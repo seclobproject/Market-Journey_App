@@ -35,11 +35,11 @@ class _loginpageState extends State<loginpage> {
 
       if (response['sts'] == '01') {
         log.i('Login Success');
-        print('User ID: ${response['_id']}');
+        print('User ID: ${response['id']}');
         print('Token: ${response['access_token']}');
 
         // _saveAndRedirectToHome(response['access_token'], response['name']);
-        _saveAndRedirectToHome(response['access_token'], response['_id']);
+        _saveAndRedirectToHome(response['access_token'], response['id']);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Login Success'),
@@ -178,12 +178,12 @@ class _loginpageState extends State<loginpage> {
           ),
           GestureDetector(
             onTap: () {
-              // _login();
-              // _isLoader = true;
-              // Navigator.of(context).pushAndRemoveUntil;
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => BottomTabsScreen()),
-                      (route) => false);
+              _login();
+              _isLoader = true;
+              Navigator.of(context).pushAndRemoveUntil;
+              // Navigator.of(context).pushAndRemoveUntil(
+              //     MaterialPageRoute(builder: (context) => BottomTabsScreen()),
+              //         (route) => false);
 
             },
             child: Padding(

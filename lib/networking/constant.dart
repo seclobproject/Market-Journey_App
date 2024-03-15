@@ -1,1 +1,1 @@
-const String baseURL = "https://marketjourney.in";
+const String baseURL = "https://seclobtest.site";

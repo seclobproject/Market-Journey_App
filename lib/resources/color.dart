@@ -31,6 +31,7 @@ const bottomtabbg = Color.fromRGBO(0, 51, 91, 0.87);
 const yellow = Color.fromRGBO(247, 174, 21, 1);
 const whitegray = Color.fromRGBO(246, 241, 248, 0.5);
 const lightyellow = Color.fromRGBO(247, 174, 21, 0.22);
+const yellow1 = Color.fromRGBO(247, 174, 21, 1);
 
 
 

@@ -7,6 +7,9 @@ import '../../resources/color.dart';
 
 import 'package:scroll_loop_auto_scroll/scroll_loop_auto_scroll.dart';
 
+import '../../services/profile_service.dart';
+import '../../support/logger.dart';
+
 class home extends StatefulWidget {
   const home({super.key});
 
@@ -17,55 +20,33 @@ class home extends StatefulWidget {
 class _homeState extends State<home> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // bool _isLoading = true;
-  // var profilepageapi;
-  //
-  // var userId;
-  // List<dynamic> unrealisedEarning = [];
-  // double totalUnrealisedAmount = 0.0;
-  //
-  // Future<void> profilePage() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   userId = prefs.getString('userid') ?? "";
-  //   print("userId....$userId");
-  //   try {
-  //     var response = await HomeService.GetProfile();
-  //     log.i('Profile page. $response');
-  //
-  //     setState(() {
-  //       profilepageapi = response;
-  //
-  //       if (profilepageapi != null &&
-  //           profilepageapi['unrealisedEarning'] is List) {
-  //         unrealisedEarning =
-  //         List<dynamic>.from(profilepageapi['unrealisedEarning']);
-  //       }
-  //
-  //       totalUnrealisedAmount = unrealisedEarning.fold(0, (sum, amount) {
-  //         if (amount is num) {
-  //           return sum + amount.toDouble();
-  //         }
-  //         return sum;
-  //       });
-  //     });
-  //   } catch (error) {
-  //     // Handle error, e.g., show an error message
-  //     print("Error fetching profile page: $error");
-  //   }
-  // }
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _initLoad();
-  // }
-  //
-  // Future<void> _initLoad() async {
-  //   await Future.wait([profilePage()]);
-  //   setState(() {
-  //     _isLoading = false;
-  //   });
-  // }
+  var profiledata;
+  bool _isLoading = true;
+
+  Future _ProfileData() async {
+    var response = await ProfileService.profile();
+    log.i('Profile data show.... $response');
+    setState(() {
+      profiledata = response;
+    });
+  }
+
+  Future _initLoad() async {
+    await Future.wait(
+      [
+        _ProfileData(),
+      ],
+    );
+    _isLoading = false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _initLoad();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +56,14 @@ class _homeState extends State<home> {
       drawerEnableOpenDragGesture: false,
       endDrawerEnableOpenDragGesture: false,
       drawer: appdrawer(),
-      body: SingleChildScrollView(
+      body: _isLoading
+          ? Center(
+        child: CircularProgressIndicator(
+          strokeWidth: 6.0,
+          valueColor : AlwaysStoppedAnimation(yellow),
+        ),
+      )
+          :SingleChildScrollView(
         child: Column(
           children: [
             SizedBox(
@@ -114,7 +102,7 @@ class _homeState extends State<home> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Hello Lachu"),
+                    Text(profiledata['name'],style: TextStyle(fontSize: 16),),
                     Text(
                       "Welcome Back",
                       style: TextStyle(
@@ -232,10 +220,13 @@ class _homeState extends State<home> {
                                 "Your monthly subscription plan has\n10 days to renew Subscription is 0\nPlease upload the screenshot",
                                 style: TextStyle(color: marketbg, fontSize: 12),
                               )),
-
-                          SizedBox(width: 25,),
-
-                          Image.asset('assets/logo/freemium.png',height: 70,),
+                          SizedBox(
+                            width: 25,
+                          ),
+                          Image.asset(
+                            'assets/logo/freemium.png',
+                            height: 70,
+                          ),
                         ],
                       ),
                     ),
@@ -282,55 +273,65 @@ class _homeState extends State<home> {
                         color: bluem, borderRadius: BorderRadius.circular(10)),
                     child: Column(
                       children: [
-
-                        SizedBox(height: 10,),
-
-                        Image.asset('assets/logo/walletimg1.png',fit: BoxFit.none),
-
-                        SizedBox(height: 10,),
-
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Image.asset('assets/logo/walletimg1.png',
+                            fit: BoxFit.none),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Padding(
-                          padding:  EdgeInsets.symmetric(horizontal: 15),
+                          padding: EdgeInsets.symmetric(horizontal: 15),
                           child: Align(
                               alignment: Alignment.topLeft,
-                              child: Text("My balance",style: TextStyle(color: marketbg),)),
+                              child: Text(
+                                "My balance",
+                                style: TextStyle(color: marketbg),
+                              )),
                         ),
-
                         Padding(
-                          padding:  EdgeInsets.symmetric(horizontal: 15),
+                          padding: EdgeInsets.symmetric(horizontal: 15),
                           child: Align(
                               alignment: Alignment.topLeft,
-                              child: Text("₹1,05,210",style: TextStyle(color: marketbg,fontSize: 20,fontWeight: FontWeight.w900),)),
+                              child: Text(
+                               profiledata['walletAmount'],
+                                style: TextStyle(
+                                    color: marketbg,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w900),
+                              )),
                         ),
-
-
                       ],
                     ),
                   ),
-
-
                   SizedBox(
                     width: 20,
                   ),
-
-
                   Container(
                     height: 164,
                     width: 188,
                     decoration: BoxDecoration(
                         color: bluem, borderRadius: BorderRadius.circular(10)),
-                    child:  Column(
+                    child: Column(
                       children: [
-                        SizedBox(height: 10,),
-                        Image.asset('assets/logo/refferpage.png',height: 70,),
-
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Image.asset(
+                          'assets/logo/refferpage.png',
+                          height: 70,
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Text("Sharing is rewarding!\nRefer your friends and Life Time Income",style: TextStyle(fontSize: 10,color:marketbg),),
+                          child: Text(
+                            "Sharing is rewarding!\nRefer your friends and Life Time Income",
+                            style: TextStyle(fontSize: 10, color: marketbg),
+                          ),
                         ),
-
-                        SizedBox(height: 10,),
-
+                        SizedBox(
+                          height: 10,
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: Align(
@@ -339,27 +340,25 @@ class _homeState extends State<home> {
                               height: 20,
                               width: 78,
                               decoration: BoxDecoration(
-                                color: yellow,
-                                borderRadius: BorderRadius.circular(5)
-                              ),
-
-                              child: Center(child: Text("Refer Now",style: TextStyle(fontSize: 10),)),
-
+                                  color: yellow,
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Center(
+                                  child: Text(
+                                "Refer Now",
+                                style: TextStyle(fontSize: 10),
+                              )),
                             ),
                           ),
                         )
-
                       ],
                     ),
                   ),
-
                 ],
               ),
             ),
-
-
-            SizedBox(height: 20,),
-
+            SizedBox(
+              height: 20,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
@@ -386,33 +385,55 @@ class _homeState extends State<home> {
                 ],
               ),
             ),
-
-            SizedBox(height: 10,),
-
-
+            SizedBox(
+              height: 10,
+            ),
             Padding(
               padding: const EdgeInsets.only(left: 20),
               child: Container(
                   height: 111,
-                width: 400,
-                decoration: BoxDecoration(
-                  color: lightyellow,
-                  borderRadius: BorderRadius.all(Radius.circular(10))
-                ),
-                child:
-                Container(
-
-                ),
-              ),
+                  width: 400,
+                  decoration: BoxDecoration(
+                      color: lightyellow,
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 10,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            child: Column(
+                              children: [
+                                ClipOval(
+                                  child: Container(
+                                    color: Colors.orange,
+                                    height: 65,
+                                    width: 65,
+                                    child: Image.network(
+                                      'https://a.storyblok.com/f/191576/1200x800/215e59568f/round_profil_picture_after_.webp',
+                                      fit: BoxFit
+                                          .cover, // Adjust the image's fit within the container
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  "Mrs Fathima",
+                                  style: TextStyle(fontSize: 12),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  )),
             ),
-
-
-
-
-
-
-            SizedBox(height: 20,),
-
+            SizedBox(
+              height: 20,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
@@ -439,52 +460,49 @@ class _homeState extends State<home> {
                 ],
               ),
             ),
-
-            SizedBox(height: 10,),
-
-
-
-        SizedBox(
-          height: 120,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-              itemCount: 5,
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 81,
-                        width: 122,
-                        decoration: BoxDecoration(
-                            color: bottomtabbg,
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10), // Adjust the value as per your preference
-                          child: Image.network(
-                            'https://i.insider.com/6247782ae22adb0018d1b640?width=700',
-                            fit: BoxFit.fill,
+            SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              height: 120,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 5,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 81,
+                            width: 122,
+                            decoration: BoxDecoration(
+                                color: bottomtabbg,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              // Adjust the value as per your preference
+                              child: Image.network(
+                                'https://i.insider.com/6247782ae22adb0018d1b640?width=700',
+                                fit: BoxFit.fill,
+                              ),
+                            ),
                           ),
-                        ),
+                          Text(
+                            "Journey of inspiration\nand discovery",
+                            style: TextStyle(
+                                fontSize: 10, overflow: TextOverflow.ellipsis),
+                          )
+                        ],
                       ),
-                      Text("Journey of inspiration\nand discovery",
-                        style: TextStyle(
-                        fontSize: 10,
-                          overflow: TextOverflow.ellipsis
-                      ),)
-                    ],
-                  ),
-                );
-              }),
-        ),
-
-
-            SizedBox(height: 10,),
-
+                    );
+                  }),
+            ),
+            SizedBox(
+              height: 10,
+            ),
             SizedBox(
               height: 120,
               child: ListView.builder(
@@ -521,23 +539,24 @@ class _homeState extends State<home> {
                                 child: Container(
                                   height: 20,
                                   width: 35,
-                                decoration: BoxDecoration(
+                                  decoration: BoxDecoration(
                                     color: yellow,
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                  child: Center(child: Text("New",style: TextStyle(fontSize: 10),)),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                    "New",
+                                    style: TextStyle(fontSize: 10),
+                                  )),
                                 ),
                               ),
                             ],
                           )
-
-
                         ],
                       ),
                     );
                   }),
             ),
-
           ],
         ),
       ),
