@@ -35,6 +35,7 @@ class _homeState extends State<home> {
     await Future.wait(
       [
         _ProfileData(),
+        ///////
       ],
     );
     _isLoading = false;
