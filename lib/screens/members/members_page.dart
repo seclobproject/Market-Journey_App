@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:master_journey/screens/members/widgets/add_member.dart';
 import 'package:master_journey/screens/members/widgets/level_one.dart';
 import 'package:master_journey/screens/members/widgets/level_two.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,10 +72,10 @@ class _memberspageState extends State<memberspage> {
           backgroundColor: yellow,
           onPressed: () {
             setState(() {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => const addmember()),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AddMemberPage()),
+              );
             });
           },
         ),
