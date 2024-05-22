@@ -8,7 +8,6 @@ import 'package:master_journey/screens/members/widgets/level_two.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../resources/color.dart';
 import '../../support/logger.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class memberspage extends StatefulWidget {
   const memberspage({super.key});
