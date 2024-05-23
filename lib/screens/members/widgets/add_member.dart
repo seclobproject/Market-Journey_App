@@ -29,6 +29,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
     'Franchise': ['District Franchise', 'Zonal Franchise', 'Mobile Franchise'],
   };
   List packageName = [];
+  
 
   String? stateTypedropdownvalue;
   List stateType = ['Kerala'];
