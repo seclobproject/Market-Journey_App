@@ -394,7 +394,6 @@ class _AddMemberPageState extends State<AddMemberPage> {
                 ),
               ),
             ),
-
             const SizedBox(
               height: 8,
             ),
