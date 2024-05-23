@@ -128,7 +128,7 @@ userid = prefs.getString('userid');
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Mobile Franchise',
+                                 packagedata['packageData'][index]['packageName'],
                                 style: TextStyle(
                                   color: yellow,
                                   fontSize: 12,
@@ -172,7 +172,7 @@ userid = prefs.getString('userid');
                             Row(
                               children: [
                                 Text(
-                                  'Franchise Package',
+                                   'Franchise Package',
                                   style: TextStyle(
                                     color: marketbg,
                                     fontWeight: FontWeight.w500,
@@ -194,7 +194,7 @@ userid = prefs.getString('userid');
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Mobile Franchise',
+                                  packagedata['packageData'][index]['packageName'],
                                   style: TextStyle(
                                     color: yellow,
                                     fontSize: 12
@@ -238,7 +238,7 @@ userid = prefs.getString('userid');
                           Row(
                             children: [
                               Text(
-                                'Franchise Package',
+                                 'Franchise Package', 
                                 style: TextStyle(
                                   color: marketbg,
                                   fontWeight: FontWeight.w500,
@@ -260,7 +260,7 @@ userid = prefs.getString('userid');
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Mobile Franchise',
+                               packagedata['packageData'][index]['packageName'],
                                 style: TextStyle(
                                   color: yellow,
                                   fontSize: 12,
