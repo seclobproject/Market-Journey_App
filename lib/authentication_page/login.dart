@@ -32,7 +32,7 @@ class _loginpageState extends State<loginpage> {
     };
     try {
       var response = await LoginService.login(reqData);
-
+print(response);
       if (response['sts'] == '01') {
         log.i('Login Success');
         print('User ID: ${response['id']}');
