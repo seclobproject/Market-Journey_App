@@ -4,9 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../navigation/app_drawer.dart';
 import '../../resources/color.dart';
-
 import 'package:scroll_loop_auto_scroll/scroll_loop_auto_scroll.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/profile_service.dart';
 import '../../support/logger.dart';
 
@@ -21,9 +20,14 @@ class _homeState extends State<home> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   var profiledata;
+  var userid;
+
+
   bool _isLoading = true;
 
   Future _ProfileData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString('userid');
     var response = await ProfileService.profile();
     log.i('Profile data show.... $response');
     setState(() {
