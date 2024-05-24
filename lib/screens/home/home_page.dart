@@ -22,8 +22,7 @@ class _homeState extends State<home> {
   var profiledata;
   var userid;
 
-
-  bool _isLoading = true;
+  bool _isLoading = false;
 
   Future _ProfileData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -42,7 +41,9 @@ class _homeState extends State<home> {
         ///////
       ],
     );
-    _isLoading = false;
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
