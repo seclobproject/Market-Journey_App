@@ -64,10 +64,14 @@ class _reportState extends State<report> {
                 //   fontSize: 12.0,
                 // ),
                 tabs: [
-                  Tab(text: 'Level 1'), // Title for first tab
+                  Tab(text: 'Level 1',),
+                   // Title for first tab
                   Tab(text: 'Level 2'),
+                   
                   Tab(text: 'Wallet'),
+                  
                   Tab(text: 'Withdrawal'),
+                   
                   Tab(text: 'level5'),
                 ],
               ),

@@ -32,7 +32,7 @@ class _leveloneState extends State<levelone> {
                       children: [
                         Text("Name",style: TextStyle(fontSize: 12,color: marketbg),),
                         SizedBox(width: 60,),
-                        Text(":",style: TextStyle(fontSize: 12,color: marketbg)),
+                        Text(":",style: TextStyle(fontSize: 10,color: marketbg)),
                         SizedBox(width: 60,),
                         Text("Fathima ",style: TextStyle(fontSize: 12,color: marketbg),),
                       ],
