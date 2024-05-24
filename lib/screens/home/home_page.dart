@@ -19,6 +19,7 @@ class home extends StatefulWidget {
 class _homeState extends State<home> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  var userid;
   var profiledata;
   bool _isLoading = false;
 
@@ -41,7 +42,6 @@ class _homeState extends State<home> {
     );
     setState(() {
       _isLoading = false;
-
     });
   }
 
@@ -108,7 +108,8 @@ class _homeState extends State<home> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("dfd",
+                          Text(
+                            "dfd",
                             // profiledata['name'],
                             style: TextStyle(fontSize: 16),
                           ),
@@ -306,7 +307,8 @@ class _homeState extends State<home> {
                                 padding: EdgeInsets.symmetric(horizontal: 15),
                                 child: Align(
                                     alignment: Alignment.topLeft,
-                                    child: Text("100",
+                                    child: Text(
+                                      "100",
                                       // profiledata['walletAmount'],
                                       style: TextStyle(
                                           color: marketbg,
