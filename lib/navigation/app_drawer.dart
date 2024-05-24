@@ -7,6 +7,7 @@ import '../authentication_page/login.dart';
 import '../resources/color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../screens/demateaccount/dematedetails.dart';
 import '../screens/profile/profile.dart';
 import '../support/logger.dart';
 
@@ -86,17 +87,24 @@ class _appdrawerState extends State<appdrawer> {
             SizedBox(
               height: 20,
             ),
-            Row(
-              children: [
-                Icon(
-                  Icons.account_box_outlined,
-                  color: Colors.white,
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Text('Demat account', style: TextStyle(color: Colors.white)),
-              ],
+            GestureDetector(onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Dematedetails()),
+                );
+            },
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.account_box_outlined,
+                    color: Colors.white,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text('Demat account', style: TextStyle(color: Colors.white)),
+                ],
+              ),
             ),
             SizedBox(
               height: 20,
