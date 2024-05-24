@@ -12,18 +12,13 @@ class package extends StatefulWidget {
 }
 
 class _packageState extends State<package> {
-
- var userid;
-  var packagedata;  
+  var userid;
+  var packagedata;
   bool _isLoading = true;
 
-
-
-
-  
   Future _PackageData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-userid = prefs.getString('userid');
+    userid = prefs.getString('userid');
 
     var response = await PackageService.ViewPackage();
     log.i('Profile data show.... $response');
@@ -53,7 +48,7 @@ userid = prefs.getString('userid');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: marketbg, 
+      backgroundColor: marketbg,
       appBar: AppBar(
         backgroundColor: marketbg,
         title: Center(
@@ -63,19 +58,11 @@ userid = prefs.getString('userid');
           ),
         ),
       ),
-      body:_isLoading
-          ? Center(child: CircularProgressIndicator()):
-       Padding(
-        padding: const EdgeInsets.only(left:20 ),
-        child: ListView(
-          
-          children: [
-
-
-
-            
+      body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: ListView(children: [
             Padding(
-              padding: const EdgeInsets.only(top: 24,  bottom: 20),
+              padding: const EdgeInsets.only(top: 24, bottom: 20),
               child: Text(
                 "Franchise",
                 style: TextStyle(
@@ -85,77 +72,14 @@ userid = prefs.getString('userid');
                 ),
               ),
             ),
-            Column(
-              children: List.generate(3, (index) {
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                  child: Container(
-                    height: 76,
-                    width: 312,
-                    decoration: BoxDecoration(
-                      color: bluem,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                'Franchise Package',
-                                style: TextStyle(
-                                  color: marketbg,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              Spacer(),
-                              Text(
-                                'Package Amount',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12,
-                                    color: marketbg),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                 packagedata['packageData'][index]['packageName'],
-                                style: TextStyle(
-                                  color: yellow,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              Text(packagedata['packageData'][index]['packageAmount'], style: TextStyle(color: yellow)),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              }),
-            ),
-            Text('Course',
-            style: TextStyle(
-                  color: Color(0xff163A56),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),),
-            Expanded(
-              child: Column(
-                children: List.generate(3, (index) {
+            ListView.builder(
+                shrinkWrap: true,
+                itemCount:
+                    packagedata != null ? packagedata['packageData'].length : 0,
+                itemBuilder: (context, index) {
                   return Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 20),
                     child: Container(
                       height: 76,
                       width: 312,
@@ -172,7 +96,7 @@ userid = prefs.getString('userid');
                             Row(
                               children: [
                                 Text(
-                                   'Franchise Package',
+                                  'Franchise Package',
                                   style: TextStyle(
                                     color: marketbg,
                                     fontWeight: FontWeight.w500,
@@ -194,13 +118,17 @@ userid = prefs.getString('userid');
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  packagedata['packageData'][index]['packageName'],
+                                  packagedata['packageData'][index]
+                                      ['packageName'],
                                   style: TextStyle(
                                     color: yellow,
-                                    fontSize: 12
+                                    fontSize: 12,
                                   ),
                                 ),
-                                Text(packagedata['packageData'][index]['packageAmount'],style: TextStyle(color: yellow)) ,
+                                Text(
+                                    packagedata['packageData'][index]
+                                        ['packageAmount'],
+                                    style: TextStyle(color: yellow)),
                               ],
                             ),
                           ],
@@ -209,76 +137,150 @@ userid = prefs.getString('userid');
                     ),
                   );
                 }),
+            Text(
+              'Courses',
+              style: TextStyle(
+                color: Color(0xff163A56),
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
               ),
             ),
-             Text('Signals',
-            style: TextStyle(
-                  color: Color(0xff163A56),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),),
-            Column(
-              children: List.generate(6, (index) {
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                  child: Container(
-                    height: 76,
-                    width: 312,
-                    decoration: BoxDecoration(
-                      color: bluem,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                 'Franchise Package', 
-                                style: TextStyle(
-                                  color: marketbg,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              Spacer(),
-                              Text(
-                                'Package Amount',
-                                style: TextStyle(
+            ListView.builder(
+                shrinkWrap: true,
+                itemCount:
+                    packagedata != null ? packagedata['packageData'].length : 0,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 20),
+                    child: Container(
+                      height: 76,
+                      width: 312,
+                      decoration: BoxDecoration(
+                        color: bluem,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  'Franchise Package',
+                                  style: TextStyle(
+                                    color: marketbg,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 12,
-                                    color: marketbg),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                               packagedata['packageData'][index]['packageName'],
-                                style: TextStyle(
-                                  color: yellow,
-                                  fontSize: 12,
+                                  ),
                                 ),
-                              ),
-                              Text(packagedata['packageData'][index]['packageAmount'],style: TextStyle(color: yellow)),
-                            ],
-                          ),
-                        ],
+                                Spacer(),
+                                Text(
+                                  'Package Amount',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12,
+                                      color: marketbg),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  packagedata['packageData'][index]
+                                      ['packageName'],
+                                  style: TextStyle(color: yellow, fontSize: 12),
+                                ),
+                                Text(
+                                    packagedata['packageData'][index]
+                                        ['packageAmount'],
+                                    style: TextStyle(color: yellow)),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
+            Text(
+              'Signals',
+              style: TextStyle(
+                color: Color(0xff163A56),
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ],
-        ),
-      ),
+            ListView.builder(
+                shrinkWrap: true,
+                itemCount:
+                    packagedata != null ? packagedata['packageData'].length : 0,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 20),
+                    child: Container(
+                      height: 76,
+                      width: 312,
+                      decoration: BoxDecoration(
+                        color: bluem,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  'Franchise Package',
+                                  style: TextStyle(
+                                    color: marketbg,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                Spacer(),
+                                Text(
+                                  'Package Amount',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12,
+                                      color: marketbg),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 5),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  packagedata['packageData'][index]
+                                      ['packageName'],
+                                  style: TextStyle(
+                                    color: yellow,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                Text(
+                                    packagedata['packageData'][index]
+                                        ['packageAmount'],
+                                    style: TextStyle(color: yellow)),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+          ])),
     );
   }
 }

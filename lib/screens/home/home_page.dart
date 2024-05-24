@@ -21,7 +21,7 @@ class _homeState extends State<home> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   var profiledata;
-  bool _isLoading = true;
+  bool _isLoading = false;
 
   Future _ProfileData() async {
     var response = await ProfileService.profile();
@@ -38,7 +38,10 @@ class _homeState extends State<home> {
         ///////
       ],
     );
-    _isLoading = false;
+    setState(() {
+      _isLoading = false;
+
+    });
   }
 
   @override
@@ -104,8 +107,8 @@ class _homeState extends State<home> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            profiledata['name'],
+                          Text("dfd",
+                            // profiledata['name'],
                             style: TextStyle(fontSize: 16),
                           ),
                           Text(
@@ -302,8 +305,8 @@ class _homeState extends State<home> {
                                 padding: EdgeInsets.symmetric(horizontal: 15),
                                 child: Align(
                                     alignment: Alignment.topLeft,
-                                    child: Text(
-                                      profiledata['walletAmount'],
+                                    child: Text("100",
+                                      // profiledata['walletAmount'],
                                       style: TextStyle(
                                           color: marketbg,
                                           fontSize: 20,
