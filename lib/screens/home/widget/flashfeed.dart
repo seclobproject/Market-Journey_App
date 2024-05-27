@@ -45,7 +45,7 @@ class _FlashfeedState extends State<Flashfeed> {
                                 Container(
                                   // This is the container for the image
                                   height: 222,
-                                  width: 341,
+                                  width: 363,
                                   decoration: BoxDecoration(
                                     color: bottomtabbg,
                                     borderRadius: BorderRadius.circular(10),

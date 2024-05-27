@@ -71,13 +71,14 @@ class _walletState extends State<wallet> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: GestureDetector(onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const Cashwithdraw()),
-                );
-              },
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const Cashwithdraw()),
+                  );
+                },
                 child: Container(
                   height: 40,
                   width: 400,
@@ -96,7 +97,7 @@ class _walletState extends State<wallet> {
               height: 25,
             ),
             Container(
-              height: 510,
+              height: 1000,
               decoration: BoxDecoration(
                   color: marketbg,
                   borderRadius: BorderRadius.all(Radius.circular(10))),

@@ -31,7 +31,7 @@ class _reportState extends State<report> {
         backgroundColor: marketbg,
         title: Center(
             child:
-                Text("Report", style: TextStyle(color: black, fontSize: 18))),
+                Text("Income", style: TextStyle(color: black, fontSize: 18))),
       ),
       body: DefaultTabController(
         length: 5, // Number of tabs
@@ -64,15 +64,17 @@ class _reportState extends State<report> {
                 //   fontSize: 12.0,
                 // ),
                 tabs: [
-                  Tab(text: 'Level 1',),
-                   // Title for first tab
-                  Tab(text: 'Level 2'),
-                   
-                  Tab(text: 'Wallet'),
-                  
-                  Tab(text: 'Withdrawal'),
-                   
-                  Tab(text: 'level5'),
+                  Tab(
+                    text: 'Direct',
+                  ),
+                  // Title for first tab
+                  Tab(text: 'Indirect'),
+
+                  Tab(text: 'Level Income'),
+
+                  Tab(text: 'Autopool'),
+
+                  Tab(text: 'Bonus'),
                 ],
               ),
             ),
