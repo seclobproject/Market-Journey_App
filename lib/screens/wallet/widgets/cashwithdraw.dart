@@ -133,13 +133,13 @@ class _CashwithdrawState extends State<Cashwithdraw> {
                           height: 40,
                           width: 100,
                           decoration: BoxDecoration(
-                              color: appBlueColor,
+                              border: Border.all(color: yellow, width: 3),
                               borderRadius: BorderRadius.circular(8)),
                           child: Center(
                               child: Text(
                             'Cancel',
                             style: TextStyle(
-                                color: marketbg,
+                                color: black,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500),
                           )),
