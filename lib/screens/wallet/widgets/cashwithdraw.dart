@@ -121,48 +121,43 @@ class _CashwithdrawState extends State<Cashwithdraw> {
             SizedBox(
               height: 30,
             ),
-            Align(
-              alignment: Alignment.center,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 85),
-                child: Column(
+            Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          height: 40,
-                          width: 100,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: yellow, width: 3),
-                              borderRadius: BorderRadius.circular(8)),
-                          child: Center(
-                              child: Text(
-                            'Cancel',
-                            style: TextStyle(
-                                color: black,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500),
-                          )),
-                        ),
-                        SizedBox(width: 20),
-                        Container(
-                          height: 40,
-                          width: 100,
-                          decoration: BoxDecoration(
-                              color: yellow,
-                              borderRadius: BorderRadius.circular(8)),
-                          child: Center(
-                              child: Text(
-                            'Submit',
-                            style: TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.w500),
-                          )),
-                        )
-                      ],
+                    Container(
+                      height: 40,
+                      width: 100,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: yellow, width: 3),
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Center(
+                          child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                            color: black,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500),
+                      )),
                     ),
+                    SizedBox(width: 20),
+                    Container(
+                      height: 40,
+                      width: 100,
+                      decoration: BoxDecoration(
+                          color: yellow,
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Center(
+                          child: Text(
+                        'Submit',
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w500),
+                      )),
+                    )
                   ],
                 ),
-              ),
+              ],
             ),
             SizedBox(
               height: 30,

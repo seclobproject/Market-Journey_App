@@ -15,7 +15,7 @@ class _leveloneState extends State<levelone> {
         itemCount: 10,
         itemBuilder: (BuildContext context, int index) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Container(
               height: 107,
               width: 400,
