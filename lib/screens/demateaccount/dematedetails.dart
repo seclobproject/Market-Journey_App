@@ -138,6 +138,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:master_journey/resources/color.dart';
+import 'package:master_journey/screens/demateaccount/widget/demataccount.dart';
 
 class Dematedetails extends StatefulWidget {
   const Dematedetails({super.key});
@@ -167,7 +168,10 @@ class _DematedetailsState extends State<Dematedetails> {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Container(
               width: 400,
-              height: 160,
+              height: 180,
+              decoration: UnderlineTabIndicator(
+                  borderSide: BorderSide(
+                      color: const Color.fromRGBO(206, 206, 206, 0.5))),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -177,17 +181,26 @@ class _DematedetailsState extends State<Dematedetails> {
                       children: [
                         Text(
                           "District",
-                          style: TextStyle(fontSize: 12, color: bluem),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: bluem),
                         ),
-                        SizedBox(width: 40),
+                        SizedBox(width: 60),
                         Text(
                           ":",
-                          style: TextStyle(fontSize: 12, color: bluem),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: bluem),
                         ),
                         SizedBox(width: 20),
                         Text(
                           "",
-                          style: TextStyle(fontSize: 12, color: bluem),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: bluem),
                         ),
                       ],
                     ),
@@ -199,17 +212,26 @@ class _DematedetailsState extends State<Dematedetails> {
                       children: [
                         Text(
                           "Name",
-                          style: TextStyle(fontSize: 12, color: bluem),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: bluem),
                         ),
-                        SizedBox(width: 16),
+                        SizedBox(width: 68),
                         Text(
                           ":",
-                          style: TextStyle(fontSize: 12, color: bluem),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: bluem),
                         ),
                         SizedBox(width: 20),
                         Text(
                           "",
-                          style: TextStyle(fontSize: 12, color: bluem),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: bluem),
                         ),
                       ],
                     ),
@@ -221,17 +243,26 @@ class _DematedetailsState extends State<Dematedetails> {
                       children: [
                         Text(
                           "Username",
-                          style: TextStyle(fontSize: 12, color: bluem),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: bluem),
                         ),
-                        SizedBox(width: 24),
+                        SizedBox(width: 44),
                         Text(
                           ":",
-                          style: TextStyle(fontSize: 12, color: bluem),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: bluem),
                         ),
                         SizedBox(width: 20),
                         Text(
                           "",
-                          style: TextStyle(fontSize: 12, color: bluem),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: bluem),
                         ),
                       ],
                     ),
@@ -243,17 +274,26 @@ class _DematedetailsState extends State<Dematedetails> {
                       children: [
                         Text(
                           "Mobile Number",
-                          style: TextStyle(fontSize: 12, color: bluem),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: bluem),
                         ),
                         SizedBox(width: 16),
                         Text(
                           ":",
-                          style: TextStyle(fontSize: 12, color: bluem),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: bluem),
                         ),
                         SizedBox(width: 20),
                         Text(
                           "",
-                          style: TextStyle(fontSize: 12, color: bluem),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: bluem),
                         ),
                       ],
                     ),
@@ -265,17 +305,26 @@ class _DematedetailsState extends State<Dematedetails> {
                       children: [
                         Text(
                           "Email",
-                          style: TextStyle(fontSize: 12, color: bluem),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: bluem),
                         ),
-                        SizedBox(width: 16),
+                        SizedBox(width: 70),
                         Text(
                           ":",
-                          style: TextStyle(fontSize: 12, color: bluem),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: bluem),
                         ),
                         SizedBox(width: 20),
                         Text(
                           "",
-                          style: TextStyle(fontSize: 12, color: bluem),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: bluem),
                         ),
                       ],
                     ),
@@ -287,17 +336,26 @@ class _DematedetailsState extends State<Dematedetails> {
                       children: [
                         Text(
                           "Address",
-                          style: TextStyle(fontSize: 12, color: bluem),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: bluem),
                         ),
-                        SizedBox(width: 16),
+                        SizedBox(width: 55),
                         Text(
                           ":",
-                          style: TextStyle(fontSize: 12, color: bluem),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: bluem),
                         ),
                         SizedBox(width: 20),
                         Text(
                           "",
-                          style: TextStyle(fontSize: 12, color: bluem),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: bluem),
                         ),
                       ],
                     ),
@@ -306,6 +364,22 @@ class _DematedetailsState extends State<Dematedetails> {
               ),
             ),
           );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        // isExtended: true,
+        child: Icon(
+          Icons.add,
+          color: bluem,
+        ),
+        backgroundColor: yellow,
+        onPressed: () {
+          setState(() {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Demataccount()),
+            );
+          });
         },
       ),
     );

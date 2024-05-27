@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:master_journey/screens/home/widget/notification.dart';
+import 'package:master_journey/screens/home/widget/subscription.dart';
 import '../../navigation/app_drawer.dart';
 import '../../resources/color.dart';
 import 'package:scroll_loop_auto_scroll/scroll_loop_auto_scroll.dart';
@@ -78,23 +80,39 @@ class _homeState extends State<home> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 20),
                     child: GestureDetector(
-                      onTap: () {
-                        _scaffoldKey.currentState?.openDrawer();
-                        // Navigator.of(context).push(MaterialPageRoute(builder: (context) => myHome()));
-                      },
+                      // onTap: () {
+                      //   _scaffoldKey.currentState?.openDrawer();
+                      //   // Navigator.of(context).push(MaterialPageRoute(builder: (context) => myHome()));
+                      // },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SvgPicture.asset(
-                            'assets/svg/drawrwhite.svg',
-                            color: black,
-                            width: 17,
-                            height: 17,
+                          GestureDetector(
+                            onTap: () {
+                              _scaffoldKey.currentState?.openDrawer();
+                              // Navigator.of(context).push(MaterialPageRoute(builder: (context) => myHome()));
+                            },
+                            child: SvgPicture.asset(
+                              'assets/svg/drawrwhite.svg',
+                              color: black,
+                              width: 17,
+                              height: 17,
+                            ),
                           ),
-                          SvgPicture.asset(
-                            'assets/svg/notifications_unread.svg',
-                            width: 25,
-                            height: 25,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const Notificationscreen()),
+                              );
+                            },
+                            child: SvgPicture.asset(
+                              'assets/svg/notifications_unread.svg',
+                              width: 25,
+                              height: 25,
+                            ),
                           ),
                         ],
                       ),
@@ -249,17 +267,27 @@ class _homeState extends State<home> {
                             padding: const EdgeInsets.symmetric(horizontal: 15),
                             child: Align(
                               alignment: Alignment.topLeft,
-                              child: Container(
-                                height: 30,
-                                width: 60,
-                                decoration: BoxDecoration(
-                                    color: yellow,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Center(
-                                    child: Text(
-                                  'Click',
-                                  style: TextStyle(fontSize: 10),
-                                )),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const Subscription()),
+                                  );
+                                },
+                                child: Container(
+                                  height: 30,
+                                  width: 60,
+                                  decoration: BoxDecoration(
+                                      color: yellow,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Center(
+                                      child: Text(
+                                    'Click',
+                                    style: TextStyle(fontSize: 10),
+                                  )),
+                                ),
                               ),
                             ),
                           ),

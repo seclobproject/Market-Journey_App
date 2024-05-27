@@ -7,6 +7,7 @@ import '../authentication_page/login.dart';
 import '../resources/color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../screens/changepassword/changepass.dart';
 import '../screens/demateaccount/dematedetails.dart';
 import '../screens/profile/profile.dart';
 import '../support/logger.dart';
@@ -87,12 +88,14 @@ class _appdrawerState extends State<appdrawer> {
             SizedBox(
               height: 20,
             ),
-            GestureDetector(onTap: () {
-              Navigator.push(
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Dematedetails()),
+                  MaterialPageRoute(
+                      builder: (context) => const Dematedetails()),
                 );
-            },
+              },
               child: Row(
                 children: [
                   Icon(
@@ -103,6 +106,31 @@ class _appdrawerState extends State<appdrawer> {
                     width: 5,
                   ),
                   Text('Demat account', style: TextStyle(color: Colors.white)),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const Changepassword()),
+                );
+              },
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.lock_outline,
+                    color: Colors.white,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text('Change Password',
+                      style: TextStyle(color: Colors.white)),
                 ],
               ),
             ),

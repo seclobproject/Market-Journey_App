@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:master_journey/screens/wallet/widgets/cashwithdraw.dart';
 import 'package:master_journey/screens/wallet/widgets/recent_transaction.dart';
 import 'package:master_journey/screens/wallet/widgets/withdrawal_history.dart';
 import '../../resources/color.dart';
@@ -70,17 +71,25 @@ class _walletState extends State<wallet> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
-                height: 40,
-                width: 400,
-                decoration: BoxDecoration(
-                    color: yellow,
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                child: Center(
-                    child: Text(
-                  'Request withdrawal cash',
-                  style: TextStyle(fontSize: 12, color: black),
-                )),
+              child: GestureDetector(onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const Cashwithdraw()),
+                );
+              },
+                child: Container(
+                  height: 40,
+                  width: 400,
+                  decoration: BoxDecoration(
+                      color: yellow,
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  child: Center(
+                      child: Text(
+                    'Request withdrawal cash',
+                    style: TextStyle(fontSize: 12, color: black),
+                  )),
+                ),
               ),
             ),
             SizedBox(
