@@ -58,28 +58,34 @@ class _packageState extends State<package> {
           ),
         ),
       ),
-      body: Padding(
+      body:_isLoading
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: ListView(children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 24, bottom: 20),
-              child: Text(
-                "Franchise",
-                style: TextStyle(
-                  color: Color(0xff163A56),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 24, bottom: 20),
+                  child: Text(
+                    "Franchise",
+                    style: TextStyle(
+                      color: Color(0xff163A56),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            ListView.builder(
+
+                ListView.builder(
                 shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
                 itemCount:
                     packagedata != null ? packagedata['packageData'].length : 0,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 20),
+                        horizontal: 15, vertical: 12),
                     child: Container(
                       height: 76,
                       width: 312,
@@ -147,12 +153,13 @@ class _packageState extends State<package> {
             ),
             ListView.builder(
                 shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 itemCount:
                     packagedata != null ? packagedata['packageData'].length : 0,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 20),
+                        horizontal: 15, vertical: 12),
                     child: Container(
                       height: 76,
                       width: 312,
@@ -217,12 +224,13 @@ class _packageState extends State<package> {
             ),
             ListView.builder(
                 shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 itemCount:
                     packagedata != null ? packagedata['packageData'].length : 0,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 20),
+                        horizontal: 15, vertical: 12),
                     child: Container(
                       height: 76,
                       width: 312,
