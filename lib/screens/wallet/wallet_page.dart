@@ -117,12 +117,9 @@ class _walletState extends State<wallet> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Container(
-                      height: 1000, // Adjust height as needed
-                      child: withdrawalhistory(),
-                    ),
+                  Container(
+                    height: 1000, // Adjust height as needed
+                    child: withdrawalhistory(),
                   ),
                 ],
               ),
