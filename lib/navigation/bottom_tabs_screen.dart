@@ -78,7 +78,7 @@ class _BottomTabsScreenState extends State<BottomTabsScreen> {
                 icon: Padding(
                   padding: const EdgeInsets.only(top: 15),
                   child: SvgPicture.asset(
-                    "assets/svg/homebtn.svg",
+                    "assets/svg/homenew.svg",
                     height: 20,
                     color: (_selectedPageIndex == 0) ? yellow : null,
                   ),
@@ -89,7 +89,7 @@ class _BottomTabsScreenState extends State<BottomTabsScreen> {
                 icon: Padding(
                   padding: const EdgeInsets.only(top: 15),
                   child: SvgPicture.asset(
-                    "assets/svg/packagebtm.svg",
+                    "assets/svg/packagenew.svg",
                     height: 20,
                     color: (_selectedPageIndex == 1) ? yellow : null,
                   ),
@@ -100,7 +100,7 @@ class _BottomTabsScreenState extends State<BottomTabsScreen> {
                 icon: Padding(
                   padding: const EdgeInsets.only(top: 15),
                   child: SvgPicture.asset(
-                    "assets/svg/memberbtm.svg",
+                    "assets/svg/membernew.svg",
                     height: 20,
                     color: (_selectedPageIndex == 2) ? yellow : null,
                   ),
@@ -111,7 +111,7 @@ class _BottomTabsScreenState extends State<BottomTabsScreen> {
                 icon: Padding(
                   padding: const EdgeInsets.only(top: 15),
                   child: SvgPicture.asset(
-                    "assets/svg/walletbtm.svg",
+                    "assets/svg/walletnew.svg",
                     height: 20,
                     color: (_selectedPageIndex == 3) ? yellow : null,
                   ),
@@ -127,7 +127,7 @@ class _BottomTabsScreenState extends State<BottomTabsScreen> {
                     color: (_selectedPageIndex == 4) ? yellow : null,
                   ),
                 ),
-                label: 'Report',
+                label: 'Income',
               ),
             ],
           ),

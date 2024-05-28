@@ -2,13 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:master_journey/screens/home/widget/latestnews.dart';
+import 'package:master_journey/screens/home/widget/notification.dart';
+import 'package:master_journey/screens/home/widget/subscription.dart';
 import '../../navigation/app_drawer.dart';
 import '../../resources/color.dart';
-
 import 'package:scroll_loop_auto_scroll/scroll_loop_auto_scroll.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/profile_service.dart';
 import '../../support/logger.dart';
+import 'widget/flashfeed.dart';
 
 class home extends StatefulWidget {
   const home({super.key});
@@ -20,10 +23,13 @@ class home extends StatefulWidget {
 class _homeState extends State<home> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  var userid;
   var profiledata;
   bool _isLoading = false;
 
   Future _ProfileData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString('userid');
     var response = await ProfileService.profile();
     log.i('Profile data show.... $response');
     setState(() {
@@ -40,7 +46,6 @@ class _homeState extends State<home> {
     );
     setState(() {
       _isLoading = false;
-
     });
   }
 
@@ -77,23 +82,39 @@ class _homeState extends State<home> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 20),
                     child: GestureDetector(
-                      onTap: () {
-                        _scaffoldKey.currentState?.openDrawer();
-                        // Navigator.of(context).push(MaterialPageRoute(builder: (context) => myHome()));
-                      },
+                      // onTap: () {
+                      //   _scaffoldKey.currentState?.openDrawer();
+                      //   // Navigator.of(context).push(MaterialPageRoute(builder: (context) => myHome()));
+                      // },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SvgPicture.asset(
-                            'assets/svg/drawrwhite.svg',
-                            color: black,
-                            width: 17,
-                            height: 17,
+                          GestureDetector(
+                            onTap: () {
+                              _scaffoldKey.currentState?.openDrawer();
+                              // Navigator.of(context).push(MaterialPageRoute(builder: (context) => myHome()));
+                            },
+                            child: SvgPicture.asset(
+                              'assets/svg/drawrwhite.svg',
+                              color: black,
+                              width: 17,
+                              height: 17,
+                            ),
                           ),
-                          SvgPicture.asset(
-                            'assets/svg/notifications_unread.svg',
-                            width: 25,
-                            height: 25,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const Notificationscreen()),
+                              );
+                            },
+                            child: SvgPicture.asset(
+                              'assets/svg/notifications_unread.svg',
+                              width: 25,
+                              height: 25,
+                            ),
                           ),
                         ],
                       ),
@@ -107,7 +128,8 @@ class _homeState extends State<home> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("dfd",
+                          Text(
+                            "dfd",
                             // profiledata['name'],
                             style: TextStyle(fontSize: 16),
                           ),
@@ -178,9 +200,18 @@ class _homeState extends State<home> {
                     height: 10,
                   ),
                   ScrollLoopAutoScroll(
-                    child: Text(
-                      'Very long text that bleeds out of the rendering space',
-                      style: TextStyle(fontSize: 13, color: marketbgblue),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Latestnews()),
+                        );
+                      },
+                      child: Text(
+                        'Very long text that bleeds out of the rendering space',
+                        style: TextStyle(fontSize: 13, color: marketbgblue),
+                      ),
                     ),
                     scrollDirection: Axis.horizontal,
                   ),
@@ -247,17 +278,27 @@ class _homeState extends State<home> {
                             padding: const EdgeInsets.symmetric(horizontal: 15),
                             child: Align(
                               alignment: Alignment.topLeft,
-                              child: Container(
-                                height: 30,
-                                width: 60,
-                                decoration: BoxDecoration(
-                                    color: yellow,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Center(
-                                    child: Text(
-                                  'Click',
-                                  style: TextStyle(fontSize: 10),
-                                )),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const Subscription()),
+                                  );
+                                },
+                                child: Container(
+                                  height: 30,
+                                  width: 60,
+                                  decoration: BoxDecoration(
+                                      color: yellow,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Center(
+                                      child: Text(
+                                    'Click',
+                                    style: TextStyle(fontSize: 10),
+                                  )),
+                                ),
                               ),
                             ),
                           ),
@@ -305,7 +346,8 @@ class _homeState extends State<home> {
                                 padding: EdgeInsets.symmetric(horizontal: 15),
                                 child: Align(
                                     alignment: Alignment.topLeft,
-                                    child: Text("100",
+                                    child: Text(
+                                      "100",
                                       // profiledata['walletAmount'],
                                       style: TextStyle(
                                           color: marketbg,
@@ -528,49 +570,60 @@ class _homeState extends State<home> {
                         itemBuilder: (BuildContext context, int index) {
                           return Padding(
                             padding: const EdgeInsets.only(left: 20),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Stack(
-                                  children: [
-                                    Container(
-                                      // This is the container for the image
-                                      height: 81,
-                                      width: 122,
-                                      decoration: BoxDecoration(
-                                        color: bottomtabbg,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.network(
-                                          'https://www.simplilearn.com/ice9/free_resources_article_thumb/What_is_the_Importance_of_Technology.jpg',
-                                          fit: BoxFit.fill,
-                                        ),
-                                      ),
-                                    ),
-                                    // This is the container for aligning at the top right corner
-                                    Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Container(
-                                        height: 20,
-                                        width: 35,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Flashfeed()),
+                                );
+                              },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Stack(
+                                    children: [
+                                      Container(
+                                        // This is the container for the image
+                                        height: 81,
+                                        width: 122,
                                         decoration: BoxDecoration(
-                                          color: yellow,
+                                          color: bottomtabbg,
                                           borderRadius:
-                                              BorderRadius.circular(5),
+                                              BorderRadius.circular(10),
                                         ),
-                                        child: Center(
-                                            child: Text(
-                                          "New",
-                                          style: TextStyle(fontSize: 10),
-                                        )),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: Image.network(
+                                            'https://www.simplilearn.com/ice9/free_resources_article_thumb/What_is_the_Importance_of_Technology.jpg',
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                )
-                              ],
+                                      // This is the container for aligning at the top right corner
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Container(
+                                          height: 20,
+                                          width: 35,
+                                          decoration: BoxDecoration(
+                                            color: yellow,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: Center(
+                                              child: Text(
+                                            "New",
+                                            style: TextStyle(fontSize: 10),
+                                          )),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                           );
                         }),
