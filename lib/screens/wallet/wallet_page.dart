@@ -69,66 +69,65 @@ class _walletState extends State<wallet> {
             SizedBox(
               height: 20,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const Cashwithdraw()),
-                  );
-                },
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Cashwithdraw()),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0),
                 child: Container(
                   height: 40,
-                  width: 400,
+                  // width: 150,
                   decoration: BoxDecoration(
-                      color: yellow,
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                    color: yellow,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
                   child: Center(
-                      child: Text(
-                    'Request withdrawal cash',
-                    style: TextStyle(fontSize: 12, color: black),
-                  )),
+                    child: Text(
+                      'Request withdrawal cash',
+                      style: TextStyle(
+                          fontSize: 12,
+                          color: black,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
                 ),
               ),
             ),
-            SizedBox(
-              height: 25,
-            ),
+            SizedBox(height: 25),
             Container(
-              height: 1000,
               decoration: BoxDecoration(
-                  color: marketbg,
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: DefaultTabController(
-                length: 2, // Number of tabs
-                child: Column(
-                  children: [
-                    TabBar(
-                      labelColor: black,
-                      unselectedLabelColor: Colors.black,
-                      indicatorColor: yellow,
-                      labelStyle: TextStyle(
-                        fontSize: 12.0,
-                      ),
-                      tabs: [
-                        Tab(text: 'Recent Transaction'), // Title for first tab
-                        Tab(text: 'Withdrawal History'), // Title for second tab
-                      ],
-                    ),
-                    Expanded(
-                      child: TabBarView(
-                        children: [recenttransation(), withdrawalhistory()],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                    )
-                  ],
-                ),
+                color: marketbg,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
-            )
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text(
+                      'Withdrawal History',
+                      style: TextStyle(
+                        color: black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Container(
+                      height: 1000, // Adjust height as needed
+                      child: withdrawalhistory(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 40),
           ],
         ),
       ),

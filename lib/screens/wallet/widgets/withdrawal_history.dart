@@ -14,15 +14,21 @@ class _withdrawalhistoryState extends State<withdrawalhistory> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
             children: [
               Text("Amount", style: TextStyle(color: black, fontSize: 12)),
-              SizedBox(width: 50,),
+              SizedBox(
+                width: 50,
+              ),
               Text("TDS Amount", style: TextStyle(color: black, fontSize: 12)),
-              SizedBox(width: 35,),
+              SizedBox(
+                width: 35,
+              ),
               Text("Amount", style: TextStyle(color: black, fontSize: 12)),
               Expanded(child: SizedBox()),
               Text("Status", style: TextStyle(color: black, fontSize: 12)),
