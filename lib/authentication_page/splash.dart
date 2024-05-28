@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:master_journey/authentication_page/transcation.dart';
 import '../resources/color.dart';
 import 'LandingPage.dart';
 import 'login.dart';
@@ -19,8 +20,8 @@ class _MyHomePageState extends State<MyHomePage> {
             () => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => Landing_Page(
-                  title: 'landingpage'
+                builder: (context) => TransactionScreen(
+
                 ))));
   }
 

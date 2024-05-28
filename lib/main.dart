@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:master_journey/authentication_page/login.dart';
 import 'package:master_journey/authentication_page/splash.dart';
+import 'package:master_journey/screens/home/home_page.dart';
 
 import 'authentication_page/LandingPage.dart';
 
