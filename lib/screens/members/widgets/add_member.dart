@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
+import 'package:master_journey/services/package_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../resources/color.dart';
 import '../../../resources/color.dart';
 import '../../../services/member_service.dart';
+import '../../../support/logger.dart';
 
 class AddMemberPage extends StatefulWidget {
   const AddMemberPage({Key? key}) : super(key: key);
@@ -14,6 +16,11 @@ class AddMemberPage extends StatefulWidget {
 }
 
 class _AddMemberPageState extends State<AddMemberPage> {
+
+var userid;
+  var packagedata;
+
+
   bool _isLoading = false;
   String? name;
   String? email;
@@ -99,6 +106,36 @@ class _AddMemberPageState extends State<AddMemberPage> {
     }
   }
 
+  Future _PackageData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString('userid');
+
+    var response = await PackageService.ViewPackage();
+    log.i('Profile data show.... $response');
+    setState(() {
+      packagedata = response;
+    });
+  }
+
+  Future _initLoad() async {
+    await Future.wait(
+      [
+        _PackageData(),
+        ///////
+      ],
+    );
+    _isLoading = false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _initLoad();
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,7 +149,6 @@ class _AddMemberPageState extends State<AddMemberPage> {
             SizedBox(
               height: 10,
             ),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Align(
@@ -120,11 +156,9 @@ class _AddMemberPageState extends State<AddMemberPage> {
                   child: Text('Name',
                       style: TextStyle(color: marketbgblue, fontSize: 14))),
             ),
-
             SizedBox(
               height: 10,
             ),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextField(

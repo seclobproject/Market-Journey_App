@@ -58,9 +58,11 @@ class _packageState extends State<package> {
           ),
         ),
       ),
+
       body:_isLoading
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
+
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
