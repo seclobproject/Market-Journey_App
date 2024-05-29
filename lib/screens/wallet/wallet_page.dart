@@ -22,6 +22,7 @@ class _walletState extends State<wallet> {
       appBar: AppBar(
         backgroundColor: bluem,
         title: Text("Wallet", style: TextStyle(color: marketbg, fontSize: 18)),
+        centerTitle: true,
       ),
       backgroundColor: bluem,
       body: SingleChildScrollView(

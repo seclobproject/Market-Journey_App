@@ -102,7 +102,7 @@ class _memberspageState extends State<memberspage> {
         centerTitle: true,
         title: Text(
           "Member View",
-          style: TextStyle(color: black, fontSize: 16),
+          style: TextStyle(color: black, fontSize: 18),
         ),
       ),
       body: Dropdownscreen(),

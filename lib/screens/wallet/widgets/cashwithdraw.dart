@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:master_journey/screens/wallet/wallet_page.dart';
 
 import '../../../resources/color.dart';
 
@@ -195,20 +196,183 @@ class _CashwithdrawState extends State<Cashwithdraw> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      height: 40,
-                      width: 100,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: yellow, width: 3),
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Center(
-                          child: Text(
-                        'Cancel',
-                        style: TextStyle(
-                            color: black,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500),
-                      )),
+                    Center(
+                      //   child: GestureDetector(
+                      //     onTap: () {
+                      //       showDialog(
+                      //         context: context,
+                      //         builder: (context) => AlertDialog(
+                      //           content: Text(
+                      //             'Are you sure you want to cancel?',
+                      //             style: TextStyle(
+                      //                 fontSize: 15, fontWeight: FontWeight.w500),
+                      //           ),Image.asset(
+                      //         'assets/logo/wallet.png',
+                      //         fit: BoxFit.none,
+                      //       ),
+                      //           actions: [
+                      //             Row(
+                      //               crossAxisAlignment: CrossAxisAlignment.center,
+                      //               mainAxisAlignment: MainAxisAlignment.center,
+                      //               children: [
+                      //                 Container(
+                      //                   width: 60,
+                      //                   height: 40,
+                      //                   decoration: BoxDecoration(
+                      //                       borderRadius:
+                      //                           BorderRadius.circular(6),
+                      //                       color: marketbgblue),
+                      //                   alignment: Alignment.center,
+                      //                   child: TextButton(
+                      //                     onPressed: () {
+                      //                       Navigator.of(context)
+                      //                           .pop(); // Close the dialog
+                      //                     },
+                      //                     child: Text(
+                      //                       'No',
+                      //                       style: TextStyle(color: marketbg),
+                      //                     ),
+                      //                   ),
+                      //                 ),
+                      //                 SizedBox(
+                      //                   width: 10,
+                      //                 ),
+                      //                 Container(
+                      //                   width: 60,
+                      //                   height: 40,
+                      //                   decoration: BoxDecoration(
+                      //                       borderRadius:
+                      //                           BorderRadius.circular(6),
+                      //                       color: appBlueColor),
+                      //                   child: TextButton(
+                      //                     onPressed: () {
+                      //                       Navigator.of(context).push(
+                      //                           MaterialPageRoute(
+                      //                               builder: (context) =>
+                      //                                   wallet())); // Go back to wallet page
+                      //                     },
+                      //                     child: Text(
+                      //                       'Yes',
+                      //                       style: TextStyle(color: marketbg),
+                      //                     ),
+                      //                   ),
+                      //                 ),
+                      //               ],
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       );
+                      //     },
+                      //     child: Container(
+                      //       height: 40,
+                      //       width: 100,
+                      //       decoration: BoxDecoration(
+                      //           border: Border.all(color: yellow, width: 3),
+                      //           borderRadius: BorderRadius.circular(8)),
+                      //       child: Center(
+                      //           child: Text(
+                      //         'Cancel',
+                      //         style: TextStyle(
+                      //             color: Colors.black,
+                      //             fontSize: 12,
+                      //             fontWeight: FontWeight.w500),
+                      //       )),
+                      //     ),
+                      //   ),
+                      child: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              content: Column(
+                                mainAxisSize: MainAxisSize
+                                    .min, // Set the size of the column to min
+                                children: [
+                                  Text(
+                                    'Are you sure you want to cancel?',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(
+                                      height:
+                                          20), // Add some space between text and image
+                                  Image.asset(
+                                    'assets/logo/exclamation-mark.png',
+                                    width: 40,
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 60,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        color: marketbgblue,
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(); // Close the dialog
+                                        },
+                                        child: Text(
+                                          'No',
+                                          style: TextStyle(color: marketbg),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Container(
+                                      width: 60,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(6),
+                                        color: appBlueColor,
+                                      ),
+                                      child: TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) => wallet(),
+                                            ),
+                                          ); // Go back to wallet page
+                                        },
+                                        child: Text(
+                                          'Yes',
+                                          style: TextStyle(color: marketbg),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: yellow, width: 3),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Cancel',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(width: 20),
                     Container(

@@ -45,7 +45,7 @@ class _FlashfeedState extends State<Flashfeed> {
                                 Container(
                                   // This is the container for the image
                                   height: 222,
-                                  width: 363,
+                                  width: 344,
                                   decoration: BoxDecoration(
                                     color: bottomtabbg,
                                     borderRadius: BorderRadius.circular(10),
@@ -58,48 +58,7 @@ class _FlashfeedState extends State<Flashfeed> {
                                     ),
                                   ),
                                 ),
-                                // This is the container for aligning at the top right corner
-                                // Row(crossAxisAlignment: CrossAxisAlignment.start,
-                                //   children: [
-                                //     Align(
-                                //       alignment: Alignment.topLeft,
-                                //       child: Container(
-                                //         height: 33,
-                                //         width: 53,
-                                //         decoration: BoxDecoration(
-                                //           color: yellow,
-                                //           borderRadius: BorderRadius.circular(5),
-                                //         ),
-                                //         child: Center(
-                                //             child: Text(
-                                //           "New",
-                                //           style: TextStyle(fontSize: 10),
-                                //         )),
-                                //       ),
-                                //     ),
-                                //   ],
-                                // ),
-                                // Row(
-                                //   crossAxisAlignment: CrossAxisAlignment.end,
-                                //   children: [
-                                //     Align(
-                                //       alignment: Alignment.bottomCenter,
-                                //       child: Container(
-                                //         height: 33,
-                                //         decoration: BoxDecoration(
-                                //           color: yellow,
-                                //           borderRadius:
-                                //               BorderRadius.circular(5),
-                                //         ),
-                                //         child: Center(
-                                //             child: Text(
-                                //           "Journey of inspiration and discovery",
-                                //           style: TextStyle(fontSize: 10),
-                                //         )),
-                                //       ),
-                                //     ),
-                                //   ],
-                                // ),
+
                                 Positioned(
                                   top: 10,
                                   left: 10,
