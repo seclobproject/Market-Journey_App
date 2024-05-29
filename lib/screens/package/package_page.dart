@@ -13,7 +13,10 @@ class package extends StatefulWidget {
 
 class _packageState extends State<package> {
   var userid;
-  var packagedata;
+  List<dynamic>? franchisePackages;
+  List<dynamic>? signalPackages;
+  List<dynamic>? coursePackages;
+
   bool _isLoading = true;
 
   Future _PackageData() async {
@@ -21,10 +24,23 @@ class _packageState extends State<package> {
     userid = prefs.getString('userid');
 
     var response = await PackageService.ViewPackage();
+
     log.i('Profile data show.... $response');
+
     setState(() {
-      packagedata = response;
+      franchisePackages = response['packageData']
+          .where((package) => package['franchiseName'] == 'Franchise')
+          .toList();
+      signalPackages = response['packageData']
+          .where((package) => package['franchiseName'] == 'Signals')
+          .toList();
+      coursePackages = response['packageData']
+          .where((package) => package['franchiseName'] == 'Courses')
+          .toList();
+      _isLoading = false;
+
     });
+
   }
 
   Future _initLoad() async {
@@ -81,7 +97,7 @@ class _packageState extends State<package> {
                 shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                 itemCount:
-                    packagedata != null ? packagedata['packageData'].length : 0,
+                franchisePackages != null ? franchisePackages?.length : 0,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(
@@ -124,15 +140,15 @@ class _packageState extends State<package> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  packagedata['packageData'][index]
-                                      ['packageName'],
+                                  franchisePackages?[index]['packageName']
+                                      ,
                                   style: TextStyle(
                                     color: yellow,
                                     fontSize: 12,
                                   ),
                                 ),
                                 Text(
-                                    packagedata['packageData'][index]
+                                    franchisePackages?[index]
                                         ['packageAmount'],
                                     style: TextStyle(color: yellow)),
                               ],
@@ -155,7 +171,7 @@ class _packageState extends State<package> {
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemCount:
-                    packagedata != null ? packagedata['packageData'].length : 0,
+                coursePackages != null ? coursePackages?.length : 0,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(
@@ -198,13 +214,12 @@ class _packageState extends State<package> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  packagedata['packageData'][index]
+                                  coursePackages?[index]
                                       ['packageName'],
                                   style: TextStyle(color: yellow, fontSize: 12),
                                 ),
                                 Text(
-                                    packagedata['packageData'][index]
-                                        ['packageAmount'],
+                                    coursePackages?[index]['packageName'],
                                     style: TextStyle(color: yellow)),
                               ],
                             ),
@@ -226,7 +241,7 @@ class _packageState extends State<package> {
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemCount:
-                    packagedata != null ? packagedata['packageData'].length : 0,
+                signalPackages != null ? signalPackages?.length : 0,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(
@@ -269,7 +284,7 @@ class _packageState extends State<package> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  packagedata['packageData'][index]
+                                  signalPackages?[index]
                                       ['packageName'],
                                   style: TextStyle(
                                     color: yellow,
@@ -277,7 +292,7 @@ class _packageState extends State<package> {
                                   ),
                                 ),
                                 Text(
-                                    packagedata['packageData'][index]
+                                    signalPackages?[index]
                                         ['packageAmount'],
                                     style: TextStyle(color: yellow)),
                               ],
@@ -292,3 +307,7 @@ class _packageState extends State<package> {
     );
   }
 }
+
+
+
+
