@@ -124,7 +124,7 @@ class _DropdownscreenState extends State<Dropdownscreen> {
               ),
             ),
             SizedBox(height: 10),
-            Expanded(child: levelone(searchQuery: searchController.text)),
+            Expanded(child: levelone(searchQuery: searchController.text,selectedFranchise: selectedItem,)),
           ],
         ),
       ),

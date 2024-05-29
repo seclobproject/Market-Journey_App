@@ -6,10 +6,97 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../support/logger.dart';
 
+// class levelone extends StatefulWidget {
+//   final String searchQuery;
+//   final String? selectedFranchise;
+
+//   const LevelOne({
+//     super.key,
+//     required this.searchQuery,
+//     required this.selectedFranchise,
+//   });
+
+//   const levelone({super.key, required this.searchQuery});
+
+//   @override
+//   State<levelone> createState() => _leveloneState();
+// }
+
+// class _leveloneState extends State<levelone> {
+//   var userid;
+//   var child1;
+//   List filteredChild1 = [];
+//   bool _isLoading = true;
+
+//   Future _leveview() async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     userid = prefs.getString('userid');
+
+//     var response = await MemberService.Memberview();
+//     log.i('Profile data show.... $response');
+//     setState(() {
+//       child1 = response;
+//       _filterSearchResults(widget.searchQuery, widget.selectedFranchise);
+//     });
+//   }
+
+//   Future _initLoad() async {
+//     await Future.wait(
+//       [
+//         _leveview(),
+//         ///////
+//       ],
+//     );
+//     _isLoading = false;
+//   }
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     setState(() {
+//       _initLoad();
+//     });
+//   }
+
+//   @override
+//   void didUpdateWidget(levelone oldWidget) {
+//     super.didUpdateWidget(oldWidget);
+//     if (oldWidget.searchQuery != widget.searchQuery) {
+//       _filterSearchResults(widget.searchQuery);
+//     }
+//   }
+
+//   void _filterSearchResults(String query) {
+//     if (query.isNotEmpty) {
+//       setState(() {
+//         filteredChild1 = child1['child1']
+//             .where((member) =>
+//                 member['name'].toLowerCase().contains(query.toLowerCase()) ||
+//                 member['franchise']
+//                     .toLowerCase()
+//                     .contains(query.toLowerCase()) ||
+//                 member['tempPackageAmount']
+//                     .toString()
+//                     .toLowerCase()
+//                     .contains(query.toLowerCase()))
+//             .toList();
+//       });
+//     } else {
+//       setState(() {
+//         filteredChild1 = child1['child1'];
+//       });
+//     }
+//   }
+
 class levelone extends StatefulWidget {
   final String searchQuery;
+  final String? selectedFranchise;
 
-  const levelone({super.key, required this.searchQuery});
+  const levelone({
+    super.key,
+    required this.searchQuery,
+    required this.selectedFranchise,
+  });
 
   @override
   State<levelone> createState() => _leveloneState();
@@ -29,7 +116,7 @@ class _leveloneState extends State<levelone> {
     log.i('Profile data show.... $response');
     setState(() {
       child1 = response;
-      _filterSearchResults(widget.searchQuery);
+      _filterSearchResults(widget.searchQuery, widget.selectedFranchise);
     });
   }
 
@@ -46,23 +133,23 @@ class _leveloneState extends State<levelone> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      _initLoad();
-    });
+    _initLoad();
   }
 
   @override
   void didUpdateWidget(levelone oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.searchQuery != widget.searchQuery) {
-      _filterSearchResults(widget.searchQuery);
+    if (oldWidget.searchQuery != widget.searchQuery || oldWidget.selectedFranchise != widget.selectedFranchise) {
+      _filterSearchResults(widget.searchQuery, widget.selectedFranchise);
     }
   }
 
-  void _filterSearchResults(String query) {
-    if (query.isNotEmpty) {
-      setState(() {
-        filteredChild1 = child1['child1']
+  void _filterSearchResults(String query, String? franchise) {
+    if (child1 != null) {
+      var results = child1['child1'];
+
+      if (query.isNotEmpty) {
+        results = results
             .where((member) =>
                 member['name'].toLowerCase().contains(query.toLowerCase()) ||
                 member['franchise']
@@ -73,10 +160,17 @@ class _leveloneState extends State<levelone> {
                     .toLowerCase()
                     .contains(query.toLowerCase()))
             .toList();
-      });
-    } else {
+      }
+
+      if (franchise != null && franchise != 'All Package Type') {
+        results = results
+            .where((member) =>
+                member['franchise'].toLowerCase() == franchise.toLowerCase())
+            .toList();
+      }
+
       setState(() {
-        filteredChild1 = child1['child1'];
+        filteredChild1 = results;
       });
     }
   }
@@ -185,94 +279,3 @@ class _leveloneState extends State<levelone> {
             });
   }
 }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return _isLoading
-//         ? Center(child: CircularProgressIndicator())
-//         : ListView.builder(
-//             itemCount: child1 != null ? child1['child1'].length : 0,
-//             itemBuilder: (BuildContext context, int index) {
-//               return Padding(
-//                 padding:
-//                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-//                 child: Container(
-//                   height: 107,
-//                   width: 400,
-//                   decoration: BoxDecoration(
-//                     color: bluem,
-//                     borderRadius: BorderRadius.circular(10),
-//                   ),
-//                   child: Column(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: [
-//                       Padding(
-//                         padding: const EdgeInsets.symmetric(horizontal: 20),
-//                         child: Row(
-//                           children: [
-//                             Text(
-//                               "Name",
-//                               style: TextStyle(fontSize: 12, color: marketbg),
-//                             ),
-//                             SizedBox(width: 40),
-//                             Text(":",
-//                                 style:
-//                                     TextStyle(fontSize: 12, color: marketbg)),
-//                             SizedBox(width: 20),
-//                             Text(
-//                               child1['child1'][index]['name'],
-//                               style: TextStyle(fontSize: 12, color: marketbg),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                       SizedBox(height: 10),
-//                       Padding(
-//                         padding: const EdgeInsets.symmetric(horizontal: 20),
-//                         child: Row(
-//                           children: [
-//                             Text(
-//                               "Franchise",
-//                               style: TextStyle(fontSize: 12, color: marketbg),
-//                             ),
-//                             SizedBox(width: 16),
-//                             Text(":",
-//                                 style:
-//                                     TextStyle(fontSize: 12, color: marketbg)),
-//                             SizedBox(width: 20),
-//                             Text(
-//                               child1['child1'][index]['franchise'],
-//                               style: TextStyle(fontSize: 12, color: marketbg),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                       SizedBox(height: 10),
-//                       Padding(
-//                         padding: const EdgeInsets.symmetric(horizontal: 20),
-//                         child: Row(
-//                           children: [
-//                             Text(
-//                               "Package",
-//                               style: TextStyle(fontSize: 12, color: marketbg),
-//                             ),
-//                             SizedBox(width: 24),
-//                             Text(":",
-//                                 style:
-//                                     TextStyle(fontSize: 12, color: marketbg)),
-//                             SizedBox(width: 20),
-//                             Text(
-//                               child1['child1'][index]['tempPackageAmount']
-//                                   .toString(),
-//                               style: TextStyle(fontSize: 12, color: marketbg),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               );
-//             });
-//   }
-// }
