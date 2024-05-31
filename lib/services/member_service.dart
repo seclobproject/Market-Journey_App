@@ -21,4 +21,49 @@ class MemberService {
     print(response);
     return response.data;
   }
+
+  static Future Memberstate() async {
+    var dio = await DioHelper.getInstance();
+    var response = await dio.get('$baseURL/api/admin/view-states');
+    print(response);
+    return response.data;
+  }
+
+  static Future Memberdistrict(id) async {
+    var dio = await DioHelper.getInstance();
+    var response =
+        await dio.get('$baseURL/api/admin/view-dropdown-districts/$id');
+    print(response);
+    return response.data;
+  }
+
+  static Future Memberzonal(districtId) async {
+    print("$districtId fg");
+    var dio = await DioHelper.getInstance();
+    var response = await dio.get('$baseURL/api/admin/view-dropdown-zonals/$districtId');
+    print(response);
+    return response.data;
+  }
+
+  static Future Memberpanchayath() async {
+    var dio = await DioHelper.getInstance();
+    var response =
+        await dio.get('$baseURL/api/admin/view-dropdown-panchayaths');
+    print(response);
+    return response.data;
+  }
+
+  static Future Membernotdistrict() async {
+    var dio = await DioHelper.getInstance();
+    var response = await dio.get('$baseURL/api/admin/view-nottaken-districts');
+    print(response);
+    return response.data;
+  }
+
+  static Future Membernotzonal() async {
+    var dio = await DioHelper.getInstance();
+    var response = await dio.get('$baseURL/api/admin/view-nottaken-zonals');
+    print(response);
+    return response.data;
+  }
 }

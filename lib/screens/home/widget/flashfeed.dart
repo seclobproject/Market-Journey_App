@@ -42,23 +42,50 @@ class _FlashfeedState extends State<Flashfeed> {
                           children: [
                             Stack(
                               children: [
-                                Container(
-                                  // This is the container for the image
-                                  height: 222,
-                                  width: 344,
-                                  decoration: BoxDecoration(
-                                    color: bottomtabbg,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.network(
-                                      'https://www.simplilearn.com/ice9/free_resources_article_thumb/What_is_the_Importance_of_Technology.jpg',
-                                      fit: BoxFit.fill,
+                                // Container(
+                                //   // This is the container for the image
+                                //   height: 222,
+                                //   width: 344,
+                                //   decoration: BoxDecoration(
+                                //     color: bottomtabbg,
+                                //     borderRadius: BorderRadius.circular(10),
+                                //   ),
+                                //   child: ClipRRect(
+                                //     borderRadius: BorderRadius.circular(10),
+                                //     child: Image.network(
+                                //       'https://www.simplilearn.com/ice9/free_resources_article_thumb/What_is_the_Importance_of_Technology.jpg',
+                                //       fit: BoxFit.fill,
+                                //     ),
+                                //   ),
+                                // ),
+                                Row(
+                                  children: [
+                                    Container(
+                                      // This is the container for the image
+                                      height: MediaQuery.of(context)
+                                              .size
+                                              .width *
+                                          244 /
+                                          344, // Adjust the aspect ratio accordingly
+                                      width: (MediaQuery.of(context)
+                                              .size
+                                              .width) *
+                                          0.87, // Set to 90% of the screen width
+                                      decoration: BoxDecoration(
+                                        color: bottomtabbg,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(
+                                          'https://www.simplilearn.com/ice9/free_resources_article_thumb/What_is_the_Importance_of_Technology.jpg',
+                                          fit: BoxFit
+                                              .cover, // Use BoxFit.cover to cover the entire container
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-
                                 Positioned(
                                   top: 10,
                                   left: 10,
