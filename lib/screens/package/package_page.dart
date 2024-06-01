@@ -63,6 +63,7 @@ class _packageState extends State<package> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: marketbg,
       appBar: AppBar(
@@ -140,8 +141,8 @@ class _packageState extends State<package> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  franchisePackages?[index]['packageName']
-                                      ,
+                                  franchisePackages?[index]['packageName'],
+
                                   style: TextStyle(
                                     color: yellow,
                                     fontSize: 12,

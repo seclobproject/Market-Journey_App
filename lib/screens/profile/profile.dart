@@ -192,97 +192,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     }),
               ),
 
-              // Text(profiledata['userStatus']),
-              // SizedBox(height: 20,),
-              // Container(
-              //   width: double.infinity,
-              //   decoration: BoxDecoration(color: Color.fromRGBO(7, 39, 64, 1), borderRadius: BorderRadius.circular(10)),
-              //   child: Padding(
-              //     padding: const EdgeInsets.all(15),
-              //     child: Align(
-              //       alignment: Alignment.center,
-              //       child: Column(
-              //         children: [
-              //           Row(children: [
-              //             Icon(Icons.mail,color: Colors.white,size: 15 ,),
-              //             SizedBox(width: 5,),
-              //             Text('Email : ${profiledata['email']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //           SizedBox(height: 8,),
-              //           Row(children: [
-              //             Icon(Icons.phone,color: Colors.white,size: 15),
-              //             SizedBox(width: 5,),
-              //             Text('Phone : ${profiledata['phone']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //           SizedBox(height: 8,),
-              //           Row(children: [
-              //             Icon(Icons.numbers,color: Colors.white,size: 15),
-              //             SizedBox(width: 5,),
-              //             Text('UserId : ${profiledata['ownSponserId']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //           SizedBox(height: 8,),
-              //           Row(children: [
-              //             Icon(Icons.location_city,color: Colors.white,size: 15),
-              //             SizedBox(width: 5,),
-              //             Text('Address : ${profiledata['address']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //           SizedBox(height: 8,),
-              //           Row(children: [
-              //             Icon(Icons.calendar_month,color: Colors.white,size: 15),
-              //             SizedBox(width: 5,),
-              //             Text('Date Of Birth : ${profiledata['dateOfBirth']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //           SizedBox(height: 8,),
-              //           Row(children: [
-              //             Icon(Icons.wallet,color: Colors.white,size: 15),
-              //             SizedBox(width: 5,),
-              //             Text('Package Amount : ${profiledata['packageAmount']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //           SizedBox(height: 8,),
-              //           Row(children: [
-              //             Icon(Icons.wallet,color: Colors.white,size: 15),
-              //             SizedBox(width: 5,),
-              //             Text('Wallet Amount : ${profiledata['walletAmount']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //           SizedBox(height: 8,),
-              //           Row(children: [
-              //             Icon(Icons.type_specimen,color: Colors.white,size: 15),
-              //             SizedBox(width: 5,),
-              //             Text('Package Type : ${profiledata['packageType']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //           // SizedBox(height: 8,),
-              //           // Row(children: [
-              //           //   Icon(Icons.drive_file_rename_outline,color: Colors.white,size: 15),
-              //           //   SizedBox(width: 5,),
-              //           //   Text('Package Name : ${profiledata['']}',style: TextStyle(color: Colors.white),),
-              //           //
-              //           // ],),
-              //           SizedBox(height: 8,),
-              //           Row(children: [
-              //             Icon(Icons.stacked_bar_chart,color: Colors.white,size: 15),
-              //             SizedBox(width: 5,),
-              //             Text('Points : ${profiledata['points']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //           SizedBox(height: 8,),
-              //           Row(children: [
-              //             Icon(Icons.leaderboard,color: Colors.white,size: 15),
-              //             SizedBox(width: 5,),
-              //             Text('Pool Rank : ${profiledata['pool']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
+
               SizedBox(
                 height: 30,
               ),
@@ -673,6 +583,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                   ),
                                   SizedBox(height: 16),
+
                                   Row(
                                     children: [
                                       Text(
@@ -760,6 +671,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ),
                                     ],
                                   ),
+
                                   SizedBox(height: 17),
                                   Divider(),
                                   SizedBox(height: 14),

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:master_journey/authentication_page/login.dart';
 import 'package:master_journey/resources/color.dart';
 
+import '../screens/home/home_page.dart';
+
 class TransactionScreen extends StatefulWidget {
   const TransactionScreen({super.key});
 
@@ -107,7 +109,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => loginpage()),
+                    MaterialPageRoute(builder: (context) => home()),
                   );
                 },
                 child: Center(
