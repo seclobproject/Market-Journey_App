@@ -38,17 +38,17 @@ class MemberService {
   }
 
   static Future Memberzonal(districtId) async {
-    print("$districtId fg");
     var dio = await DioHelper.getInstance();
-    var response = await dio.get('$baseURL/api/admin/view-dropdown-zonals/$districtId');
+    var response =
+        await dio.get('$baseURL/api/admin/view-dropdown-zonals/$districtId');
     print(response);
     return response.data;
   }
 
-  static Future Memberpanchayath() async {
+  static Future Memberpanchayath(zonalId) async {
     var dio = await DioHelper.getInstance();
     var response =
-        await dio.get('$baseURL/api/admin/view-dropdown-panchayaths');
+        await dio.get('$baseURL/api/admin/view-dropdown-panchayaths/$zonalId');
     print(response);
     return response.data;
   }

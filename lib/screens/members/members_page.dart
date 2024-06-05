@@ -48,7 +48,7 @@ class _memberspageState extends State<memberspage> {
               context,
               MaterialPageRoute(
                   builder: (context) => const AddMemberPage(
-                        id: 'id',
+                        id: 'id',name: 'name',
                       )),
             );
           });

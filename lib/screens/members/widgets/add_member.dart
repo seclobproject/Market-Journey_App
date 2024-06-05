@@ -9,12 +9,11 @@ import '../../../services/member_service.dart';
 import '../../../support/logger.dart';
 
 class AddMemberPage extends StatefulWidget {
-  const AddMemberPage({
-    Key? key,
-    required this.id,
-  }) : super(key: key);
+  const AddMemberPage({Key? key, required this.id, required this.name})
+      : super(key: key);
 
   final String id;
+  final String name;
 
   @override
   State<AddMemberPage> createState() => _AddMemberPageState();
@@ -29,6 +28,8 @@ class _AddMemberPageState extends State<AddMemberPage> {
   var districtId;
   var zonals;
   var zonalId;
+  var panchayaths;
+  var panchayathsId;
 
   bool _isLoading = false;
 
@@ -61,7 +62,6 @@ class _AddMemberPageState extends State<AddMemberPage> {
       var response = await MemberService.Memberstate();
       log.i('State API response: $response');
 
-      // Check the response structure and log relevant parts
       if (response != null &&
           response['sts'] == '01' &&
           response['msg'] == 'States retrieved successfully') {
@@ -70,20 +70,6 @@ class _AddMemberPageState extends State<AddMemberPage> {
           stateType = List<String>.from(
               states['states'].map((state) => state['stateName']));
           log.i('State names extracted: $stateType');
-
-          // Extract the state IDs and assign to a variable
-          List<String> stateIds =
-              List<String>.from(states['states'].map((state) => state['id']));
-          log.i('State IDs extracted: $stateIds');
-
-          // Assign the first state ID to stateId (or handle as needed)
-          if (stateIds.isNotEmpty) {
-            stateId =
-                stateIds[0]; // Or any specific logic to select the desired ID
-            log.i('State ID assigned: $stateId');
-          } else {
-            log.e('No state IDs found in response');
-          }
         });
       } else {
         log.e('Unexpected API response: $response');
@@ -93,88 +79,77 @@ class _AddMemberPageState extends State<AddMemberPage> {
     }
   }
 
-  Future<void> _Memberdistrict(districtId) async {
-    var reqData = {
-      'id': districtId,
-    };
-
+  Future<void> _Memberdistrict(String stateId) async {
     try {
-      var response = await MemberService.Memberdistrict(districtId);
+      var response = await MemberService.Memberdistrict(stateId);
       log.i('District API response: $response');
 
-      setState(() {
-        if (response.containsKey('districts')) {
-          var districtsList = response['districts'];
+      if (response != null &&
+          response['sts'] == '01' &&
+          response['msg'] == 'Districts retrieved success') {
+        setState(() {
+          districts = response['districts'];
 
-          // Extract district IDs and assign the first one to districtId
-          List<String> districtIds = List<String>.from(
-              districtsList.map((district) => district['id']).toList());
-          log.i('District IDs extracted: $districtIds');
-
-          if (districtIds.isNotEmpty) {
-            districtId = districtIds[
-                0]; // Or any specific logic to select the desired ID
-            log.i('District ID assigned: $districtId');
-          } else {
-            log.e('No district IDs found in response');
-          }
-
-          // Map district names and remove duplicates
-          districtType = List<String>.from(districtsList
-              .map((district) => district['name'])
-              .where((name) => name != null)
-              .toSet()
-              .toList());
+          // Extract district names and remove duplicates
+          districtType = List<String>.from(
+              districts.map((district) => district['name']).toSet().toList());
           log.i('District names extracted: $districtType');
-
-          print(districtType);
-        }
-      });
+        });
+      } else {
+        log.e('Unexpected API response: $response');
+      }
     } catch (e) {
       log.e('Error fetching districts: $e');
     }
   }
 
-  Future<void> _Memberzonal(id) async {
-    print("$id hgvhg");
-    var reqData = {
-      districtId: id, // Use the id parameter here
-    };
-
+  Future<void> _Memberzonal(String districtId) async {
     try {
-      var response = await MemberService.Memberzonal(id);
+      var response = await MemberService.Memberzonal(districtId);
       log.i('Zonal API response: $response');
 
-      setState(() {
-        if (response.containsKey('zonals')) {
-          var zonalsList = response['zonals'];
+      if (response != null &&
+          response['sts'] == '01' &&
+          response['msg'] == 'Zonals retrieved successfully') {
+        setState(() {
+          zonals = response['zonals'];
 
-          // Extract zonal IDs and assign the first one to zonalId
-          List<String> zonalIds = List<String>.from(
-              zonalsList.map((zonal) => zonal['id']).toList());
-          log.i('Zonal IDs extracted: $zonalIds');
+          // Extract zonal names and remove duplicates
+          zonalType = List<String>.from(
+              zonals.map((zonal) => zonal['name']).toSet().toList());
+          log.i('Zonal names extracted: $zonalType');
+        });
+      } else {
+        log.e('Unexpected API response: $response');
+      }
+    } catch (e) {
+      log.e('Error fetching zonals: $e');
+    }
+  }
 
-          if (zonalIds.isNotEmpty) {
-            zonalId =
-                zonalIds[0]; // Or any specific logic to select the desired ID
-            log.i('Zonal ID assigned: $zonalId');
-          } else {
-            log.e('No zonal IDs found in response');
-          }
+  Future<void> _Memberpanchayath(String zonalId) async {
+    try {
+      var response = await MemberService.Memberpanchayath(zonalId);
+      log.i('Panchayath API response: $response');
 
-          // Map zonal names and remove duplicates
-          zonalType = List<String>.from(zonalsList
-              .map((zonal) => zonal['name'])
-              .where((name) => name != null)
+      if (response != null &&
+          response['sts'] == '01' &&
+          response['msg'] == 'panchayaths retrieved successfully') {
+        setState(() {
+          panchayaths = response['panchayaths'];
+
+          // Extract Panchayath names and remove duplicates
+          panchayathType = List<String>.from(panchayaths
+              .map((panchayath) => panchayath['name'])
               .toSet()
               .toList());
-          log.i('Zonal names extracted: $zonalType');
-
-          print(zonalType);
-        }
-      });
+          log.i('Panchayath names extracted: $panchayathType');
+        });
+      } else {
+        log.e('Unexpected API response: $response');
+      }
     } catch (e) {
-      log.e('Error fetching zonal: $e');
+      log.e('Error fetching panchayaths: $e');
     }
   }
 
@@ -641,7 +616,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
                         });
                       },
                       style: TextStyle(
-                          color: Colors.blue,
+                          color: bluem,
                           fontSize: 12,
                           fontWeight: FontWeight.w400),
                     ),
@@ -682,7 +657,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
                         });
                       },
                       style: TextStyle(
-                          color: Colors.blue,
+                          color: bluem,
                           fontSize: 12,
                           fontWeight: FontWeight.w400),
                     ),
@@ -690,256 +665,90 @@ class _AddMemberPageState extends State<AddMemberPage> {
                   const SizedBox(
                     height: 8,
                   ),
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'State',
-                              style: TextStyle(color: marketbgblue),
-                            )),
+                  Column(children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'State',
+                          style: TextStyle(color: bluem),
+                        ),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Container(
-                          height: 45,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                          ),
-                          child: Center(
-                            child: DropdownButtonFormField(
-                              decoration: const InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10.0)),
-                                    borderSide:
-                                        BorderSide(color: yellow, width: 1),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10.0)),
-                                    borderSide: BorderSide(color: yellow),
-                                  ),
-                                  hintText: 'Select State',
-                                  hintStyle: TextStyle(
-                                      fontSize: 12,
-                                      color: marketbgblue) // Remove underline
-                                  ),
-                              isExpanded: true,
-                              icon: Icon(Icons.arrow_drop_down),
-                              iconSize: 20,
-                              elevation: 10,
-                              style: TextStyle(fontSize: 15),
-                              items: stateType.map((String state) {
-                                return DropdownMenuItem<String>(
-                                  value: state,
-                                  child: Text(
-                                    state,
-                                    style:
-                                        TextStyle(fontSize: 12, color: bluem),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (String? newVal) {
-                                setState(() {
-                                  stateTypedropdownvalue = newVal;
-                                  districtType = [];
-                                  if (stateTypedropdownvalue != null) {
-                                    String selectedStateId = states['states']
-                                        .firstWhere((state) =>
-                                            state['stateName'] ==
-                                            stateTypedropdownvalue)['id'];
-                                    _Memberdistrict(selectedStateId);
-                                  }
-                                });
-                              },
-                              value: stateTypedropdownvalue,
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Container(
+                        height: 45,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                        child: Center(
+                          child: DropdownButtonFormField<String>(
+                            decoration: const InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
+                                borderSide: BorderSide(color: yellow, width: 1),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
+                                borderSide: BorderSide(color: yellow),
+                              ),
+                              hintText: 'Select State',
+                              hintStyle: TextStyle(fontSize: 12, color: bluem),
                             ),
+                            isExpanded: true,
+                            icon: Icon(Icons.arrow_drop_down),
+                            iconSize: 20,
+                            elevation: 10,
+                            style: TextStyle(fontSize: 15),
+                            items: stateType.map((String state) {
+                              return DropdownMenuItem<String>(
+                                value: state,
+                                child: Text(
+                                  state,
+                                  style: TextStyle(fontSize: 12, color: bluem),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (String? newVal) {
+                              setState(() {
+                                stateTypedropdownvalue = newVal;
+                                districtTypedropdownvalue = null;
+                                zonalTypedropdownvalue = null;
+                                districtType = [];
+                                zonalType = [];
+                                if (stateTypedropdownvalue != null) {
+                                  // Find the state ID corresponding to the selected state name
+                                  String selectedStateId = states['states']
+                                      .firstWhere((state) =>
+                                          state['stateName'] ==
+                                          stateTypedropdownvalue)['id'];
+                                  _Memberdistrict(selectedStateId);
+                                }
+                              });
+                            },
+                            value: stateTypedropdownvalue,
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
+                    ),
+                    if (districtType.isNotEmpty) ...[
+                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'District',
-                              style: TextStyle(color: marketbgblue),
-                            )),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Container(
-                          height: 45,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                          ),
-                          child: Center(
-                            child: DropdownButtonFormField(
-                              decoration: const InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10.0)),
-                                    borderSide:
-                                        BorderSide(color: yellow, width: 1),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10.0)),
-                                    borderSide: BorderSide(color: yellow),
-                                  ),
-                                  hintText: 'Select District',
-                                  hintStyle: TextStyle(
-                                      fontSize: 12,
-                                      color: marketbgblue) // Remove underline
-                                  ),
-                              isExpanded: true,
-                              icon: Icon(Icons.arrow_drop_down),
-                              iconSize: 20,
-                              elevation: 10,
-                              style: TextStyle(fontSize: 15),
-                              items: stateType.map((String state) {
-                                return DropdownMenuItem<String>(
-                                  value: state,
-                                  child: Text(
-                                    state,
-                                    style:
-                                        TextStyle(fontSize: 12, color: bluem),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (String? newVal) {
-                                setState(() {
-                                  districtTypedropdownvalue = newVal;
-                                  zonalType = [];
-                                  if (districtTypedropdownvalue != null) {
-                                    String selectedDistrictId = districts[
-                                            'districts']
-                                        .firstWhere((district) =>
-                                            district['name'] ==
-                                            districtTypedropdownvalue)['id'];
-                                    _Memberdistrict(selectedDistrictId);
-                                  }
-                                });
-                              },
-                              value: districtTypedropdownvalue,
-                            ),
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            'District',
+                            style: TextStyle(color: bluem),
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                    ],
-                  ),
-                  // Column(
-                  //   children: [
-                  //     Padding(
-                  //       padding: const EdgeInsets.symmetric(horizontal: 20),
-                  //       child: Align(
-                  //           alignment: Alignment.topLeft,
-                  //           child: Text(
-                  //             'District',
-                  //             style: TextStyle(color: marketbgblue),
-                  //           )),
-                  //     ),
-                  //     SizedBox(
-                  //       height: 10,
-                  //     ),
-                  //     Padding(
-                  //       padding: const EdgeInsets.symmetric(horizontal: 20),
-                  //       child: Container(
-                  //         height: 45,
-                  //         decoration: BoxDecoration(
-                  //           borderRadius: BorderRadius.all(Radius.circular(5)),
-                  //         ),
-                  //         child: Center(
-                  //           child: DropdownButtonFormField<String>(
-                  //             decoration: const InputDecoration(
-                  //                 enabledBorder: OutlineInputBorder(
-                  //                   borderRadius:
-                  //                       BorderRadius.all(Radius.circular(10.0)),
-                  //                   borderSide:
-                  //                       BorderSide(color: yellow, width: 1),
-                  //                 ),
-                  //                 focusedBorder: OutlineInputBorder(
-                  //                   borderRadius:
-                  //                       BorderRadius.all(Radius.circular(10.0)),
-                  //                   borderSide: BorderSide(color: yellow),
-                  //                 ),
-                  //                 hintText: 'Select District',
-                  //                 hintStyle: TextStyle(
-                  //                     fontSize: 12,
-                  //                     color: marketbgblue) // Remove underline
-                  //                 ),
-                  //             isExpanded: true,
-                  //             icon: Icon(Icons.arrow_drop_down),
-                  //             iconSize: 20,
-                  //             elevation: 10,
-                  //             style: TextStyle(fontSize: 15),
-                  //             items: districtType.map((item) {
-                  //               return DropdownMenuItem<String>(
-                  //                 value: item,
-                  //                 child: Text(
-                  //                   item,
-                  //                   style: TextStyle(
-                  //                       fontSize: 12, color: marketbgblue),
-                  //                 ),
-                  //               );
-                  //             }).toList(),
-                  //             onChanged: (String? newVal) {
-                  //               setState(() {
-                  //                 districtTypedropdownvalue = newVal;
-                  //                 zonalType = [];
-                  //                 if (districtTypedropdownvalue != null) {
-                  //                   String selectedDistrictId = districts[
-                  //                           'districts']
-                  //                       .firstWhere((district) =>
-                  //                           district['name'] ==
-                  //                           districtTypedropdownvalue)['id'];
-                  //                   _Memberzonal(selectedDistrictId);
-                  //                 }
-                  //               });
-                  //             },
-                  //             value: districtTypedropdownvalue,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     const SizedBox(
-                  //       height: 8,
-                  //     ),
-                  //   ],
-                  // ),
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'Zonal',
-                              style: TextStyle(color: marketbgblue),
-                            )),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Container(
@@ -950,74 +759,70 @@ class _AddMemberPageState extends State<AddMemberPage> {
                           child: Center(
                             child: DropdownButtonFormField<String>(
                               decoration: const InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10.0)),
-                                    borderSide:
-                                        BorderSide(color: yellow, width: 1),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10.0)),
-                                    borderSide: BorderSide(color: yellow),
-                                  ),
-                                  hintText: 'Select Zonal',
-                                  hintStyle: TextStyle(
-                                      fontSize: 12,
-                                      color: marketbgblue) // Remove underline
-                                  ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide:
+                                      BorderSide(color: yellow, width: 1),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide(color: yellow),
+                                ),
+                                hintText: 'Select District',
+                                hintStyle:
+                                    TextStyle(fontSize: 12, color: bluem),
+                              ),
                               isExpanded: true,
                               icon: Icon(Icons.arrow_drop_down),
                               iconSize: 20,
                               elevation: 10,
                               style: TextStyle(fontSize: 15),
-                              items: zonalType.map((item) {
+                              items: districtType.map((String district) {
                                 return DropdownMenuItem<String>(
-                                  value: item,
+                                  value: district,
                                   child: Text(
-                                    item,
-                                    style: TextStyle(
-                                        fontSize: 12, color: marketbgblue),
+                                    district,
+                                    style:
+                                        TextStyle(fontSize: 12, color: bluem),
                                   ),
                                 );
                               }).toList(),
                               onChanged: (String? newVal) {
                                 setState(() {
-                                  zonalTypedropdownvalue = newVal;
-                                  panchayathType = [];
-                                  if (zonalTypedropdownvalue != null) {
-                                    String selectedZonalId = zonals['zonals']
-                                        .firstWhere((zonal) =>
-                                            zonal['name'] ==
-                                            zonalTypedropdownvalue)['id'];
-                                    _Memberdistrict(selectedZonalId);
+                                  districtTypedropdownvalue = newVal;
+                                  zonalTypedropdownvalue = null;
+                                  zonalType = [];
+                                  if (districtTypedropdownvalue != null) {
+                                    // Find the district ID corresponding to the selected district name
+                                    String selectedDistrictId =
+                                        districts.firstWhere((district) =>
+                                            district['name'] ==
+                                            districtTypedropdownvalue)['id'];
+                                    _Memberzonal(selectedDistrictId);
                                   }
                                 });
                               },
-                              value: zonalTypedropdownvalue,
+                              value: districtTypedropdownvalue,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 8,
-                      ),
                     ],
-                  ),
-                  Column(
-                    children: [
+                    if (zonalType.isNotEmpty) ...[
+                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'Panchayath',
-                              style: TextStyle(color: marketbgblue),
-                            )),
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            'Zonal',
+                            style: TextStyle(color: bluem),
+                          ),
+                        ),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Container(
@@ -1026,43 +831,115 @@ class _AddMemberPageState extends State<AddMemberPage> {
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                           ),
                           child: Center(
-                            child: DropdownButtonFormField(
+                            child: DropdownButtonFormField<String>(
                               decoration: const InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10.0)),
-                                    borderSide:
-                                        BorderSide(color: yellow, width: 1),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10.0)),
-                                    borderSide: BorderSide(color: yellow),
-                                  ),
-                                  hintText: 'Select Panchayath',
-                                  hintStyle: TextStyle(
-                                      fontSize: 12,
-                                      color: marketbgblue) // Remove underline
-                                  ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide:
+                                      BorderSide(color: yellow, width: 1),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide(color: yellow),
+                                ),
+                                hintText: 'Select Zonal',
+                                hintStyle:
+                                    TextStyle(fontSize: 12, color: bluem),
+                              ),
                               isExpanded: true,
                               icon: Icon(Icons.arrow_drop_down),
                               iconSize: 20,
                               elevation: 10,
                               style: TextStyle(fontSize: 15),
-                              items: panchayathType.map((item) {
-                                return DropdownMenuItem(
-                                  value: item,
+                              items: zonalType.map((String zonal) {
+                                return DropdownMenuItem<String>(
+                                  value: zonal,
                                   child: Text(
-                                    item,
-                                    style: TextStyle(
-                                        fontSize: 12, color: marketbgblue),
+                                    zonal,
+                                    style:
+                                        TextStyle(fontSize: 12, color: bluem),
                                   ),
                                 );
                               }).toList(),
-                              onChanged: (newVal) {
+                              onChanged: (String? newVal) {
                                 setState(() {
-                                  panchayathTypedropdownvalue =
-                                      newVal as String?;
+                                  zonalTypedropdownvalue = newVal;
+                                  panchayathTypedropdownvalue = null;
+                                  panchayathType = [];
+                                  if (zonalTypedropdownvalue != null) {
+                                    // Find the zonal ID corresponding to the selected zonal name
+                                    String selectedZonalId = zonals.firstWhere(
+                                        (zonal) =>
+                                            zonal['name'] ==
+                                            zonalTypedropdownvalue)['id'];
+                                    _Memberpanchayath(selectedZonalId);
+                                  }
+                                });
+                              },
+                              value: zonalTypedropdownvalue,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                    if (panchayathType.isNotEmpty) ...[
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            'Panchayath',
+                            style: TextStyle(color: bluem),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Container(
+                          height: 45,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          ),
+                          child: Center(
+                            child: DropdownButtonFormField<String>(
+                              decoration: const InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide:
+                                      BorderSide(color: yellow, width: 1),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide(color: yellow),
+                                ),
+                                hintText: 'Select Panchayath',
+                                hintStyle:
+                                    TextStyle(fontSize: 12, color: bluem),
+                              ),
+                              isExpanded: true,
+                              icon: Icon(Icons.arrow_drop_down),
+                              iconSize: 20,
+                              elevation: 10,
+                              style: TextStyle(fontSize: 15),
+                              items: panchayathType.map((String panchayath) {
+                                return DropdownMenuItem<String>(
+                                  value: panchayath,
+                                  child: Text(
+                                    panchayath,
+                                    style:
+                                        TextStyle(fontSize: 12, color: bluem),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (String? newVal) {
+                                setState(() {
+                                  panchayathTypedropdownvalue = newVal;
                                 });
                               },
                               value: panchayathTypedropdownvalue,
@@ -1070,10 +947,10 @@ class _AddMemberPageState extends State<AddMemberPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 8,
-                      ),
                     ],
+                  ]),
+                  const SizedBox(
+                    height: 10,
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),
