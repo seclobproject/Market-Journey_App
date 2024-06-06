@@ -38,12 +38,15 @@ class _AddMemberPageState extends State<AddMemberPage> {
   int? phone;
   int? dob;
   String? password;
+  String packageAmount = '';
+  String packageAmountGST = '';
 
+  List<Map<String, dynamic>> packageData = [];
   String? packageTypedropdownvalue;
   List<String> packageType = [];
 
   String? packageNamedropdownvalue;
-  List<String> packageName = [];
+  List<String> PackageName = [];
 
   String? stateTypedropdownvalue;
   List<String> stateType = [];
@@ -56,6 +59,36 @@ class _AddMemberPageState extends State<AddMemberPage> {
 
   String? panchayathTypedropdownvalue;
   List<String> panchayathType = [];
+
+  Future<void> _PackageData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userid = prefs.getString('userid');
+
+    try {
+      var response = await PackageService.ViewPackage();
+      log.i('Profile data show.... $response');
+
+      if (response != null &&
+          response['sts'] == '01' &&
+          response['msg'] == 'Packages retrieved successfully') {
+        setState(() {
+          packageData =
+              List<Map<String, dynamic>>.from(response['packageData']);
+
+          // Extract package types and remove duplicates
+          packageType = packageData
+              .map((packagedata) => packagedata['franchiseName'] as String)
+              .toSet()
+              .toList();
+          log.i('Package data names extracted: $packageType');
+        });
+      } else {
+        log.e('Unexpected API response: $response');
+      }
+    } catch (e) {
+      log.e('Error fetching package data: $e');
+    }
+  }
 
   Future _Memberstate() async {
     try {
@@ -182,14 +215,46 @@ class _AddMemberPageState extends State<AddMemberPage> {
     }
   }
 
-  Future _PackageData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    userid = prefs.getString('userid');
-
-    var response = await PackageService.ViewPackage();
+  Future _Membernotdistrict() async {
+    var response = await MemberService.Membernotdistrict();
     log.i('Profile data show.... $response');
     setState(() {
       packagedata = response;
+    });
+  }
+
+  Future<void> _Membernotzonal(String? newVal) async {
+    if (newVal == 'District Franchise') {
+      try {
+        var response = await MemberService.Memberdistrict(stateId);
+        if (response != null && response['sts'] == '01') {
+          setState(() {
+            districtType = List<String>.from(
+                response['districts'].map((district) => district['name']));
+            log.i('District names extracted: $districtType');
+          });
+        } else {
+          log.e('Unexpected API response: $response');
+        }
+      } catch (e) {
+        log.e('Error fetching district data: $e');
+      }
+    }
+  }
+
+  void _updatePackageAmountAndGST(String? newVal) {
+    setState(() {
+      packageNamedropdownvalue = newVal;
+      packageAmount = packageData
+          .firstWhere(
+              (element) =>
+                  element['packageName'] == packageNamedropdownvalue &&
+                  element['franchiseName'] == packageTypedropdownvalue,
+              orElse: () => {})
+          .putIfAbsent('packageAmount', () => '')
+          .toString();
+      packageAmountGST =
+          (double.tryParse(packageAmount) ?? 0 * 0.18).toStringAsFixed(2);
     });
   }
 
@@ -198,12 +263,6 @@ class _AddMemberPageState extends State<AddMemberPage> {
       [
         _PackageData(),
         _Memberstate(),
-        // _Memberdistrict(),
-        // _Memberzonal(),
-        // _Memberpanchayath(),
-        // _Membernotdistrict(),
-        // _Membernotzonal(),
-        ///////
       ],
     );
     _isLoading = false;
@@ -456,15 +515,12 @@ class _AddMemberPageState extends State<AddMemberPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'Package Type',
-                          style: TextStyle(color: marketbgblue),
-                        )),
+                      alignment: Alignment.topLeft,
+                      child: Text('Package Type',
+                          style: TextStyle(color: marketbgblue)),
+                    ),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Container(
@@ -473,41 +529,56 @@ class _AddMemberPageState extends State<AddMemberPage> {
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                       ),
                       child: Center(
-                        child: DropdownButtonFormField(
+                        child: DropdownButtonFormField<String>(
                           decoration: const InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide: BorderSide(color: yellow, width: 1),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide: BorderSide(color: yellow),
-                              ),
-                              hintText: 'Select Package Type',
-                              hintStyle: TextStyle(
-                                  fontSize: 12,
-                                  color: marketbgblue) // Remove underline
-                              ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(color: yellow, width: 1),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(color: yellow),
+                            ),
+                            hintText: 'Select Package Type',
+                            hintStyle:
+                                TextStyle(fontSize: 12, color: marketbgblue),
+                          ),
                           isExpanded: true,
                           icon: Icon(Icons.arrow_drop_down),
                           iconSize: 20,
                           elevation: 10,
                           style: TextStyle(fontSize: 15),
-                          items: packageType.map((item) {
-                            return DropdownMenuItem(
-                              value: item,
+                          items: packageType.map((String packagedata) {
+                            return DropdownMenuItem<String>(
+                              value: packagedata,
                               child: Text(
-                                item,
+                                packagedata,
                                 style: TextStyle(
                                     fontSize: 12, color: marketbgblue),
                               ),
                             );
                           }).toList(),
-                          onChanged: (newVal) {
+                          onChanged: (String? newVal) async {
+                            await _Membernotzonal(newVal);
                             setState(() {
                               packageTypedropdownvalue = newVal;
+                              packageNamedropdownvalue = null;
+                              packageAmount = '';
+                              packageAmountGST = '';
+
+                              if (packageTypedropdownvalue != null) {
+                                PackageName = packageData
+                                    .where((packagedata) =>
+                                        packagedata['franchiseName'] ==
+                                        packageTypedropdownvalue)
+                                    .map((packagedata) =>
+                                        packagedata['packageName'] as String)
+                                    .toList();
+                              } else {
+                                PackageName = [];
+                              }
                             });
                           },
                           value: packageTypedropdownvalue,
@@ -515,21 +586,16 @@ class _AddMemberPageState extends State<AddMemberPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 8,
-                  ),
+                  SizedBox(height: 8),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'Package Name',
-                          style: TextStyle(color: marketbgblue),
-                        )),
+                      alignment: Alignment.topLeft,
+                      child: Text('Package Name',
+                          style: TextStyle(color: marketbgblue)),
+                    ),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Container(
@@ -538,30 +604,29 @@ class _AddMemberPageState extends State<AddMemberPage> {
                         borderRadius: BorderRadius.all(Radius.circular(5)),
                       ),
                       child: Center(
-                        child: DropdownButtonFormField(
+                        child: DropdownButtonFormField<String>(
                           decoration: const InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide: BorderSide(color: yellow, width: 1),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide: BorderSide(color: yellow),
-                              ),
-                              hintText: 'Select Package name',
-                              hintStyle: TextStyle(
-                                  fontSize: 12,
-                                  color: marketbgblue) // Remove underline
-                              ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(color: yellow, width: 1),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(color: yellow),
+                            ),
+                            hintText: 'Select Package Name',
+                            hintStyle:
+                                TextStyle(fontSize: 12, color: marketbgblue),
+                          ),
                           isExpanded: true,
                           icon: Icon(Icons.arrow_drop_down),
                           iconSize: 20,
                           elevation: 10,
                           style: TextStyle(fontSize: 15),
-                          items: packageName.map((item) {
-                            return DropdownMenuItem(
+                          items: PackageName.map((String item) {
+                            return DropdownMenuItem<String>(
                               value: item,
                               child: Text(
                                 item,
@@ -570,35 +635,32 @@ class _AddMemberPageState extends State<AddMemberPage> {
                               ),
                             );
                           }).toList(),
-                          onChanged: (newVal) {
-                            setState(() {
-                              packageNamedropdownvalue = newVal as String?;
-                            });
-                          },
+                          onChanged: _updatePackageAmountAndGST,
                           value: packageNamedropdownvalue,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Text('Package Amount',
-                            style:
-                                TextStyle(color: marketbgblue, fontSize: 14))),
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Package Amount',
+                        style: TextStyle(color: bluem, fontSize: 14),
+                      ),
+                    ),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: TextField(
+                      readOnly: true,
                       decoration: InputDecoration(
                         hintText: 'Package amount',
                         hintStyle: TextStyle(
-                            color: marketbgblue, fontWeight: FontWeight.w400),
+                            color: bluem, fontWeight: FontWeight.w400),
                         contentPadding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                         enabledBorder: OutlineInputBorder(
@@ -612,13 +674,14 @@ class _AddMemberPageState extends State<AddMemberPage> {
                       ),
                       onChanged: (text) {
                         setState(() {
-                          name = text;
+                          packageAmount = text;
                         });
                       },
                       style: TextStyle(
                           color: bluem,
                           fontSize: 12,
                           fontWeight: FontWeight.w400),
+                      controller: TextEditingController(text: packageAmount),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -636,6 +699,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: TextField(
+                      readOnly: true,
                       decoration: InputDecoration(
                         hintText: 'Package amount GST',
                         hintStyle: TextStyle(
@@ -660,82 +724,88 @@ class _AddMemberPageState extends State<AddMemberPage> {
                           color: bluem,
                           fontSize: 12,
                           fontWeight: FontWeight.w400),
+                      controller: TextEditingController(text: packageAmountGST),
                     ),
                   ),
                   const SizedBox(
                     height: 8,
                   ),
                   Column(children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'State',
-                          style: TextStyle(color: bluem),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Container(
-                        height: 45,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                        ),
-                        child: Center(
-                          child: DropdownButtonFormField<String>(
-                            decoration: const InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide: BorderSide(color: yellow, width: 1),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide: BorderSide(color: yellow),
-                              ),
-                              hintText: 'Select State',
-                              hintStyle: TextStyle(fontSize: 12, color: bluem),
-                            ),
-                            isExpanded: true,
-                            icon: Icon(Icons.arrow_drop_down),
-                            iconSize: 20,
-                            elevation: 10,
-                            style: TextStyle(fontSize: 15),
-                            items: stateType.map((String state) {
-                              return DropdownMenuItem<String>(
-                                value: state,
-                                child: Text(
-                                  state,
-                                  style: TextStyle(fontSize: 12, color: bluem),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (String? newVal) {
-                              setState(() {
-                                stateTypedropdownvalue = newVal;
-                                districtTypedropdownvalue = null;
-                                zonalTypedropdownvalue = null;
-                                districtType = [];
-                                zonalType = [];
-                                if (stateTypedropdownvalue != null) {
-                                  // Find the state ID corresponding to the selected state name
-                                  String selectedStateId = states['states']
-                                      .firstWhere((state) =>
-                                          state['stateName'] ==
-                                          stateTypedropdownvalue)['id'];
-                                  _Memberdistrict(selectedStateId);
-                                }
-                              });
-                            },
-                            value: stateTypedropdownvalue,
+                    if (packageNamedropdownvalue == 'District Franchise') ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            'State',
+                            style: TextStyle(color: bluem),
                           ),
                         ),
                       ),
-                    ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Container(
+                          height: 45,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          ),
+                          child: Center(
+                            child: DropdownButtonFormField<String>(
+                              decoration: const InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide:
+                                      BorderSide(color: yellow, width: 1),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide(color: yellow),
+                                ),
+                                hintText: 'Select State',
+                                hintStyle:
+                                    TextStyle(fontSize: 12, color: bluem),
+                              ),
+                              isExpanded: true,
+                              icon: Icon(Icons.arrow_drop_down),
+                              iconSize: 20,
+                              elevation: 10,
+                              style: TextStyle(fontSize: 15),
+                              items: stateType.map((String state) {
+                                return DropdownMenuItem<String>(
+                                  value: state,
+                                  child: Text(
+                                    state,
+                                    style:
+                                        TextStyle(fontSize: 12, color: bluem),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (String? newVal) {
+                                setState(() {
+                                  stateTypedropdownvalue = newVal;
+                                  districtTypedropdownvalue = null;
+                                  zonalTypedropdownvalue = null;
+                                  districtType = [];
+                                  zonalType = [];
+                                  if (stateTypedropdownvalue != null) {
+                                    // Find the state ID corresponding to the selected state name
+                                    String selectedStateId = states['states']
+                                        .firstWhere((state) =>
+                                            state['stateName'] ==
+                                            stateTypedropdownvalue)['id'];
+                                    _Memberdistrict(selectedStateId);
+                                  }
+                                });
+                              },
+                              value: stateTypedropdownvalue,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                     if (districtType.isNotEmpty) ...[
                       SizedBox(height: 10),
                       Padding(
