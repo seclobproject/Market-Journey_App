@@ -9,8 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../resources/color.dart';
-import '../../resources/color.dart';
-import '../../resources/color.dart';
+
 import '../../services/profile_service.dart';
 import '../../support/logger.dart';
 
