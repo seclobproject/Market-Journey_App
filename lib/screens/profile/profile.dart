@@ -29,7 +29,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
 
   int   isSelectedIndex = -1;
-
   var profiledata;
   bool _isLoading = true;
 
@@ -62,7 +61,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget build(BuildContext context) {
- gstAmount = profiledata['packageAmount'] * 0.18;
+
+    double gstAmount = profiledata['packageAmount'] * 0.18;
 
     double totalAmount = profiledata['packageAmount'] + gstAmount ;
 
