@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/home_service.dart';
 import '../../services/profile_service.dart';
 import '../../support/logger.dart';
-import '../profile/profile.dart';
+
 import 'widget/flashfeed.dart';
 
 class home extends StatefulWidget {
