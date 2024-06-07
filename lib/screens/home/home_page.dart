@@ -528,7 +528,7 @@ class _homeState extends State<home> {
                             scrollDirection: Axis.horizontal,
                             itemCount: awardData.length,
                             itemBuilder: (BuildContext context, int index) {
-                              var data = awardData[index];
+                              // var data = awardData[index];
                               return Row(
                                 children: [
                                   Padding(
@@ -544,13 +544,13 @@ class _homeState extends State<home> {
                                             height: 61,
                                             width: 61,
                                             child: Image.network(
-                                              data['memberImage'] ?? "no image",
+                                              awardData['memberImage'] ?? "no image",
                                                fit: BoxFit.cover,
                                             ),
                                           ),
                                         ),
                                         Text(
-                                          data['memberName'] ?? 'No Name',
+                                          awardData['memberName'] ?? 'No Name',
                                           style: TextStyle(
                                             fontSize: screenWidth * 0.03,
                                           ),
