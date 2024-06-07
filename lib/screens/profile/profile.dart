@@ -66,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
     double totalAmount = profiledata['packageAmount'] + gstAmount ;
 
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    // double width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: bluem,
         appBar: AppBar(
@@ -77,7 +77,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     fontWeight: FontWeight.w500)),
             centerTitle: true,
             backgroundColor: bluem),
-        body: SizedBox(
+        body:
+        _isLoading
+            ? Center(child: CircularProgressIndicator()):SizedBox(
             child: Container(
                 child: SingleChildScrollView(
           child: Stack(children: [
@@ -106,8 +108,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     width: 5,
                                   ),
                                   Column(children: [
-                                    Text(
-                                      '₹${profiledata['directIncome']}' ?? "",
+                                    Text("text",
+                                      // ₹${profiledata['directIncome']}' ?? ""
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 11),
@@ -143,8 +145,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                   Column(children: [
                                     Text(
-                                        '₹${profiledata['inDirectIncome']}' ??
-                                            "",
+                                        // '₹${profiledata['inDirectIncome']}' ??
+                                            "text",
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 11)),
