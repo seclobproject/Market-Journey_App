@@ -19,317 +19,6 @@ class AddMemberPage extends StatefulWidget {
   State<AddMemberPage> createState() => _AddMemberPageState();
 }
 
-// class _AddMemberPageState extends State<AddMemberPage> {
-//   TextEditingController _dobController = TextEditingController();
-//   var userid;
-//   var packagedata;
-//   var states;
-//   // var stateId;
-//   var districts;
-//   // var districtId;
-//   var zonals;
-//   // var zonalId;
-//   var panchayaths;
-
-//   bool _isLoading = false;
-
-//   String? name;
-//   String? email;
-//   int? phone;
-//   int? dob;
-//   String? address;
-//   String? password;
-//   String packageAmount = '';
-//   String packageAmountGST = '';
-
-//   List<Map<String, dynamic>> packageData = [];
-//   String? packageTypedropdownvalue;
-//   List<String> packageType = [];
-
-//   String? packageNamedropdownvalue;
-//   List<String> PackageName = [];
-
-//   String? stateTypedropdownvalue;
-//   List<String> stateType = [];
-
-//   String? districtTypedropdownvalue;
-//   List<String> districtType = [];
-
-//   String? zonalTypedropdownvalue;
-//   List<String> zonalType = [];
-
-//   String? panchayathTypedropdownvalue;
-//   List<String> panchayathType = [];
-
-//   Future<void> _PackageData() async {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     String? userid = prefs.getString('userid');
-
-//     try {
-//       var response = await PackageService.ViewPackage();
-//       log.i('Profile data show.... $response');
-
-//       if (response != null &&
-//           response['sts'] == '01' &&
-//           response['msg'] == 'Packages retrieved successfully') {
-//         setState(() {
-//           packageData =
-//               List<Map<String, dynamic>>.from(response['packageData']);
-
-//           // Extract package types and remove duplicates
-//           packageType = packageData
-//               .map((packagedata) => packagedata['franchiseName'] as String)
-//               .toSet()
-//               .toList();
-//           log.i('Package data names extracted: $packageType');
-//         });
-//       } else {
-//         log.e('Unexpected API response: $response');
-//       }
-//     } catch (e) {
-//       log.e('Error fetching package data: $e');
-//     }
-//   }
-
-//   Future _Memberstate() async {
-//     try {
-//       var response = await MemberService.Memberstate();
-//       log.i('State API response: $response');
-
-//       if (response != null &&
-//           response['sts'] == '01' &&
-//           response['msg'] == 'States retrieved successfully') {
-//         setState(() {
-//           states = response;
-//           stateType = List<String>.from(
-//               states['states'].map((state) => state['stateName']));
-//           log.i('State names extracted: $stateType');
-//         });
-//       } else {
-//         log.e('Unexpected API response: $response');
-//       }
-//     } catch (e) {
-//       log.e('Error fetching states: $e');
-//     }
-//   }
-
-//   Future<void> _Memberdistrict(String stateId) async {
-//     try {
-//       var response = await MemberService.Memberdistrict(stateId);
-//       log.i('District API response: $response');
-
-//       if (response != null &&
-//           response['sts'] == '01' &&
-//           response['msg'] == 'Districts retrieved success') {
-//         setState(() {
-//           districts = response['districts'];
-
-//           // Extract district names and remove duplicates
-//           districtType = List<String>.from(
-//               districts.map((district) => district['name']).toSet().toList());
-//           log.i('District names extracted: $districtType');
-//         });
-//       } else {
-//         log.e('Unexpected API response: $response');
-//       }
-//     } catch (e) {
-//       log.e('Error fetching districts: $e');
-//     }
-//   }
-
-//   Future<void> _Memberzonal(String districtId) async {
-//     try {
-//       var response = await MemberService.Memberzonal(districtId);
-//       log.i('Zonal API response: $response');
-
-//       if (response != null &&
-//           response['sts'] == '01' &&
-//           response['msg'] == 'Zonals retrieved successfully') {
-//         setState(() {
-//           zonals = response['zonals'];
-
-//           // Extract zonal names and remove duplicates
-//           zonalType = List<String>.from(
-//               zonals.map((zonal) => zonal['name']).toSet().toList());
-//           log.i('Zonal names extracted: $zonalType');
-//         });
-//       } else {
-//         log.e('Unexpected API response: $response');
-//       }
-//     } catch (e) {
-//       log.e('Error fetching zonals: $e');
-//     }
-//   }
-
-//   Future<void> _Memberpanchayath(String zonalId) async {
-//     try {
-//       var response = await MemberService.Memberpanchayath(zonalId);
-//       log.i('Panchayath API response: $response');
-
-//       if (response != null &&
-//           response['sts'] == '01' &&
-//           response['msg'] == 'panchayaths retrieved successfully') {
-//         setState(() {
-//           panchayaths = response['panchayaths'];
-
-//           // Extract Panchayath names and remove duplicates
-//           panchayathType = List<String>.from(panchayaths
-//               .map((panchayath) => panchayath['name'])
-//               .toSet()
-//               .toList());
-//           log.i('Panchayath names extracted: $panchayathType');
-//         });
-//       } else {
-//         log.e('Unexpected API response: $response');
-//       }
-//     } catch (e) {
-//       log.e('Error fetching panchayaths: $e');
-//     }
-//   }
-
-//   Future<void> _Addmember() async {
-//     setState(() {
-//       _isLoading = true;
-//     });
-
-//     // Construct the request data with proper conversions and null safety
-
-//     var reqData = {
-//       'name': name,
-//       'email': email,
-//       'phone': phone?.toString(), // Convert phone to string if not null
-//       'dob': dob?.toString(), // Convert dob to string if not null
-//       'address': address,
-//       'password': password,
-//       'packageType': packageTypedropdownvalue,
-//       'packageName': packageNamedropdownvalue,
-
-//       'packageAmount': packageAmount,
-//       'packageAmountGST': packageAmountGST,
-//     };
-
-//     // Log the request data to verify its correctness
-//     log.i('Request Data: $reqData');
-
-//     try {
-//       var response = await MemberService.Addmember(reqData);
-//       if (response['sts'] == '01') {
-//         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-//           content: Text('Add member Success'),
-//         ));
-//       } else {
-//         log.e('Add member failed: ${response['msg']}');
-//         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-//           content: Text('Add member failed: ${response['msg']}'),
-//         ));
-//       }
-//     } catch (error) {
-//       log.e('Error adding member: $error');
-//       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-//         content: Text('Error adding member: $error'),
-//       ));
-//     } finally {
-//       setState(() {
-//         _isLoading = false;
-//       });
-//     }
-//   }
-
-//   // Future<void> _Addmember() async {
-//   //   setState(() {
-//   //     _isLoading = true;
-//   //   });
-//   //   var reqData = {'email': email, 'password': password, 'phone': phone};
-//   //   try {
-//   //     var response = await MemberService.Addmember(reqData);
-//   //     if (response['sts'] == '01') {
-//   //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-//   //         content: Text('add member Success'),
-//   //       ));
-//   //     } else {
-//   //       // log.e('Login failed: ${response['msg']}');
-
-//   //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-//   //         content: Text('Login failed: ${response['msg']}'),
-//   //       ));
-//   //     }
-//   //   } catch (error) {
-//   //     setState(() {
-//   //       _isLoading = false;
-//   //     });
-
-//   //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-//   //       content: Text('Incorrect Username and password   '),
-//   //     ));
-//   //   }
-//   // }
-
-//   // Future _Membernotdistrict() async {
-//   //   var response = await MemberService.Membernotdistrict();
-//   //   log.i('Profile data show.... $response');
-//   //   setState(() {
-//   //     packagedata = response;
-//   //   });
-//   // }
-
-//   // Future<void> _Membernotzonal(String? newVal) async {
-//   //   try {
-//   //     var response = await MemberService.Membernotzonal();
-//   //     if (response != null && response['sts'] == '01') {
-//   //       setState(() {
-//   //         zonalType = List<String>.from(
-//   //             response['zonals'].map((zonal) => zonal['name']));
-
-//   //         log.i('District names extracted: $zonalType');
-//   //       });
-//   //     } else {
-//   //       log.e('Unexpected API response: $response');
-//   //     }
-//   //   } catch (e) {
-//   //     log.e('Error fetching district data: $e');
-//   //   }
-//   // }
-
-//   void _updatePackageAmountAndGST(String? newVal) {
-//     setState(() {
-//       packageNamedropdownvalue = newVal;
-
-//       if (packageNamedropdownvalue != null) {
-//         // Fetch the selected package data
-//         var selectedPackage = packageData.firstWhere((packagedata) =>
-//             packagedata['packageName'] == packageNamedropdownvalue);
-
-//         // Set the package amount
-//         packageAmount = selectedPackage['packageAmount'].toString();
-
-//         // Calculate the GST (18%)
-//         double amount = double.parse(packageAmount);
-//         packageAmountGST = (amount + amount * 0.18).toStringAsFixed(2);
-//       } else {
-//         packageAmount = '';
-//         packageAmountGST = '';
-//       }
-//     });
-//   }
-
-//   Future _initLoad() async {
-//     await Future.wait(
-//       [
-//         _PackageData(),
-//         _Memberstate(),
-//       ],
-//     );
-//     _isLoading = false;
-//   }
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     setState(() {
-//       _initLoad();
-//     });
-//   }
-
 class _AddMemberPageState extends State<AddMemberPage> {
   TextEditingController _dobController = TextEditingController();
   var userid;
@@ -495,6 +184,32 @@ class _AddMemberPageState extends State<AddMemberPage> {
     }
   }
 
+    Future _Membernotdistrict() async {
+    var response = await MemberService.Membernotdistrict();
+    log.i('Profile data show.... $response');
+    setState(() {
+      packagedata = response;
+    });
+  }
+
+  Future<void> _Membernotzonal(String? newVal) async {
+    try {
+      var response = await MemberService.Membernotzonal();
+      if (response != null && response['sts'] == '01') {
+        setState(() {
+          zonalType = List<String>.from(
+              response['zonals'].map((zonal) => zonal['name']));
+
+          log.i('District names extracted: $zonalType');
+        });
+      } else {
+        log.e('Unexpected API response: $response');
+      }
+    } catch (e) {
+      log.e('Error fetching district data: $e');
+    }
+  }
+
   Future<void> _Addmember() async {
     setState(() {
       _isLoading = true;
@@ -508,7 +223,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
       'address': address,
       'password': password,
       'packageType': packageTypedropdownvalue, // Ensure packageType is included
-      'packageName': packageNamedropdownvalue,
+      'franchise': packageNamedropdownvalue,
       'packageAmount': packageAmount,
       'packageAmountGST': packageAmountGST,
     };

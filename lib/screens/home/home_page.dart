@@ -215,7 +215,7 @@ class _homeState extends State<home> {
                               color: black,
                             ),
                           ),
-                          SizedBox(
+                          SizedBox( 
                             width: screenWidth * 0.01,
                           ),
                           Text("LATEST NEWS"),
