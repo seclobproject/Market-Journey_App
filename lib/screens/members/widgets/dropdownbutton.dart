@@ -3,46 +3,13 @@ import 'package:master_journey/screens/members/widgets/level_one.dart';
 
 import '../../../../resources/color.dart';
 
-// class Dropdownbutton extends StatefulWidget {
-//   const Dropdownbutton({super.key});
-
-//   @override
-//   State<Dropdownbutton> createState() => _DropdownbuttonState();
-// }
-
-// class _DropdownbuttonState extends State<Dropdownbutton> {
-//   List<String> items = ['item1', 'item2', 'item3'];
-//   String? selectedItem = 'item1';
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Searchbar(),
-
-//       DropdownButton<String>(
-//         value: selectedItem,
-//         items: items
-//             .map((items) => DropdownMenuItem<String>(
-//                   value: items,
-//                   child: Text(
-//                     items,
-//                     style: TextStyle(fontSize: 24),
-//                   ),
-//                 ))
-//             .toList(),
-//         onChanged: (items) => setState(() => selectedItem = items),
-//       ),
-//     );
-//   }
-// }
-
 class Dropdownscreen extends StatefulWidget {
   @override
   State<Dropdownscreen> createState() => _DropdownscreenState();
 }
 
 class _DropdownscreenState extends State<Dropdownscreen> {
-  // List of items to be displayed in the dropdown
+
   List<String> items = [
     'All Package Type',
     'District Franchise',
@@ -54,18 +21,21 @@ class _DropdownscreenState extends State<Dropdownscreen> {
     'Night Cafe',
     'Crude Oil'
   ];
+
   // The currently selected item
   String? selectedItem = 'All Package Type';
+
   // Text editing controller for the search bar
   TextEditingController searchController = TextEditingController();
+
   // Filtered list of items based on the search input
   List<String> filteredItems = [];
 
   @override
   void initState() {
     super.initState();
-    // Initialize the filtered items list with all items
-    filteredItems = items;
+    // Initialize the filtered items list with all items, ensuring there are no duplicates
+    filteredItems = items.toSet().toList();
   }
 
   // Function to filter items based on search input
@@ -88,9 +58,6 @@ class _DropdownscreenState extends State<Dropdownscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: marketbg,
-      // ),
       backgroundColor: marketbg,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -101,6 +68,10 @@ class _DropdownscreenState extends State<Dropdownscreen> {
               height: 40,
               child: TextField(
                 controller: searchController,
+                onChanged: (value) {
+                  // Filter search results without affecting dropdown
+                  setState(() {});
+                },
                 decoration: InputDecoration(
                   hintText: 'Search here...',
                   prefixIcon: Icon(Icons.search),
@@ -120,13 +91,10 @@ class _DropdownscreenState extends State<Dropdownscreen> {
             Container(
               width: 180,
               height: 40,
-              padding: EdgeInsets.only(
-                left: 10,
-              ),
+              padding: EdgeInsets.only(left: 10),
               decoration: BoxDecoration(
                 color: yellow,
                 borderRadius: BorderRadius.circular(5),
-                // border: Border.all(color: Colors.black),
               ),
               child: DropdownButtonFormField<String>(
                 isExpanded: true,
@@ -137,15 +105,13 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                     borderSide: BorderSide.none,
                   ),
                 ),
-                items: items
+                items: filteredItems
                     .map((item) => DropdownMenuItem<String>(
                           value: item,
                           child: Center(
                             child: Text(
                               item,
-                              style: TextStyle(
-                                fontSize: 15,
-                              ),
+                              style: TextStyle(fontSize: 15),
                             ),
                           ),
                         ))
@@ -157,10 +123,8 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                 },
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Expanded(child: levelone())
+            SizedBox(height: 10),
+            Expanded(child: levelone(searchQuery: searchController.text,selectedFranchise: selectedItem,)),
           ],
         ),
       ),
