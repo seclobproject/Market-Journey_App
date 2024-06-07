@@ -1,5 +1,4 @@
 
-import 'dart:ui';
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,8 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../resources/color.dart';
-import '../../resources/color.dart';
-import '../../resources/color.dart';
+
 import '../../services/profile_service.dart';
 import '../../support/logger.dart';
 
@@ -23,8 +21,14 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+
   @override
-  int isSelectedIndex = -1;
+
+
+
+
+  int   isSelectedIndex = -1;
   var profiledata;
   bool _isLoading = true;
 
@@ -52,11 +56,18 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
     setState(() {
       _initLoad();
+
     });
   }
 
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
+
+    double gstAmount = profiledata['packageAmount'] * 0.18;
+
+    double totalAmount = profiledata['packageAmount'] + gstAmount ;
+
+    double height = MediaQuery.of(context).size.height;
+    // double width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: bluem,
         appBar: AppBar(
@@ -67,7 +78,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     fontWeight: FontWeight.w500)),
             centerTitle: true,
             backgroundColor: bluem),
-        body: SizedBox(
+        body:
+        _isLoading
+            ? Center(child: CircularProgressIndicator()):SizedBox(
             child: Container(
                 child: SingleChildScrollView(
           child: Stack(children: [
@@ -96,8 +109,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     width: 5,
                                   ),
                                   Column(children: [
-                                    Text(
-                                      '₹${profiledata['directIncome']}' ?? "",
+                                    Text("text",
+                                      // ₹${profiledata['directIncome']}' ?? ""
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 11),
@@ -133,8 +146,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                   Column(children: [
                                     Text(
-                                        '₹${profiledata['inDirectIncome']}' ??
-                                            "",
+                                        // '₹${profiledata['inDirectIncome']}' ??
+                                            "text",
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 11)),
@@ -181,97 +194,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     }),
               ),
 
-              // Text(profiledata['userStatus']),
-              // SizedBox(height: 20,),
-              // Container(
-              //   width: double.infinity,
-              //   decoration: BoxDecoration(color: Color.fromRGBO(7, 39, 64, 1), borderRadius: BorderRadius.circular(10)),
-              //   child: Padding(
-              //     padding: const EdgeInsets.all(15),
-              //     child: Align(
-              //       alignment: Alignment.center,
-              //       child: Column(
-              //         children: [
-              //           Row(children: [
-              //             Icon(Icons.mail,color: Colors.white,size: 15 ,),
-              //             SizedBox(width: 5,),
-              //             Text('Email : ${profiledata['email']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //           SizedBox(height: 8,),
-              //           Row(children: [
-              //             Icon(Icons.phone,color: Colors.white,size: 15),
-              //             SizedBox(width: 5,),
-              //             Text('Phone : ${profiledata['phone']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //           SizedBox(height: 8,),
-              //           Row(children: [
-              //             Icon(Icons.numbers,color: Colors.white,size: 15),
-              //             SizedBox(width: 5,),
-              //             Text('UserId : ${profiledata['ownSponserId']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //           SizedBox(height: 8,),
-              //           Row(children: [
-              //             Icon(Icons.location_city,color: Colors.white,size: 15),
-              //             SizedBox(width: 5,),
-              //             Text('Address : ${profiledata['address']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //           SizedBox(height: 8,),
-              //           Row(children: [
-              //             Icon(Icons.calendar_month,color: Colors.white,size: 15),
-              //             SizedBox(width: 5,),
-              //             Text('Date Of Birth : ${profiledata['dateOfBirth']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //           SizedBox(height: 8,),
-              //           Row(children: [
-              //             Icon(Icons.wallet,color: Colors.white,size: 15),
-              //             SizedBox(width: 5,),
-              //             Text('Package Amount : ${profiledata['packageAmount']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //           SizedBox(height: 8,),
-              //           Row(children: [
-              //             Icon(Icons.wallet,color: Colors.white,size: 15),
-              //             SizedBox(width: 5,),
-              //             Text('Wallet Amount : ${profiledata['walletAmount']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //           SizedBox(height: 8,),
-              //           Row(children: [
-              //             Icon(Icons.type_specimen,color: Colors.white,size: 15),
-              //             SizedBox(width: 5,),
-              //             Text('Package Type : ${profiledata['packageType']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //           // SizedBox(height: 8,),
-              //           // Row(children: [
-              //           //   Icon(Icons.drive_file_rename_outline,color: Colors.white,size: 15),
-              //           //   SizedBox(width: 5,),
-              //           //   Text('Package Name : ${profiledata['']}',style: TextStyle(color: Colors.white),),
-              //           //
-              //           // ],),
-              //           SizedBox(height: 8,),
-              //           Row(children: [
-              //             Icon(Icons.stacked_bar_chart,color: Colors.white,size: 15),
-              //             SizedBox(width: 5,),
-              //             Text('Points : ${profiledata['points']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //           SizedBox(height: 8,),
-              //           Row(children: [
-              //             Icon(Icons.leaderboard,color: Colors.white,size: 15),
-              //             SizedBox(width: 5,),
-              //             Text('Pool Rank : ${profiledata['pool']}',style: TextStyle(color: Colors.white),),
-              //
-              //           ],),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
+
               SizedBox(
                 height: 30,
               ),
@@ -291,6 +214,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 55),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         GestureDetector(
                           onTap: () {
@@ -304,7 +228,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 29,
                             width: 115,
                             decoration: BoxDecoration(
-                              border: Border.all(color: yellow1),
+                              border: Border.all(color: yellow1, width: 1),
                               borderRadius: BorderRadius.circular(5),
                               color:
                                   isSelectedIndex == 0 ? yellow : Colors.white,
@@ -338,7 +262,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 29,
                             width: 115,
                             decoration: BoxDecoration(
-                              border: Border.all(color: yellow1),
+                              border: Border.all(color: yellow1, width: 1),
                               borderRadius: BorderRadius.circular(5),
                               color:
                                   isSelectedIndex == 1 ? yellow : Colors.white,
@@ -489,29 +413,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ),
                                       SizedBox(width: 5),
                                       Text(
-                                        '${profiledata['FranchiseName']}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 12,
-                                            color: marketbgblue),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(height: 27),
-                                  Row(
-                                    children: [
-                                      SvgPicture.asset('assets/svg/edit.svg'),
-                                      SizedBox(width: 10),
-                                      Text(
-                                        'Franchise Type :  ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 12,
-                                            color: marketbgblue),
-                                      ),
-                                      SizedBox(width: 5),
-                                      Text(
-                                        'Destrict Franchise',
+                                        '${profiledata['franchiseName']}',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 12,
@@ -533,7 +435,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ),
                                       SizedBox(width: 5),
                                       Text(
-                                        'Franchise',
+                                        '${profiledata['packageType']}',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 12,
@@ -556,7 +458,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ),
                                       SizedBox(width: 5),
                                       Text(
-                                        '555568',
+                                        '${profiledata['walletAmount']}',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 12,
@@ -578,7 +480,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ),
                                       SizedBox(width: 5),
                                       Text(
-                                        'No pool ',
+                                        '${profiledata['pool']}',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 12,
@@ -594,301 +496,352 @@ class _ProfilePageState extends State<ProfilePage> {
                       : isSelectedIndex == 0
                           ? Container(child: Text('Certificate'))
                           : Container(
-                              child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 24),
-                                  child: Column(children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 24),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/svg/barcode.svg',
+                                        height: 26,
+                                      ),
+                                      SvgPicture.asset(
+                                        'assets/svg/logo.svg',
+                                        height: 56,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 16),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
                                       children: [
-                                        SvgPicture.asset(
-                                            'assets/svg/barcode.svg',
-                                            height: 26),
-                                        SvgPicture.asset('assets/svg/logo.svg',
-                                            height: 56)
+                                        Text(
+                                          '(+91)',
+                                          style: TextStyle(
+                                              fontSize: 9,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                        Text(
+                                          'Marketjourney.com',
+                                          style: TextStyle(
+                                              fontSize: 9,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                        Text(
+                                          '1st Floor Hibon Plaza Mavoor Road',
+                                          style: TextStyle(
+                                              fontSize: 9,
+                                              fontWeight: FontWeight.w400),
+                                        ),
                                       ],
                                     ),
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            '(+91)',
-                                            style: TextStyle(
-                                                fontSize: 9,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                          Text(
-                                            'Marketjourney.com',
-                                            style: TextStyle(
-                                                fontSize: 9,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                          Text(
-                                            '1st Floor Hibon palaza Mavoor road',
-                                            style: TextStyle(
-                                                fontSize: 9,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 32,
-                                    ),
-                                    Text(
-                                      'INVOICE',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    SizedBox(
-                                      height: 21,
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 6),
-                                      height: 24,
-                                      width: 312,
-                                      decoration:
-                                          BoxDecoration(color: whitegray),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            'Package  Type',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 10,
-                                                color: marketbgblue),
-                                          ),
-                                          SizedBox(
-                                            width: 54,
-                                          ),
-                                          Text(
-                                            'Package',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 10,
-                                                color: marketbgblue),
-                                          ),
-                                          SizedBox(
-                                            width: 54,
-                                          ),
-                                          Text(
-                                            'Amount  ',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 10,
-                                                color: marketbgblue),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(height: 16),
-                                    Row(
+                                  ),
+                                  SizedBox(height: 32),
+                                  Text(
+                                    'INVOICE',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(height: 21),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 6),
+                                    height: 24,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(color: whitegray),
+                                    child: Row(
                                       children: [
                                         Text(
-                                          'Franchise',
+                                          'Package Type',
                                           style: TextStyle(
                                               fontWeight: FontWeight.w500,
-                                              fontSize: 9,
+                                              fontSize: 10,
                                               color: marketbgblue),
                                         ),
-                                        SizedBox(width: 79),
+                                        Spacer(),
                                         Text(
-                                          'ZonalFranchise',
+                                          'Package',
                                           style: TextStyle(
                                               fontWeight: FontWeight.w500,
-                                              fontSize: 9,
+                                              fontSize: 10,
                                               color: marketbgblue),
                                         ),
-                                        SizedBox(width: 79),
+                                        Spacer(),
                                         Text(
-                                          '₹ 50000',
+                                          'Amount',
                                           style: TextStyle(
                                               fontWeight: FontWeight.w500,
-                                              fontSize: 9,
+                                              fontSize: 10,
                                               color: marketbgblue),
                                         ),
                                       ],
                                     ),
-                                    SizedBox(height: 20),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'GST',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 9,
-                                              color: marketbgblue),
-                                        ),
-                                      SizedBox(width: 109,),
+                                  ),
+                                  SizedBox(height: 16),
+
+                                  Row(
+                                    children: [
+                                      Text(
+                                        profiledata['packageType'],
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 9,
+                                            color: marketbgblue),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        profiledata['franchise'],
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 9,
+                                            color: marketbgblue),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        '${profiledata['packageAmount']}',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 9,
+                                            color: marketbgblue),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20),
+                                  Row(
+                                    children: [
                                        Text(
-                                            '18%',
+                                            'GST',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 9,
                                                 color: marketbgblue),
                                           ),
 
-                                      ],
-                                    ),
-                                    SizedBox(height: 20),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'GSTAmount',
+                                     
+                                      SizedBox(width: 79),
+                                       Text(
+                                          '18%',
                                           style: TextStyle(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 9,
                                               color: marketbgblue),
                                         ),
-                                        SizedBox(width: 79),
-                                        Text(
-                                          '₹ 9000',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 9,
-                                              color: marketbgblue),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 20),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Package Amount',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 9,
-                                              color: marketbgblue),
-                                        ),
-                                        SizedBox(width: 79),
-                                        Text(
-                                          '₹ 50000',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 9,
-                                              color: marketbgblue),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 17),
-                                    Divider(),
-                                    SizedBox(height: 14),
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 12, vertical: 2),
-                                      height: 24,
-                                      width: 312,
-                                      decoration:
-                                          BoxDecoration(color: whitegray),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('Total',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14,
-                                                  color: marketbgblue)),
-                                          SizedBox(width: 49,),
-
-                                          Text('₹ 50000',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14,
-                                                  color: marketbgblue))
-                                        ],
+                                     
+                                    ],
+                                  ),
+                                  SizedBox(height: 20),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'GST Amount',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 9,
+                                            color: marketbgblue),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: 47,
-                                    ),
-                                    Row(
+                                      SizedBox(width: 79),
+                                      Text(
+                                        '$gstAmount',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 9,
+                                            color: marketbgblue),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Package Amount',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 9,
+                                            color: marketbgblue),
+                                      ),
+                                      SizedBox(width: 49),
+                                      Text(
+                                        '${profiledata['packageAmount']}',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 9,
+                                            color: marketbgblue),
+                                      ),
+                                    ],
+                                  ),
+
+                                  SizedBox(height: 17),
+                                  Divider(),
+                                  SizedBox(height: 14),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 2),
+                                    height: 24,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(color: whitegray),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('Name:',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 9,
-                                                color: black)),
-                                        Text('Vadanapalli',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 9,
-                                                color: black))
+                                        Text(
+                                          'Total',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14,
+                                              color: marketbgblue),
+                                        ),
+                                        Spacer(),
+                                        Text(
+                                          '₹ $totalAmount',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14,
+                                              color: marketbgblue),
+                                        ),
                                       ],
                                     ),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text('Contact: ',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 9,
-                                                color: black)),
-                                        Text('865545686',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 9,
-                                                color: black))
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text('Email: ',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 9,
-                                                color: black)),
-                                        Text('vadanapalli@gmail.com',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 9,
-                                                color: black))
-                                      ],
-                                    ),
-                                  ]))),
+                                  ),
+
+                                  SizedBox(height: 47),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Name: ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 9,
+                                            color: black),
+                                      ),
+                                      Text(
+                                        profiledata['name'],
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 9,
+                                            color: black),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 4),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Contact: ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 9,
+                                            color: black),
+                                      ),
+                                      Text(
+                                        profiledata['phone'].toString(),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 9,
+                                            color: black),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 4),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Email: ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 9,
+                                            color: black),
+                                      ),
+                                      Text(
+                                        profiledata['email'],
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 9,
+                                            color: black),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )
                 ]),
               )
             ]),
-            Positioned(
-                top: height * 0.24,
-                left: 131,
-                right: 131,
+            // Positioned(
+            //     top: height * 0.24,
+            //     left: width * 0.5 - 40,
+            //
+            //
+            //     child: Column(
+            //       children: [
+            //         CircleAvatar(
+            //             backgroundColor: marketbg,
+            //             radius: 40,
+            //             child: CircleAvatar(
+            //               backgroundColor: Colors.black,
+            //               radius: 35,
+            //             )),
+            //         Text(
+            //           profiledata['name'],
+            //           style:
+            //               TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+            //         ),
+            //         SizedBox(
+            //           height: 4,
+            //         ),
+            //         Text(
+            //           profiledata['userStatus'],
+            //           style: TextStyle(
+            //               fontSize: 13,
+            //               fontWeight: FontWeight.w500,
+            //               color: greendark),
+            //         ),
+            //       ],
+            //     ))
+
+              Positioned(
+              top: height * 0.24,
+              left: 0,
+              right: 0,
+              child: Align(
+                alignment: Alignment.topCenter,
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     CircleAvatar(
-                        backgroundColor: marketbg,
-                        radius: 40,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.black,
-                          radius: 35,
-                        )),
-                    Text(
-                      "Fathima",
-                      style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                      backgroundColor: marketbg,
+                      radius: 40,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.black,
+                        radius: 35,
+                      ),
                     ),
-                    SizedBox(
-                      height: 4,
-                    ),
+                    SizedBox(height: 4),
                     Text(
-                      profiledata['userStatus'],
+                      profiledata['name'] ?? '',
                       style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: greendark),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      profiledata['userStatus'] ?? '',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: greendark,
+                      ),
                     ),
                   ],
-                ))
-          ]),
-        ))));
+                ),
+              ),
+              ),
+            ])))));
   }
 }
