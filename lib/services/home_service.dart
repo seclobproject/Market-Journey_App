@@ -9,3 +9,12 @@ class AwardService {
     return response.data;
   }
 }
+
+
+class LeaderService {
+  static Future viewleaders() async {
+    var dio = await DioHelper.getInstance();
+    var response = await dio.get('$baseURL/api/user/get-pool-amount');
+    return response.data;
+  }
+}

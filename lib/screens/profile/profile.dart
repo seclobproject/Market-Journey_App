@@ -614,21 +614,24 @@ class _ProfilePageState extends State<ProfilePage> {
                                   SizedBox(height: 20),
                                   Row(
                                     children: [
-                                      Text(
-                                        'GST',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 9,
-                                            color: marketbgblue),
-                                      ),
+                                       Text(
+                                            'GST',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 9,
+                                                color: marketbgblue),
+                                          ),
+
+                                     
                                       SizedBox(width: 79),
-                                      Text(
-                                        '18%',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 9,
-                                            color: marketbgblue),
-                                      ),
+                                       Text(
+                                          '18%',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 9,
+                                              color: marketbgblue),
+                                        ),
+                                     
                                     ],
                                   ),
                                   SizedBox(height: 20),

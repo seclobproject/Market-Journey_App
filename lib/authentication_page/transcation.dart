@@ -109,7 +109,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => home()),
+                    MaterialPageRoute(builder: (context) => loginpage()),
                   );
                 },
                 child: Center(

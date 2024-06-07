@@ -10,6 +10,7 @@ import '../../navigation/app_drawer.dart';
 import '../../resources/color.dart';
 import 'package:scroll_loop_auto_scroll/scroll_loop_auto_scroll.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../services/home_service.dart';
 import '../../services/profile_service.dart';
 import '../../support/logger.dart';
@@ -28,7 +29,8 @@ class _homeState extends State<home> {
 
   var userid;
   var profiledata;
-  var awardData;
+  dynamic awardData;
+  List pool = [];
   bool _isLoading = true;
 
   Future _ProfileData() async {
@@ -41,12 +43,23 @@ class _homeState extends State<home> {
     });
   }
 
-  Future _AwardData() async {
+  Future<void> _AwardData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userid = prefs.getString('userid');
     var response = await AwardService.viewRewards();
     log.i('Award & Reward data show.... $response');
-    return response ?? []; // return the loaded data
+    setState(() {
+      awardData = response;
+    });
+  }
+  Future _leadersboard() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString('userid');
+    var response = await LeaderService.viewleaders();
+    log.i(' data show.... $response');
+    setState(() {
+      pool = response['pool'] ?? [];
+    });
   }
 
   Future _initLoad() async {
@@ -54,6 +67,7 @@ class _homeState extends State<home> {
       [
         _ProfileData(),
         _AwardData(),
+        _leadersboard()
         ///////
       ],
     );
@@ -500,108 +514,55 @@ class _homeState extends State<home> {
                     SizedBox(
                       height: 5,
                     ),
-
-                    SizedBox(
-                      height: 120,
-                      child: ListView.builder(
-                        itemBuilder: (context, index) {
-                          return Container(
-                            height: 111,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: yellow),
-                            child: Row(
-                              children: [
-                                Column(
-                                  children: [
-                                    ClipOval(
-                                      child: Container(
-                                        color: Colors.orange,
-                                        height: 61,
-                                        width: 61,
-                                      ),
+                    Padding(
+                      padding: EdgeInsets.only(left: screenWidth * 0.05),
+                      child: Container(
+                        height: 111,
+                        width: 400,
+                        decoration: BoxDecoration(
+                          color: lightyellow,
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(screenWidth * 0.025)),
+                        ),
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: awardData.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              var data = awardData[index];
+                              return Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: screenWidth * 0.025,
+                                      vertical: screenHeight * 0.02,
                                     ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        },
+                                    child: Column(
+                                      children: [
+                                        ClipOval(
+                                          child: Container(
+                                            color: Colors.orange,
+                                            height: 61,
+                                            width: 61,
+                                            child: Image.network(
+                                              data['memberImage'] ?? "no image",
+                                               fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          data['memberName'] ?? 'No Name',
+                                          style: TextStyle(
+                                            fontSize: screenWidth * 0.03,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
                       ),
                     ),
-
-                    // Padding(
-                    //   padding: EdgeInsets.only(left: screenWidth * 0.05),
-                    //   child:
-                    //   Container(
-                    //     height: 111,
-                    //     width: 400,
-                    //     decoration: BoxDecoration(
-                    //       color: lightyellow,
-                    //       borderRadius: BorderRadius.all(
-                    //           Radius.circular(screenWidth * 0.025)),
-                    //     ),
-                    //     child:
-                    //     FutureBuilder(
-                    //       future: _AwardData(),
-                    //       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                    //         if (snapshot.connectionState == ConnectionState.waiting) {
-                    //           return CircularProgressIndicator(); // show a loader while data is loading
-                    //         } else if (snapshot.hasError) {
-                    //           return Text('Error: ${snapshot.error}'); // display an error message
-                    //         } else {
-                    //           if (snapshot.data == null) {
-                    //             return Text('No data available'); // or some other default message
-                    //           } else {
-                    //             return ListView.builder(
-                    //               scrollDirection: Axis.horizontal,
-                    //               itemCount: snapshot.data.length,
-                    //               itemBuilder: (BuildContext context, int index) {
-                    //                 if (awardData[index] == null) {
-                    //                   return Container(); // or some other default widget
-                    //                 } else {
-                    //                   return Row(
-                    //                     children: [
-                    //                       Padding(
-                    //                         padding: EdgeInsets.symmetric(
-                    //                           horizontal: screenWidth * 0.025,
-                    //                           vertical: screenHeight * 0.02,
-                    //                         ),
-                    //                         child: Column(
-                    //                           children: [
-                    //                             ClipOval(
-                    //                               child: Container(
-                    //                                 color: Colors.orange,
-                    //                                 height: 61,
-                    //                                 width: 61,
-                    //                                 child: Image.network(
-                    //                                   awardData[index]['memberImage']?? '',
-                    //                                   fit: BoxFit.cover, // Adjust the image's fit within the container
-                    //                                 ),
-                    //                               ),
-                    //                             ),
-                    //                             Text(
-                    //                               awardData[index]['memberName']?? 'No Name',
-                    //                               style: TextStyle(
-                    //                                 fontSize: screenWidth * 0.03, // Adjust font size
-                    //                               ),
-                    //                             ),
-                    //                           ],
-                    //                         ),
-                    //                       ),
-                    //                     ],
-                    //                   );
-                    //                 }
-                    //               },
-                    //             );
-                    //           }
-                    //         }
-                    //       },
-                    //     )
-                    //   ),
-                    // ),
-
                     SizedBox(
                       height: screenHeight * 0.02,
                     ),
@@ -642,9 +603,10 @@ class _homeState extends State<home> {
                     SizedBox(
                       height: 100,
                       child: ListView.builder(
-                        itemCount: 5,
+                        itemCount: pool.length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (BuildContext context, int index) {
+                          var pooldata = pool[index];
                           return Padding(
                             padding: const EdgeInsets.only(left: 20),
                             child: Container(
@@ -672,7 +634,7 @@ class _homeState extends State<home> {
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            'Member’s',
+                                            "Member’s",
                                             style: TextStyle(
                                                 fontSize: 8,
                                                 fontWeight: FontWeight.w500,
@@ -680,7 +642,7 @@ class _homeState extends State<home> {
                                           ),
                                           SizedBox(width: 38),
                                           Text(
-                                            'Amount',
+                                            " Amount",
                                             style: TextStyle(
                                                 fontSize: 8,
                                                 fontWeight: FontWeight.w500,
@@ -706,7 +668,8 @@ class _homeState extends State<home> {
                                               color: yellow1,
                                             ),
                                             child: Text(
-                                              "1",
+                                              pooldata['count']?.toString() ??
+                                                  "0",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 10),
@@ -724,7 +687,8 @@ class _homeState extends State<home> {
                                               color: yellow1,
                                             ),
                                             child: Text(
-                                              "1",
+                                              pooldata['amount']?.toString() ??
+                                                  "0",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 10),
@@ -767,7 +731,7 @@ class _homeState extends State<home> {
                             width: screenWidth * 0.01,
                           ),
                           SizedBox(
-                            width: screenWidth * 0.45,
+                            width: screenWidth * 0.35,
                             child: Divider(
                               color: black,
                             ),
