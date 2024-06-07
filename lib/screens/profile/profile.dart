@@ -28,7 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
 
 
-  int  get isSelectedIndex = -1;
+  int   isSelectedIndex = -1;
   var profiledata;
   bool _isLoading = true;
 
