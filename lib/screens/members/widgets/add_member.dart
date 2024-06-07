@@ -19,17 +19,325 @@ class AddMemberPage extends StatefulWidget {
   State<AddMemberPage> createState() => _AddMemberPageState();
 }
 
+// class _AddMemberPageState extends State<AddMemberPage> {
+//   TextEditingController _dobController = TextEditingController();
+//   var userid;
+//   var packagedata;
+//   var states;
+//   // var stateId;
+//   var districts;
+//   // var districtId;
+//   var zonals;
+//   // var zonalId;
+//   var panchayaths;
+
+//   bool _isLoading = false;
+
+//   String? name;
+//   String? email;
+//   int? phone;
+//   int? dob;
+//   String? address;
+//   String? password;
+//   String packageAmount = '';
+//   String packageAmountGST = '';
+
+//   List<Map<String, dynamic>> packageData = [];
+//   String? packageTypedropdownvalue;
+//   List<String> packageType = [];
+
+//   String? packageNamedropdownvalue;
+//   List<String> PackageName = [];
+
+//   String? stateTypedropdownvalue;
+//   List<String> stateType = [];
+
+//   String? districtTypedropdownvalue;
+//   List<String> districtType = [];
+
+//   String? zonalTypedropdownvalue;
+//   List<String> zonalType = [];
+
+//   String? panchayathTypedropdownvalue;
+//   List<String> panchayathType = [];
+
+//   Future<void> _PackageData() async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     String? userid = prefs.getString('userid');
+
+//     try {
+//       var response = await PackageService.ViewPackage();
+//       log.i('Profile data show.... $response');
+
+//       if (response != null &&
+//           response['sts'] == '01' &&
+//           response['msg'] == 'Packages retrieved successfully') {
+//         setState(() {
+//           packageData =
+//               List<Map<String, dynamic>>.from(response['packageData']);
+
+//           // Extract package types and remove duplicates
+//           packageType = packageData
+//               .map((packagedata) => packagedata['franchiseName'] as String)
+//               .toSet()
+//               .toList();
+//           log.i('Package data names extracted: $packageType');
+//         });
+//       } else {
+//         log.e('Unexpected API response: $response');
+//       }
+//     } catch (e) {
+//       log.e('Error fetching package data: $e');
+//     }
+//   }
+
+//   Future _Memberstate() async {
+//     try {
+//       var response = await MemberService.Memberstate();
+//       log.i('State API response: $response');
+
+//       if (response != null &&
+//           response['sts'] == '01' &&
+//           response['msg'] == 'States retrieved successfully') {
+//         setState(() {
+//           states = response;
+//           stateType = List<String>.from(
+//               states['states'].map((state) => state['stateName']));
+//           log.i('State names extracted: $stateType');
+//         });
+//       } else {
+//         log.e('Unexpected API response: $response');
+//       }
+//     } catch (e) {
+//       log.e('Error fetching states: $e');
+//     }
+//   }
+
+//   Future<void> _Memberdistrict(String stateId) async {
+//     try {
+//       var response = await MemberService.Memberdistrict(stateId);
+//       log.i('District API response: $response');
+
+//       if (response != null &&
+//           response['sts'] == '01' &&
+//           response['msg'] == 'Districts retrieved success') {
+//         setState(() {
+//           districts = response['districts'];
+
+//           // Extract district names and remove duplicates
+//           districtType = List<String>.from(
+//               districts.map((district) => district['name']).toSet().toList());
+//           log.i('District names extracted: $districtType');
+//         });
+//       } else {
+//         log.e('Unexpected API response: $response');
+//       }
+//     } catch (e) {
+//       log.e('Error fetching districts: $e');
+//     }
+//   }
+
+//   Future<void> _Memberzonal(String districtId) async {
+//     try {
+//       var response = await MemberService.Memberzonal(districtId);
+//       log.i('Zonal API response: $response');
+
+//       if (response != null &&
+//           response['sts'] == '01' &&
+//           response['msg'] == 'Zonals retrieved successfully') {
+//         setState(() {
+//           zonals = response['zonals'];
+
+//           // Extract zonal names and remove duplicates
+//           zonalType = List<String>.from(
+//               zonals.map((zonal) => zonal['name']).toSet().toList());
+//           log.i('Zonal names extracted: $zonalType');
+//         });
+//       } else {
+//         log.e('Unexpected API response: $response');
+//       }
+//     } catch (e) {
+//       log.e('Error fetching zonals: $e');
+//     }
+//   }
+
+//   Future<void> _Memberpanchayath(String zonalId) async {
+//     try {
+//       var response = await MemberService.Memberpanchayath(zonalId);
+//       log.i('Panchayath API response: $response');
+
+//       if (response != null &&
+//           response['sts'] == '01' &&
+//           response['msg'] == 'panchayaths retrieved successfully') {
+//         setState(() {
+//           panchayaths = response['panchayaths'];
+
+//           // Extract Panchayath names and remove duplicates
+//           panchayathType = List<String>.from(panchayaths
+//               .map((panchayath) => panchayath['name'])
+//               .toSet()
+//               .toList());
+//           log.i('Panchayath names extracted: $panchayathType');
+//         });
+//       } else {
+//         log.e('Unexpected API response: $response');
+//       }
+//     } catch (e) {
+//       log.e('Error fetching panchayaths: $e');
+//     }
+//   }
+
+//   Future<void> _Addmember() async {
+//     setState(() {
+//       _isLoading = true;
+//     });
+
+//     // Construct the request data with proper conversions and null safety
+
+//     var reqData = {
+//       'name': name,
+//       'email': email,
+//       'phone': phone?.toString(), // Convert phone to string if not null
+//       'dob': dob?.toString(), // Convert dob to string if not null
+//       'address': address,
+//       'password': password,
+//       'packageType': packageTypedropdownvalue,
+//       'packageName': packageNamedropdownvalue,
+
+//       'packageAmount': packageAmount,
+//       'packageAmountGST': packageAmountGST,
+//     };
+
+//     // Log the request data to verify its correctness
+//     log.i('Request Data: $reqData');
+
+//     try {
+//       var response = await MemberService.Addmember(reqData);
+//       if (response['sts'] == '01') {
+//         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+//           content: Text('Add member Success'),
+//         ));
+//       } else {
+//         log.e('Add member failed: ${response['msg']}');
+//         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+//           content: Text('Add member failed: ${response['msg']}'),
+//         ));
+//       }
+//     } catch (error) {
+//       log.e('Error adding member: $error');
+//       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+//         content: Text('Error adding member: $error'),
+//       ));
+//     } finally {
+//       setState(() {
+//         _isLoading = false;
+//       });
+//     }
+//   }
+
+//   // Future<void> _Addmember() async {
+//   //   setState(() {
+//   //     _isLoading = true;
+//   //   });
+//   //   var reqData = {'email': email, 'password': password, 'phone': phone};
+//   //   try {
+//   //     var response = await MemberService.Addmember(reqData);
+//   //     if (response['sts'] == '01') {
+//   //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+//   //         content: Text('add member Success'),
+//   //       ));
+//   //     } else {
+//   //       // log.e('Login failed: ${response['msg']}');
+
+//   //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+//   //         content: Text('Login failed: ${response['msg']}'),
+//   //       ));
+//   //     }
+//   //   } catch (error) {
+//   //     setState(() {
+//   //       _isLoading = false;
+//   //     });
+
+//   //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+//   //       content: Text('Incorrect Username and password   '),
+//   //     ));
+//   //   }
+//   // }
+
+//   // Future _Membernotdistrict() async {
+//   //   var response = await MemberService.Membernotdistrict();
+//   //   log.i('Profile data show.... $response');
+//   //   setState(() {
+//   //     packagedata = response;
+//   //   });
+//   // }
+
+//   // Future<void> _Membernotzonal(String? newVal) async {
+//   //   try {
+//   //     var response = await MemberService.Membernotzonal();
+//   //     if (response != null && response['sts'] == '01') {
+//   //       setState(() {
+//   //         zonalType = List<String>.from(
+//   //             response['zonals'].map((zonal) => zonal['name']));
+
+//   //         log.i('District names extracted: $zonalType');
+//   //       });
+//   //     } else {
+//   //       log.e('Unexpected API response: $response');
+//   //     }
+//   //   } catch (e) {
+//   //     log.e('Error fetching district data: $e');
+//   //   }
+//   // }
+
+//   void _updatePackageAmountAndGST(String? newVal) {
+//     setState(() {
+//       packageNamedropdownvalue = newVal;
+
+//       if (packageNamedropdownvalue != null) {
+//         // Fetch the selected package data
+//         var selectedPackage = packageData.firstWhere((packagedata) =>
+//             packagedata['packageName'] == packageNamedropdownvalue);
+
+//         // Set the package amount
+//         packageAmount = selectedPackage['packageAmount'].toString();
+
+//         // Calculate the GST (18%)
+//         double amount = double.parse(packageAmount);
+//         packageAmountGST = (amount + amount * 0.18).toStringAsFixed(2);
+//       } else {
+//         packageAmount = '';
+//         packageAmountGST = '';
+//       }
+//     });
+//   }
+
+//   Future _initLoad() async {
+//     await Future.wait(
+//       [
+//         _PackageData(),
+//         _Memberstate(),
+//       ],
+//     );
+//     _isLoading = false;
+//   }
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     setState(() {
+//       _initLoad();
+//     });
+//   }
+
 class _AddMemberPageState extends State<AddMemberPage> {
+  TextEditingController _dobController = TextEditingController();
   var userid;
   var packagedata;
   var states;
-  var stateId;
   var districts;
-  var districtId;
   var zonals;
-  var zonalId;
   var panchayaths;
-  var panchayathsId;
 
   bool _isLoading = false;
 
@@ -37,6 +345,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
   String? email;
   int? phone;
   int? dob;
+  String? address;
   String? password;
   String packageAmount = '';
   String packageAmountGST = '';
@@ -190,71 +499,65 @@ class _AddMemberPageState extends State<AddMemberPage> {
     setState(() {
       _isLoading = true;
     });
-    var reqData = {'email': email, 'password': password, 'phone': phone};
+
+    var reqData = {
+      'name': name,
+      'email': email,
+      'phone': phone?.toString(), // Convert phone to string if not null
+      'dob': dob?.toString(), // Convert dob to string if not null
+      'address': address,
+      'password': password,
+      'packageType': packageTypedropdownvalue, // Ensure packageType is included
+      'packageName': packageNamedropdownvalue,
+      'packageAmount': packageAmount,
+      'packageAmountGST': packageAmountGST,
+    };
+
+    log.i('Request Data: $reqData');
+
     try {
       var response = await MemberService.Addmember(reqData);
       if (response['sts'] == '01') {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('add member Success'),
+          content: Text('Add member Success'),
         ));
       } else {
-        // log.e('Login failed: ${response['msg']}');
-
+        log.e('Add member failed: ${response['msg']}');
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Login failed: ${response['msg']}'),
+          content: Text('Add member failed: ${response['msg']}'),
         ));
       }
     } catch (error) {
+      log.e('Error adding member: $error');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Error adding member: $error'),
+      ));
+    } finally {
       setState(() {
         _isLoading = false;
       });
-
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Incorrect Username and password   '),
-      ));
-    }
-  }
-
-  Future _Membernotdistrict() async {
-    var response = await MemberService.Membernotdistrict();
-    log.i('Profile data show.... $response');
-    setState(() {
-      packagedata = response;
-    });
-  }
-
-  Future<void> _Membernotzonal(String? newVal) async {
-    if (newVal == 'District Franchise') {
-      try {
-        var response = await MemberService.Memberdistrict(stateId);
-        if (response != null && response['sts'] == '01') {
-          setState(() {
-            districtType = List<String>.from(
-                response['districts'].map((district) => district['name']));
-            log.i('District names extracted: $districtType');
-          });
-        } else {
-          log.e('Unexpected API response: $response');
-        }
-      } catch (e) {
-        log.e('Error fetching district data: $e');
-      }
     }
   }
 
   void _updatePackageAmountAndGST(String? newVal) {
     setState(() {
       packageNamedropdownvalue = newVal;
-      packageAmount = packageData
-          .firstWhere(
-              (element) =>
-                  element['packageName'] == packageNamedropdownvalue &&
-                  element['franchiseName'] == packageTypedropdownvalue,
-              orElse: () => {})
-          .putIfAbsent('packageAmount', () => '')
-          .toString();
-      packageAmountGST =
-          (double.tryParse(packageAmount) ?? 0 * 0.18).toStringAsFixed(2);
+
+      if (packageNamedropdownvalue != null) {
+        // Fetch the selected package data
+        var selectedPackage = packageData.firstWhere((packagedata) =>
+            packagedata['packageName'] == packageNamedropdownvalue);
+
+        // Set the package amount
+        packageAmount = selectedPackage['packageAmount'].toString();
+
+        // Calculate the GST (18%)
+        double amount = double.parse(packageAmount);
+        packageAmountGST = (amount + amount * 0.18).toStringAsFixed(2);
+      } else {
+        packageAmount = '';
+        packageAmountGST = '';
+      }
     });
   }
 
@@ -271,9 +574,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      _initLoad();
-    });
+    _initLoad();
   }
 
   @override
@@ -392,6 +693,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: TextField(
+                      keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
                         hintText: 'Enter your phone',
                         hintStyle: TextStyle(
@@ -409,8 +711,8 @@ class _AddMemberPageState extends State<AddMemberPage> {
                       ),
                       onChanged: (text) {
                         setState(() {
-                          phone:
-                          text;
+                          phone = int.tryParse(
+                              text); // Convert the input to an integer
                         });
                       },
                       style: TextStyle(
@@ -454,7 +756,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
                       ),
                       onChanged: (text) {
                         setState(() {
-                          // email = text;
+                          address = text;
                         });
                       },
                       style: TextStyle(
@@ -481,27 +783,44 @@ class _AddMemberPageState extends State<AddMemberPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: TextField(
+                      controller: _dobController,
+                      readOnly: true,
                       keyboardType: TextInputType.datetime,
                       decoration: InputDecoration(
-                        hintText: 'Enter your dob',
-                        hintStyle: TextStyle(
-                            color: marketbgblue, fontWeight: FontWeight.w400),
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: yellow, width: 1),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: yellow),
-                        ),
-                        // icon: Icon(Icons.calendar_month)
-                      ),
-                      onChanged: (text) {
-                        setState(() {
-                          // email = text;
-                        });
+                          hintText: 'Enter your dob',
+                          hintStyle: TextStyle(
+                              color: marketbgblue, fontWeight: FontWeight.w400),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: yellow, width: 1),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: yellow),
+                          ),
+                          suffixIcon: Icon(Icons.calendar_month)
+                          // icon: Icon(Icons.calendar_month)
+                          ),
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime(2101),
+                        );
+
+                        if (pickedDate != null) {
+                          setState(() {
+                            dob = pickedDate
+                                .millisecondsSinceEpoch; // Save the date as an integer (timestamp)
+                            _dobController.text =
+                                "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}"; // Format the date and display it
+                          });
+                        }
                       },
                       style: TextStyle(
                           color: black,
@@ -560,15 +879,14 @@ class _AddMemberPageState extends State<AddMemberPage> {
                               ),
                             );
                           }).toList(),
-                          onChanged: (String? newVal) async {
-                            await _Membernotzonal(newVal);
+                          onChanged: (String? newVal) {
                             setState(() {
                               packageTypedropdownvalue = newVal;
                               packageNamedropdownvalue = null;
                               packageAmount = '';
                               packageAmountGST = '';
-
                               if (packageTypedropdownvalue != null) {
+                                // Filter package names based on selected package type
                                 PackageName = packageData
                                     .where((packagedata) =>
                                         packagedata['franchiseName'] ==
@@ -731,7 +1049,11 @@ class _AddMemberPageState extends State<AddMemberPage> {
                     height: 8,
                   ),
                   Column(children: [
-                    if (packageNamedropdownvalue == 'District Franchise') ...[
+                    if (packageNamedropdownvalue == 'District Franchise' ||
+                        packageNamedropdownvalue == 'Zonal Franchise' ||
+                        packageNamedropdownvalue == 'Mobile Franchise' ||
+                        packageTypedropdownvalue == 'Courses' ||
+                        packageTypedropdownvalue == 'Signals') ...[
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Align(
@@ -805,8 +1127,6 @@ class _AddMemberPageState extends State<AddMemberPage> {
                           ),
                         ),
                       ),
-                    ],
-                    if (districtType.isNotEmpty) ...[
                       SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -880,7 +1200,10 @@ class _AddMemberPageState extends State<AddMemberPage> {
                         ),
                       ),
                     ],
-                    if (zonalType.isNotEmpty) ...[
+                    if (packageNamedropdownvalue == 'Zonal Franchise' ||
+                        packageNamedropdownvalue == 'Mobile Franchise' ||
+                        packageTypedropdownvalue == 'Courses' ||
+                        packageTypedropdownvalue == 'Signals') ...[
                       SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -954,7 +1277,9 @@ class _AddMemberPageState extends State<AddMemberPage> {
                         ),
                       ),
                     ],
-                    if (panchayathType.isNotEmpty) ...[
+                    if (packageNamedropdownvalue == 'Mobile Franchise' ||
+                        packageTypedropdownvalue == 'Courses' ||
+                        packageTypedropdownvalue == 'Signals') ...[
                       SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -1054,7 +1379,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
                       ),
                       onChanged: (text) {
                         setState(() {
-                          // email = text;
+                          password = text;
                         });
                       },
                       style: TextStyle(
