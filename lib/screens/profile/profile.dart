@@ -67,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
     double totalAmount = profiledata['packageAmount'] + gstAmount ;
 
     double height = MediaQuery.of(context).size.height;
-    // double width = MediaQuery.of(context).size.width;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: bluem,
         appBar: AppBar(
@@ -109,8 +109,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     width: 5,
                                   ),
                                   Column(children: [
-                                    Text("text",
-                                      // ₹${profiledata['directIncome']}' ?? ""
+                                    Text(
+                                      "₹${profiledata['directIncome']}' ?? """,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 11),
@@ -146,7 +146,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                   Column(children: [
                                     Text(
-                                        // '₹${profiledata['inDirectIncome']}' ??
+                                        '₹${profiledata['inDirectIncome']}' ??
                                             "text",
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
@@ -494,7 +494,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         )
                       : isSelectedIndex == 0
-                          ? Container(child: Text('Certificate'))
+                          ? Container(child:
+                      Text('Certificate')
+                  // SvgPicture.asset(
+                  //   'assets/svg/certificate.svg',
+                  //       height:200,
+                  // ),
+                  )
                           : Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 24, vertical: 24),
@@ -625,7 +631,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           ),
 
                                      
-                                      SizedBox(width: 79),
+                                      SizedBox(width: 130),
                                        Text(
                                           '18%',
                                           style: TextStyle(
@@ -646,7 +652,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             fontSize: 9,
                                             color: marketbgblue),
                                       ),
-                                      SizedBox(width: 79),
+                                      SizedBox(width: 95),
                                       Text(
                                         '$gstAmount',
                                         style: TextStyle(
@@ -666,7 +672,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             fontSize: 9,
                                             color: marketbgblue),
                                       ),
-                                      SizedBox(width: 49),
+                                      SizedBox(width: 75),
                                       Text(
                                         '${profiledata['packageAmount']}',
                                         style: TextStyle(
