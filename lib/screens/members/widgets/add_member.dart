@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:master_journey/services/package_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../resources/color.dart';
-import '../../../resources/color.dart';
+
 import '../../../services/member_service.dart';
 import '../../../support/logger.dart';
 
@@ -25,7 +25,10 @@ class _AddMemberPageState extends State<AddMemberPage> {
   var packagedata;
   var states;
   var districts;
+  var notdistricts;
   var zonals;
+  var notzonals;
+
   var panchayaths;
 
   bool _isLoading = false;
@@ -51,9 +54,11 @@ class _AddMemberPageState extends State<AddMemberPage> {
 
   String? districtTypedropdownvalue;
   List<String> districtType = [];
+  List<String> notdistrictType = [];
 
   String? zonalTypedropdownvalue;
   List<String> zonalType = [];
+  List<String> notzonalType = [];
 
   String? panchayathTypedropdownvalue;
   List<String> panchayathType = [];
@@ -118,6 +123,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
       if (response != null &&
           response['sts'] == '01' &&
           response['msg'] == 'Districts retrieved success') {
+        // Updated condition
         setState(() {
           districts = response['districts'];
 
@@ -125,6 +131,33 @@ class _AddMemberPageState extends State<AddMemberPage> {
           districtType = List<String>.from(
               districts.map((district) => district['name']).toSet().toList());
           log.i('District names extracted: $districtType');
+        });
+      } else {
+        log.e('Unexpected API response: $response');
+      }
+    } catch (e) {
+      log.e('Error fetching districts: $e');
+    }
+  }
+
+  Future<void> _Membernotdistrict(String stateId) async {
+    try {
+      var response = await MemberService.Membernotdistrict(stateId);
+      log.i('notDistrict API response: $response');
+
+      if (response != null &&
+          response['sts'] == '01' &&
+          response['msg'] == 'Districts retrieved successfully') {
+        // Updated condition
+        setState(() {
+          notdistricts = response['districts'];
+
+          // Extract district names and remove duplicates
+          notdistrictType = List<String>.from(notdistricts
+              .map((notdistrict) => notdistrict['name'])
+              .toSet()
+              .toList());
+          log.i('District names extracted: $notdistrictType');
         });
       } else {
         log.e('Unexpected API response: $response');
@@ -149,6 +182,31 @@ class _AddMemberPageState extends State<AddMemberPage> {
           zonalType = List<String>.from(
               zonals.map((zonal) => zonal['name']).toSet().toList());
           log.i('Zonal names extracted: $zonalType');
+        });
+      } else {
+        log.e('Unexpected API response: $response');
+      }
+    } catch (e) {
+      log.e('Error fetching zonals: $e');
+    }
+  }
+
+  ///notZonal
+  Future<void> _Membernotzonal(String districtId) async {
+    try {
+      var response = await MemberService.Membernotzonal(districtId);
+      log.i('Zonal API response: $response');
+
+      if (response != null &&
+          response['sts'] == '01' &&
+          response['msg'] == 'Zonals retrieved successfully') {
+        setState(() {
+          notzonals = response['zonals'];
+
+          // Extract zonal names and remove duplicates
+          notzonalType = List<String>.from(
+              notzonals.map((zonal) => zonal['name']).toSet().toList());
+          log.i('Zonal names extracted: $notzonalType');
         });
       } else {
         log.e('Unexpected API response: $response');
@@ -184,36 +242,36 @@ class _AddMemberPageState extends State<AddMemberPage> {
     }
   }
 
-    Future _Membernotdistrict() async {
-    var response = await MemberService.Membernotdistrict();
-    log.i('Profile data show.... $response');
-    setState(() {
-      packagedata = response;
-    });
-  }
-
-  Future<void> _Membernotzonal(String? newVal) async {
-    try {
-      var response = await MemberService.Membernotzonal();
-      if (response != null && response['sts'] == '01') {
-        setState(() {
-          zonalType = List<String>.from(
-              response['zonals'].map((zonal) => zonal['name']));
-
-          log.i('District names extracted: $zonalType');
-        });
-      } else {
-        log.e('Unexpected API response: $response');
-      }
-    } catch (e) {
-      log.e('Error fetching district data: $e');
-    }
-  }
-
   Future<void> _Addmember() async {
     setState(() {
       _isLoading = true;
     });
+
+    // Validate required fields
+    if (name == null ||
+        name!.isEmpty ||
+        email == null ||
+        email!.isEmpty ||
+        phone == null ||
+        phone.toString().isEmpty ||
+        dob == null ||
+        dob.toString().isEmpty ||
+        address == null ||
+        address!.isEmpty ||
+        password == null ||
+        password!.isEmpty ||
+        packageTypedropdownvalue == null ||
+        packageTypedropdownvalue!.isEmpty ||
+        packageNamedropdownvalue == null ||
+        packageNamedropdownvalue!.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('All fields are required'),
+      ));
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
 
     var reqData = {
       'name': name,
@@ -222,8 +280,8 @@ class _AddMemberPageState extends State<AddMemberPage> {
       'dob': dob?.toString(), // Convert dob to string if not null
       'address': address,
       'password': password,
-      'packageType': packageTypedropdownvalue, // Ensure packageType is included
-      'franchise': packageNamedropdownvalue,
+      'franchise': packageTypedropdownvalue, // Ensure packageType is included
+      'packageName': packageNamedropdownvalue,
       'packageAmount': packageAmount,
       'packageAmountGST': packageAmountGST,
     };
@@ -826,14 +884,21 @@ class _AddMemberPageState extends State<AddMemberPage> {
                                   districtTypedropdownvalue = null;
                                   zonalTypedropdownvalue = null;
                                   districtType = [];
+                                  notdistrictType = [];
                                   zonalType = [];
+                                  notzonalType = [];
                                   if (stateTypedropdownvalue != null) {
                                     // Find the state ID corresponding to the selected state name
                                     String selectedStateId = states['states']
                                         .firstWhere((state) =>
                                             state['stateName'] ==
                                             stateTypedropdownvalue)['id'];
-                                    _Memberdistrict(selectedStateId);
+                                    if (packageNamedropdownvalue ==
+                                        'District Franchise') {
+                                      _Membernotdistrict(selectedStateId);
+                                    } else {
+                                      _Memberdistrict(selectedStateId);
+                                    }
                                   }
                                 });
                               },
@@ -884,7 +949,11 @@ class _AddMemberPageState extends State<AddMemberPage> {
                               iconSize: 20,
                               elevation: 10,
                               style: TextStyle(fontSize: 15),
-                              items: districtType.map((String district) {
+                              items: (packageNamedropdownvalue ==
+                                          'District Franchise'
+                                      ? notdistrictType
+                                      : districtType)
+                                  .map((String district) {
                                 return DropdownMenuItem<String>(
                                   value: district,
                                   child: Text(
@@ -899,13 +968,38 @@ class _AddMemberPageState extends State<AddMemberPage> {
                                   districtTypedropdownvalue = newVal;
                                   zonalTypedropdownvalue = null;
                                   zonalType = [];
+
                                   if (districtTypedropdownvalue != null) {
-                                    // Find the district ID corresponding to the selected district name
-                                    String selectedDistrictId =
-                                        districts.firstWhere((district) =>
-                                            district['name'] ==
-                                            districtTypedropdownvalue)['id'];
-                                    _Memberzonal(selectedDistrictId);
+                                    try {
+                                      // Debugging: Print the API response
+                                      print(
+                                          'Selected District: $districtTypedropdownvalue');
+
+                                      // Find the district ID corresponding to the selected district name
+                                      String selectedDistrictId =
+                                          (packageNamedropdownvalue ==
+                                                          'District Franchise'
+                                                      ? notdistricts
+                                                      : districts)
+                                                  .firstWhere((district) =>
+                                                      district['name'] ==
+                                                      districtTypedropdownvalue)[
+                                              'id'];
+
+                                      if (packageNamedropdownvalue ==
+                                          'Zonal Franchise') {
+                                        _Membernotzonal(selectedDistrictId);
+                                      } else {
+                                        _Memberzonal(selectedDistrictId);
+                                      }
+
+                                      print(
+                                          'Selected District ID: $selectedDistrictId');
+                                      _Memberzonal(selectedDistrictId);
+                                    } catch (e) {
+                                      // Handle error if district is not found
+                                      print('Error finding district ID: $e');
+                                    }
                                   }
                                 });
                               },
@@ -961,7 +1055,11 @@ class _AddMemberPageState extends State<AddMemberPage> {
                               iconSize: 20,
                               elevation: 10,
                               style: TextStyle(fontSize: 15),
-                              items: zonalType.map((String zonal) {
+                              items:
+                                  (packageNamedropdownvalue == 'Zonal Franchise'
+                                          ? notzonalType
+                                          : zonalType)
+                                      .map((String zonal) {
                                 return DropdownMenuItem<String>(
                                   value: zonal,
                                   child: Text(
@@ -971,18 +1069,52 @@ class _AddMemberPageState extends State<AddMemberPage> {
                                   ),
                                 );
                               }).toList(),
+                              // onChanged: (String? newVal) {
+                              //   setState(() {
+                              //     zonalTypedropdownvalue = newVal;
+                              //     panchayathTypedropdownvalue = null;
+                              //     panchayathType = [];
+                              //     if (zonalTypedropdownvalue != null) {
+                              //
+                              //       // Find the zonal ID corresponding to the selected zonal name
+                              //       String selectedZonalId = zonals.firstWhere(
+                              //           (zonal) =>
+                              //               zonal['name'] ==
+                              //               zonalTypedropdownvalue)['id'];
+                              //       _Memberpanchayath(selectedZonalId);
+                              //     }
+                              //   });
+                              // },
+
                               onChanged: (String? newVal) {
                                 setState(() {
                                   zonalTypedropdownvalue = newVal;
                                   panchayathTypedropdownvalue = null;
                                   panchayathType = [];
+
                                   if (zonalTypedropdownvalue != null) {
-                                    // Find the zonal ID corresponding to the selected zonal name
-                                    String selectedZonalId = zonals.firstWhere(
-                                        (zonal) =>
-                                            zonal['name'] ==
-                                            zonalTypedropdownvalue)['id'];
-                                    _Memberpanchayath(selectedZonalId);
+                                    try {
+                                      // Debugging: Print the API response
+                                      print(
+                                          'Selected Zonal: $zonalTypedropdownvalue');
+
+                                      // Find the district ID corresponding to the selected district name
+                                      String selectedZonalId =
+                                          (packageNamedropdownvalue ==
+                                                      'Zonal Franchise'
+                                                  ? notzonals
+                                                  : zonals)
+                                              .firstWhere((zonal) =>
+                                                  zonal['name'] ==
+                                                  zonalTypedropdownvalue)['id'];
+
+                                      print(
+                                          'Selected Zonal ID: $selectedZonalId');
+                                      _Memberpanchayath(selectedZonalId);
+                                    } catch (e) {
+                                      // Handle error if district is not found
+                                      print('Error finding Zonal ID: $e');
+                                    }
                                   }
                                 });
                               },
@@ -1138,10 +1270,4 @@ class _AddMemberPageState extends State<AddMemberPage> {
             ),
     );
   }
-}
-
-@override
-Widget build(BuildContext context) {
-  // TODO: implement build
-  throw UnimplementedError();
 }

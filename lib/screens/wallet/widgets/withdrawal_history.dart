@@ -168,79 +168,80 @@ class _withdrawalhistoryState extends State<withdrawalhistory> {
             thickness: 1,
           ),
         ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: 50,
-            itemBuilder: (BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.only(right: 0, top: 10),
-                child: Table(
-                  columnWidths: const {},
-                  children: [
-                    TableRow(
-                      children: [
-                        Center(
-                          child: Text(
-                            '₹1000',
-                            style: TextStyle(
-                              color: bluem,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                        Center(
-                          child: Text(
-                            '₹100',
-                            style: TextStyle(
-                              color: bluem,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                        Center(
-                          child: Text(
-                            '₹900',
-                            style: TextStyle(
-                              color: greendark,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 60,
-                              height: 20,
-                              margin: EdgeInsets.symmetric(vertical: 0),
-                              decoration: BoxDecoration(
-                                color: greenbg,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Accepted',
-                                  style: TextStyle(
-                                    color: marketbg,
-                                    fontSize: 8,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
+        //   Expanded(
+        //     child: ListView.builder(
+        //       itemCount: 50,
+        //       itemBuilder: (BuildContext context, int index) {
+        //         return Padding(
+        //           padding: const EdgeInsets.only(right: 0, top: 10),
+        //           child: Table(
+        //             columnWidths: const {},
+        //             children: [
+        //               TableRow(
+        //                 children: [
+        //                   Center(
+        //                     child: Text(
+        //                       '₹1000',
+        //                       style: TextStyle(
+        //                         color: bluem,
+        //                         fontSize: 10,
+        //                         fontWeight: FontWeight.w800,
+        //                       ),
+        //                     ),
+        //                   ),
+        //                   Center(
+        //                     child: Text(
+        //                       '₹100',
+        //                       style: TextStyle(
+        //                         color: bluem,
+        //                         fontSize: 10,
+        //                         fontWeight: FontWeight.w800,
+        //                       ),
+        //                     ),
+        //                   ),
+        //                   Center(
+        //                     child: Text(
+        //                       '₹900',
+        //                       style: TextStyle(
+        //                         color: greendark,
+        //                         fontSize: 10,
+        //                         fontWeight: FontWeight.w800,
+        //                       ),
+        //                     ),
+        //                   ),
+        //                   Row(
+        //                     mainAxisAlignment: MainAxisAlignment.center,
+        //                     children: [
+        //                       Container(
+        //                         width: 60,
+        //                         height: 20,
+        //                         margin: EdgeInsets.symmetric(vertical: 0),
+        //                         decoration: BoxDecoration(
+        //                           color: greenbg,
+        //                           borderRadius:
+        //                               BorderRadius.all(Radius.circular(5)),
+        //                         ),
+        //                         child: Center(
+        //                           child: Text(
+        //                             'Accepted',
+        //                             style: TextStyle(
+        //                               color: marketbg,
+        //                               fontSize: 8,
+        //                             ),
+        //                           ),
+        //                         ),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                 ],
+        //               ),
+        //             ],
+        //           ),
+        //         );
+        //       },
+        //     ),
+        //   ),
+        //
       ],
     );
   }

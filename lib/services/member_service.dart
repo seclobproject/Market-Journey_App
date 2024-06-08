@@ -53,16 +53,18 @@ class MemberService {
     return response.data;
   }
 
-  static Future Membernotdistrict() async {
+  static Future Membernotdistrict(id) async {
     var dio = await DioHelper.getInstance();
-    var response = await dio.get('$baseURL/api/admin/view-nottaken-districts');
+    var response =
+        await dio.get('$baseURL/api/admin/view-nottaken-districts/$id');
     print(response);
     return response.data;
   }
 
-  static Future Membernotzonal() async {
+  static Future Membernotzonal(districtId) async {
     var dio = await DioHelper.getInstance();
-    var response = await dio.get('$baseURL/api/admin/view-nottaken-zonals');
+    var response =
+        await dio.get('$baseURL/api/admin/view-nottaken-zonals/$districtId');
     print(response);
     return response.data;
   }

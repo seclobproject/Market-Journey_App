@@ -6,6 +6,7 @@ import 'package:master_journey/screens/wallet/widgets/withdrawal_history.dart';
 import '../../resources/color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../services/profile_service.dart';
 import '../../support/logger.dart';
 
 class wallet extends StatefulWidget {
@@ -16,6 +17,43 @@ class wallet extends StatefulWidget {
 }
 
 class _walletState extends State<wallet> {
+  var userid;
+  var profiledata;
+  dynamic awardData;
+  List pool = [];
+  bool _isLoading = true;
+
+  Future _ProfileData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString('userid');
+    var response = await ProfileService.profile();
+    log.i('Profile data show.... $response');
+    setState(() {
+      profiledata = response;
+    });
+  }
+
+  Future _initLoad() async {
+    await Future.wait(
+      [
+        _ProfileData(),
+
+        ///////
+      ],
+    );
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _initLoad();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,11 +80,12 @@ class _walletState extends State<wallet> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "₹1,05,210",
+                        profiledata?['walletAmount']?.toString() ?? '0.00',
                         style: TextStyle(
-                            color: marketbg,
-                            fontSize: 25,
-                            fontWeight: FontWeight.w800),
+                          color: marketbg,
+                          fontSize: 25,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                       Container(
                         height: 50,
