@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:master_journey/services/package_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../resources/color.dart';
+import '../../../resources/color.dart'; 
 
 import '../../../services/member_service.dart';
 import '../../../support/logger.dart';

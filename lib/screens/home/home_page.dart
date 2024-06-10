@@ -10,7 +10,6 @@ import '../../navigation/app_drawer.dart';
 import '../../resources/color.dart';
 import 'package:scroll_loop_auto_scroll/scroll_loop_auto_scroll.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../services/home_service.dart';
 import '../../services/profile_service.dart';
 import '../../support/logger.dart';
@@ -128,11 +127,15 @@ class _homeState extends State<home> {
                                 // Navigator.of(context).push(MaterialPageRoute(
                                 //     builder: (context) => home()));
                               },
-                              child: SvgPicture.asset(
-                                'assets/svg/drawrwhite.svg',
-                                color: black,
-                                width: screenWidth * 0.03,
-                                height: screenHeight * 0.03,
+                              child: SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: SvgPicture.asset(
+                                  'assets/svg/drawrwhite.svg',
+                                  color: black,
+                                  width: screenWidth * 0.03,
+                                  height: screenHeight * 0.03,
+                                ),
                               ),
                             ),
                             GestureDetector(
@@ -144,10 +147,14 @@ class _homeState extends State<home> {
                                           const Notificationscreen()),
                                 );
                               },
-                              child: SvgPicture.asset(
-                                'assets/svg/notifications_unread.svg',
-                                width: screenWidth * 0.04,
-                                height: screenHeight * 0.04,
+                              child: SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: SvgPicture.asset(
+                                  'assets/svg/notifications_unread.svg',
+                                  width: screenWidth * 0.04,
+                                  height: screenHeight * 0.04,
+                                ),
                               ),
                             ),
                           ],
@@ -157,7 +164,7 @@ class _homeState extends State<home> {
                     Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: screenWidth * 0.05,
-                          vertical: screenHeight * 0.02),
+                          vertical: screenHeight * 0.01),
                       child: Align(
                         alignment: Alignment.topLeft,
                         child: Column(
@@ -209,24 +216,27 @@ class _homeState extends State<home> {
                       height: 24,
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
                       child: Row(
                         children: [
                           SizedBox(
-                            width: screenWidth * 0.01,
+                            width: screenWidth * 0.02,
                             child: Divider(
                               color: black,
                             ),
                           ),
+                          Text(
+                            " LATEST NEWS ",
+                            style: TextStyle(
+                                fontSize: screenWidth * 0.04,
+                                fontWeight:
+                                    FontWeight.w600), // Adjust font size
+                          ),
                           SizedBox(
                             width: screenWidth * 0.01,
                           ),
-                          Text("LATEST NEWS"),
-                          SizedBox(
-                            width: screenWidth * 0.01,
-                          ),
-                          SizedBox(
-                            width: screenWidth * 0.57,
+                          Expanded(
                             child: Divider(
                               color: black,
                             ),
@@ -266,18 +276,17 @@ class _homeState extends State<home> {
                       padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: Container(
                         padding: EdgeInsets.only(left: 9, right: 6),
-                        width: 400,
+                        width: double.infinity,
                         height: 180,
                         decoration: BoxDecoration(
                           color: bluem,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: Row(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Row(
                                 children: [
                                   Text(
                                     "10",
@@ -287,156 +296,143 @@ class _homeState extends State<home> {
                                         color: marketbg),
                                   ),
                                   SizedBox(
-                                    width: 10,
+                                    width: 7,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(top: 10),
                                     child: Text(
                                       "Days left",
                                       style: TextStyle(
-                                          fontSize: 15, color: marketbg),
+                                          fontSize: 17, color: marketbg),
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                            SizedBox(
-                              height: 4,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    "Your monthly subscription plan has 10 days to renew Subscription is 0m Please upload the screenshot",
-                                    style: TextStyle(
-                                        color: marketbg,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "Your monthly subscription plan has 10 days to renew Subscription is 0m Please upload the screenshot",
+                                      style: TextStyle(
+                                          color: marketbg,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400),
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 19,
-                                ),
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: Image.asset(
-                                    'assets/logo/freemium.png',
-                                    height: 83,
-                                    width: 83,
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: Image.asset(
+                                      'assets/logo/freemium.png',
+                                      height: 83,
+                                      width: 83,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Align(
-                              alignment: Alignment.bottomLeft,
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const Subscription()),
-                                  );
-                                },
-                                child: Container(
-                                  height: 26,
-                                  width: 52,
-                                  decoration: BoxDecoration(
-                                      color: yellow,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Center(
-                                      child: Text(
-                                    'Click',
-                                    style: TextStyle(fontSize: 10),
-                                  )),
+                                ],
+                              ),
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const Subscription()),
+                                    );
+                                  },
+                                  child: Container(
+                                    height: 26,
+                                    width: 52,
+                                    decoration: BoxDecoration(
+                                        color: yellow,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Center(
+                                        child: Text(
+                                      'Click',
+                                      style: TextStyle(fontSize: 10),
+                                    )),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(height: screenHeight * 0.02),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 162,
-                            width: 132, // Adjust the width as per requirement
-                            decoration: BoxDecoration(
-                              color: bluem,
-                              borderRadius:
-                                  BorderRadius.circular(screenWidth * 0.025),
-                            ),
+                    SizedBox(height: screenHeight * 0.03),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          height: 162,
+                          width: 132, // Adjust the width as per requirement
+                          decoration: BoxDecoration(
+                            color: bluem,
+                            borderRadius:
+                                BorderRadius.circular(screenWidth * 0.025),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                SizedBox(height: screenHeight * 0.01),
                                 Image.asset(
                                   'assets/logo/walletimg1.png',
-                                  fit: BoxFit.none,
+                                  height: 58,
+                                  width: 58,
                                 ),
-                                SizedBox(height: screenHeight * 0.01),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: screenWidth * 0.04),
-                                  child: Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      "My balance",
-                                      style: TextStyle(
-                                        color: marketbg,
-                                        fontSize: screenWidth *
-                                            0.03, // Adjust the font size as per requirement
-                                      ),
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "My balance",
+                                    style: TextStyle(
+                                      color: marketbg,
+                                      fontSize: screenWidth *
+                                          0.04, // Adjust the font size as per requirement
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: screenWidth * 0.04),
-                                  child: Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      profiledata['walletAmount'],
-                                      style: TextStyle(
-                                        color: marketbg,
-                                        fontSize: screenWidth *
-                                            0.06, // Adjust the font size as per requirement
-                                        fontWeight: FontWeight.w900,
-                                      ),
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    profiledata['walletAmount'],
+                                    style: TextStyle(
+                                      color: marketbg,
+                                      fontSize: screenWidth *
+                                          0.06, // Adjust the font size as per requirement
+                                      fontWeight: FontWeight.w900,
                                     ),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          SizedBox(width: 34),
-                          Container(
-                            height: 165, // Adjust the height as per requirement
-                            width: 176, // Adjust the width as per requirement
-                            decoration: BoxDecoration(
-                              color: bluem,
-                              borderRadius:
-                                  BorderRadius.circular(screenWidth * 0.025),
-                            ),
+                        ),
+                        Container(
+                          height: 165, // Adjust the height as per requirement
+                          width: 176, // Adjust the width as per requirement
+                          decoration: BoxDecoration(
+                            color: bluem,
+                            borderRadius:
+                                BorderRadius.circular(screenWidth * 0.025),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
                             child: Column(
                               children: [
-                                SizedBox(height: screenHeight * 0.01),
                                 Image.asset(
                                   'assets/logo/refferpage.png',
-                                  height: screenHeight * 0.1,
+                                  height: 67,
                                 ),
                                 Flexible(
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
-                                        horizontal: screenWidth * 0.04),
+                                        horizontal: screenWidth * 0.03),
                                     child: Text(
-                                      "Sharing is rewarding!\nRefer your friends and Life Time Income",
+                                      "Sharing is rewarding! Refer your friends and Life Time Income",
                                       style: TextStyle(
                                         fontSize: screenWidth *
                                             0.03, // Adjust the font size as per requirement
@@ -447,10 +443,9 @@ class _homeState extends State<home> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: screenHeight * 0.01),
                                 Padding(
                                   padding: EdgeInsets.symmetric(
-                                      horizontal: screenWidth * 0.04),
+                                      horizontal: screenWidth * 0.03),
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: Container(
@@ -476,8 +471,8 @@ class _homeState extends State<home> {
                               ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: screenHeight * 0.02,
@@ -577,20 +572,17 @@ class _homeState extends State<home> {
                               color: black,
                             ),
                           ),
-                          SizedBox(
-                            width: screenWidth * 0.01,
-                          ),
                           Text(
-                            "Award Rewards  ",
+                            " Award Rewards ",
                             style: TextStyle(
-                                fontSize:
-                                    screenWidth * 0.04), // Adjust font size
+                                fontSize: screenWidth * 0.04,
+                                fontWeight:
+                                    FontWeight.w600), // Adjust font size
                           ),
                           SizedBox(
                             width: screenWidth * 0.01,
                           ),
-                          SizedBox(
-                            width: screenWidth * 0.5,
+                          Expanded(
                             child: Divider(
                               color: black,
                             ),
@@ -602,7 +594,8 @@ class _homeState extends State<home> {
                       height: 5,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: screenWidth * 0.05),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
                       child: Container(
                         height: 111,
                         width: screenWidth * 0.9,
@@ -612,56 +605,59 @@ class _homeState extends State<home> {
                             Radius.circular(screenWidth * 0.025),
                           ),
                         ),
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: awardData.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            var data = awardData[index];
-                            if (data == null ||
-                                data['memberImage'] == null ||
-                                data['memberName'] == null) {
-                              return Center(
-                                child: Text('No Data Available'),
-                              ); // Return an empty widget if data is null or missing required keys
-                            }
-                            return Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: screenWidth * 0.025,
-                                    vertical: screenHeight * 0.02,
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      ClipOval(
-                                        child: Container(
-                                          color: Colors.orange,
-                                          height: 61,
-                                          width: 61,
-                                          child: Image.network(
-                                            data['memberImage']!,
-                                            fit: BoxFit.cover,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                              return Icon(Icons.error,
-                                                  color: Colors.red);
-                                            },
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: awardData.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              var data = awardData[index];
+                              if (data == null ||
+                                  data['memberImage'] == null ||
+                                  data['memberName'] == null) {
+                                return Center(
+                                  child: Text('No Data Available'),
+                                ); // Return an empty widget if data is null or missing required keys
+                              }
+                              return Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: screenWidth * 0.025,
+                                      vertical: screenHeight * 0.02,
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        ClipOval(
+                                          child: Container(
+                                            color: Colors.orange,
+                                            height: 61,
+                                            width: 61,
+                                            child: Image.network(
+                                              data['memberImage']!,
+                                              fit: BoxFit.cover,
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                return Icon(Icons.error,
+                                                    color: Colors.red);
+                                              },
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(height: screenHeight * 0.01),
-                                      Text(
-                                        data['memberName']!,
-                                        style: TextStyle(
-                                          fontSize: screenWidth * 0.03,
+                                        SizedBox(height: screenHeight * 0.01),
+                                        Text(
+                                          data['memberName']!,
+                                          style: TextStyle(
+                                            fontSize: screenWidth * 0.03,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
-                            );
-                          },
+                                ],
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
@@ -679,21 +675,17 @@ class _homeState extends State<home> {
                               color: black,
                             ),
                           ),
-                          SizedBox(
-                            width: screenWidth * 0.01,
-                          ),
                           Text(
-                            "Leader Boards  ",
+                            " Leader Boards ",
                             style: TextStyle(
-                                fontSize: 12,
+                                fontSize: screenWidth * 0.04,
                                 fontWeight:
                                     FontWeight.w600), // Adjust font size
                           ),
                           SizedBox(
                             width: screenWidth * 0.01,
                           ),
-                          SizedBox(
-                            width: screenWidth * 0.5,
+                          Expanded(
                             child: Divider(
                               color: black,
                             ),
@@ -701,7 +693,7 @@ class _homeState extends State<home> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: 10),
                     SizedBox(
                       height: 100,
                       child: ListView.builder(
@@ -712,26 +704,27 @@ class _homeState extends State<home> {
                           return Padding(
                             padding: const EdgeInsets.only(left: 20),
                             child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 11, horizontal: 20),
-                                width: 170,
-                                height: 88,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: marketbgblue),
-                                child: Align(
-                                  alignment: Alignment.topCenter,
-                                  child: Column(
+                              width: 170,
+                              height: 88,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: marketbgblue),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(children: [
+                                  Text(
+                                    'Team Leader(A)',
+                                    style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w500,
+                                        color: marketbg),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: [
-                                      Text(
-                                        'Team Leader(A)',
-                                        style: TextStyle(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w500,
-                                            color: marketbg),
-                                      ),
-                                      SizedBox(height: 10),
-                                      Row(
+                                      Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
@@ -742,7 +735,33 @@ class _homeState extends State<home> {
                                                 fontWeight: FontWeight.w500,
                                                 color: marketbg),
                                           ),
-                                          SizedBox(width: 38),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Container(
+                                            height: 25,
+                                            width: 33,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                              color: yellow1,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                pooldata['count']?.toString() ??
+                                                    "0",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 10),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
                                           Text(
                                             " Amount",
                                             style: TextStyle(
@@ -750,15 +769,9 @@ class _homeState extends State<home> {
                                                 fontWeight: FontWeight.w500,
                                                 color: marketbg),
                                           ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
+                                          SizedBox(
+                                            height: 5,
+                                          ),
                                           Container(
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 3, horizontal: 13),
@@ -777,34 +790,18 @@ class _homeState extends State<home> {
                                                   fontSize: 10),
                                             ),
                                           ),
-                                          SizedBox(width: 49),
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 3, horizontal: 13),
-                                            height: 25,
-                                            width: 33,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                              color: yellow1,
-                                            ),
-                                            child: Text(
-                                              pooldata['amount']?.toString() ??
-                                                  "0",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 10),
-                                            ),
-                                          )
                                         ],
-                                      )
+                                      ),
                                     ],
                                   ),
-                                )),
+                                ]),
+                              ),
+                            ),
                           );
                         },
                       ),
                     ),
+
                     SizedBox(
                       height: screenHeight * 0.02,
                     ),
@@ -819,21 +816,17 @@ class _homeState extends State<home> {
                               color: black,
                             ),
                           ),
-                          SizedBox(
-                            width: screenWidth * 0.01,
-                          ),
                           Text(
-                            "Distributed Leader Boards  ",
+                            " Distributed Leader Boards ",
                             style: TextStyle(
-                                fontSize: 12,
+                                fontSize: screenWidth * 0.04,
                                 fontWeight:
                                     FontWeight.w600), // Adjust font size
                           ),
                           SizedBox(
                             width: screenWidth * 0.01,
                           ),
-                          SizedBox(
-                            width: screenWidth * 0.35,
+                          Expanded(
                             child: Divider(
                               color: black,
                             ),
@@ -841,63 +834,85 @@ class _homeState extends State<home> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: 10),
                     SizedBox(
                       height: 100,
                       child: ListView.builder(
-                        itemCount: 5,
+                        itemCount: pool.length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (BuildContext context, int index) {
+                          var pooldata = pool[index];
                           return Padding(
                             padding: const EdgeInsets.only(left: 20),
                             child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 11, horizontal: 20),
-                                width: 170,
-                                height: 88,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: marketbgblue),
-                                child: Align(
-                                  alignment: Alignment.topCenter,
-                                  child: Column(
+                              width: 170,
+                              height: 88,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: marketbgblue),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(children: [
+                                  Text(
+                                    'Team Leader(A)',
+                                    style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w500,
+                                        color: marketbg),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: [
-                                      Text(
-                                        'Team Leader(A)',
-                                        style: TextStyle(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w500,
-                                            color: marketbg),
-                                      ),
-                                      SizedBox(height: 10),
-                                      Row(
+                                      Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            'Member’s',
+                                            "Member’s",
                                             style: TextStyle(
                                                 fontSize: 8,
                                                 fontWeight: FontWeight.w500,
                                                 color: marketbg),
                                           ),
-                                          SizedBox(width: 38),
-                                          Text(
-                                            'Amount',
-                                            style: TextStyle(
-                                                fontSize: 8,
-                                                fontWeight: FontWeight.w500,
-                                                color: marketbg),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Container(
+                                            height: 25,
+                                            width: 33,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                              color: yellow1,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                pooldata['count']?.toString() ??
+                                                    "0",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 10),
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Row(
+                                      Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
+                                          Text(
+                                            " Amount",
+                                            style: TextStyle(
+                                                fontSize: 8,
+                                                fontWeight: FontWeight.w500,
+                                                color: marketbg),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
                                           Container(
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 3, horizontal: 13),
@@ -909,35 +924,20 @@ class _homeState extends State<home> {
                                               color: yellow1,
                                             ),
                                             child: Text(
-                                              "1",
+                                              pooldata['count']?.toString() ??
+                                                  "0",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 10),
                                             ),
                                           ),
-                                          SizedBox(width: 49),
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 3, horizontal: 13),
-                                            height: 25,
-                                            width: 33,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                              color: yellow1,
-                                            ),
-                                            child: Text(
-                                              "1",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 10),
-                                            ),
-                                          )
                                         ],
-                                      )
+                                      ),
                                     ],
                                   ),
-                                )),
+                                ]),
+                              ),
+                            ),
                           );
                         },
                       ),
@@ -951,26 +951,22 @@ class _homeState extends State<home> {
                       child: Row(
                         children: [
                           SizedBox(
-                            width: screenWidth * 0.03,
+                            width: screenWidth * 0.02,
                             child: Divider(
                               color: black,
                             ),
                           ),
-                          SizedBox(
-                            width: screenWidth * 0.02,
-                          ),
                           Text(
-                            "FLASH FEED ",
+                            " FLASH FEED ",
                             style: TextStyle(
-                                fontSize: 12,
+                                fontSize: screenWidth * 0.04,
                                 fontWeight:
                                     FontWeight.w600), // Adjust font size
                           ),
                           SizedBox(
                             width: screenWidth * 0.01,
                           ),
-                          SizedBox(
-                            width: screenWidth * 0.62,
+                          Expanded(
                             child: Divider(
                               color: black,
                             ),
