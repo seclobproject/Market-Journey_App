@@ -266,7 +266,7 @@ class _CashwithdrawState extends State<Cashwithdraw> {
                                           style: TextStyle(color: marketbg),
                                         ),
                                       ),
-                                    ),
+                                    ), 
                                   ],
                                 ),
                               ],

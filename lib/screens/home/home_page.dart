@@ -44,14 +44,17 @@ class _homeState extends State<home> {
   }
 
   Future<void> _AwardData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    userid = prefs.getString('userid');
-    var response = await AwardService.viewRewards();
-    log.i('Award & Reward data show.... $response');
-    setState(() {
-      awardData = response;
-    });
+    try {
+      var response = await AwardService.viewRewards();
+      log.i('Award & Reward data show.... $response');
+      setState(() {
+        awardData = response ?? [];
+      });
+    } catch (error) {
+      log.e('Error fetching award data: $error');
+    }
   }
+
   Future _leadersboard() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userid = prefs.getString('userid');
@@ -215,7 +218,7 @@ class _homeState extends State<home> {
                               color: black,
                             ),
                           ),
-                          SizedBox( 
+                          SizedBox(
                             width: screenWidth * 0.01,
                           ),
                           Text("LATEST NEWS"),
@@ -479,6 +482,90 @@ class _homeState extends State<home> {
                     SizedBox(
                       height: screenHeight * 0.02,
                     ),
+                    // Padding(
+                    //   padding:
+                    //       EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+                    //   child: Row(
+                    //     children: [
+                    //       SizedBox(
+                    //         width: screenWidth * 0.02,
+                    //         child: Divider(
+                    //           color: black,
+                    //         ),
+                    //       ),
+                    //       SizedBox(
+                    //         width: screenWidth * 0.01,
+                    //       ),
+                    //       Text(
+                    //         "Award Rewards  ",
+                    //         style: TextStyle(
+                    //             fontSize:
+                    //                 screenWidth * 0.04), // Adjust font size
+                    //       ),
+                    //       SizedBox(
+                    //         width: screenWidth * 0.01,
+                    //       ),
+                    //       SizedBox(
+                    //         width: screenWidth * 0.5,
+                    //         child: Divider(
+                    //           color: black,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                    // SizedBox(
+                    //   height: 5,
+                    // ),
+                    // Padding(
+                    //   padding: EdgeInsets.only(left: screenWidth * 0.05),
+                    //   child: Container(
+                    //     height: 111,
+                    //     width: 400,
+                    //     decoration: BoxDecoration(
+                    //       color: lightyellow,
+                    //       borderRadius: BorderRadius.all(
+                    //           Radius.circular(screenWidth * 0.025)),
+                    //     ),
+                    //     child: ListView.builder(
+                    //         scrollDirection: Axis.horizontal,
+                    //         itemCount: awardData.length,
+                    //         itemBuilder: (BuildContext context, int index) {
+                    //           // var data = awardData[index];
+                    //           return Row(
+                    //             children: [
+                    //               Padding(
+                    //                 padding: EdgeInsets.symmetric(
+                    //                   horizontal: screenWidth * 0.025,
+                    //                   vertical: screenHeight * 0.02,
+                    //                 ),
+                    //                 child: Column(
+                    //                   children: [
+                    //                     ClipOval(
+                    //                       child: Container(
+                    //                         color: Colors.orange,
+                    //                         height: 61,
+                    //                         width: 61,
+                    //                         child: Image.network(
+                    //                           awardData['memberImage'] ?? "no image",
+                    //                            fit: BoxFit.cover,
+                    //                         ),
+                    //                       ),
+                    //                     ),
+                    //                     Text(
+                    //                       awardData['memberName'] ?? 'No Name',
+                    //                       style: TextStyle(
+                    //                         fontSize: screenWidth * 0.03,
+                    //                       ),
+                    //                     ),
+                    //                   ],
+                    //                 ),
+                    //               ),
+                    //             ],
+                    //           );
+                    //         }),
+                    //   ),
+                    // ),
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
@@ -518,49 +605,64 @@ class _homeState extends State<home> {
                       padding: EdgeInsets.only(left: screenWidth * 0.05),
                       child: Container(
                         height: 111,
-                        width: 400,
+                        width: screenWidth * 0.9,
                         decoration: BoxDecoration(
-                          color: lightyellow,
+                          color: Colors.yellow[100],
                           borderRadius: BorderRadius.all(
-                              Radius.circular(screenWidth * 0.025)),
+                            Radius.circular(screenWidth * 0.025),
+                          ),
                         ),
                         child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: awardData.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              // var data = awardData[index];
-                              return Row(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: screenWidth * 0.025,
-                                      vertical: screenHeight * 0.02,
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        ClipOval(
-                                          child: Container(
-                                            color: Colors.orange,
-                                            height: 61,
-                                            width: 61,
-                                            child: Image.network(
-                                              awardData['memberImage'] ?? "no image",
-                                               fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                        Text(
-                                          awardData['memberName'] ?? 'No Name',
-                                          style: TextStyle(
-                                            fontSize: screenWidth * 0.03,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: awardData.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            var data = awardData[index];
+                            if (data == null ||
+                                data['memberImage'] == null ||
+                                data['memberName'] == null) {
+                              return Center(
+                                child: Text('No Data Available'),
+                              ); // Return an empty widget if data is null or missing required keys
+                            }
+                            return Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: screenWidth * 0.025,
+                                    vertical: screenHeight * 0.02,
                                   ),
-                                ],
-                              );
-                            }),
+                                  child: Column(
+                                    children: [
+                                      ClipOval(
+                                        child: Container(
+                                          color: Colors.orange,
+                                          height: 61,
+                                          width: 61,
+                                          child: Image.network(
+                                            data['memberImage']!,
+                                            fit: BoxFit.cover,
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              return Icon(Icons.error,
+                                                  color: Colors.red);
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: screenHeight * 0.01),
+                                      Text(
+                                        data['memberName']!,
+                                        style: TextStyle(
+                                          fontSize: screenWidth * 0.03,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
                       ),
                     ),
                     SizedBox(
