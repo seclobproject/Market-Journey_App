@@ -33,69 +33,69 @@ class _reportState extends State<report> {
             child:
                 Text("Income", style: TextStyle(color: black, fontSize: 18))),
       ),
-      body: DefaultTabController(
-        length: 5, // Number of tabs
-        child: Column(
-          children: [
-            Container(
-              height: 30,
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: bluem,
-                ),
-                borderRadius: const BorderRadius.all(Radius.circular(7)),
-                color: Color.fromARGB(255, 255, 255, 255),
-              ),
-              child: TabBar(
-                indicatorSize: TabBarIndicatorSize.tab,
-                dividerColor: Colors.transparent,
-                indicator: BoxDecoration(
-                    color: bluem,
-                    borderRadius: BorderRadius.all(Radius.circular(6))),
-                labelColor: Colors.white,
-                unselectedLabelColor: Colors.black,
-                labelStyle:
-                    TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
-                // labelColor: black,
-                // unselectedLabelColor: Colors.black,
-                // indicatorColor: yellow,
-                // labelStyle: TextStyle(
-                //   fontSize: 12.0,
-                // ),
-                tabs: [
-                  Tab(
-                    text: 'Direct',
-                  ),
-                  // Title for first tab
-                  Tab(text: 'Indirect'),
+      body:
 
-                  Tab(text: 'Level Income'),
+DefaultTabController(
+  length: 5, // Number of tabs
+  child: Column(
+    children: [
+      Container(
+        height: 30,
+        margin: const EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: bluem,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(7)),
+          color: Color.fromARGB(255, 255, 255, 255),
+        ),
+        child: TabBar(
+          indicatorSize: TabBarIndicatorSize.tab,
+          dividerColor: Colors.transparent,
+          indicator: BoxDecoration(
+              color: bluem,
+              borderRadius: BorderRadius.all(Radius.circular(6))),
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.black,
+          labelStyle:
+              TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
+          // labelColor: black,
+          // unselectedLabelColor: Colors.black,
+          // indicatorColor: yellow,
+          // labelStyle: TextStyle(
+          //   fontSize: 12.0,
+          // ),
+          tabs: [
 
-                  Tab(text: 'Autopool'),
-
-                  Tab(text: 'Bonus'),
-                ],
-              ),
+            Tab(
+              text: 'Direct',
             ),
-            SizedBox(height: 20),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  levelonereport(),
-                  leveltworeport(),
-                  levelthreereport(),
-                  levelfourreport(),
-                  levelfivereport()
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            )
+            // Title for first tab
+            Tab(text: 'Indirect'),
+
+            Tab(text: 'Level Income'),
+
+            Tab(text: 'Autopool'),
+
+            Tab(text: 'Bonus'),
           ],
         ),
       ),
-    );
-  }
-}
+      SizedBox(height: 20),
+      Expanded(
+        child: TabBarView(
+          children: [
+            LevelOneReport(),
+            LevelTwoReport(),
+            LevelThreeReport(),
+            LevelFourReport(),
+            LevelFiveReport()
+          ],
+        ),
+      ),
+      SizedBox(
+        height: 40,
+      )
+    ],
+  ),
+),);}}

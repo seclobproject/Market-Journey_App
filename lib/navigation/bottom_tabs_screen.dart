@@ -9,14 +9,20 @@ import '../screens/wallet/wallet_page.dart';
 import 'app_drawer.dart';
 
 class BottomTabsScreen extends StatefulWidget {
-  const BottomTabsScreen({Key? key}) : super(key: key);
+
+  final int initialPageIndex;
+
+
+  const BottomTabsScreen({Key? key, this.initialPageIndex = 0}): super(key: key);
 
   @override
   State<BottomTabsScreen> createState() => _BottomTabsScreenState();
 }
 
 class _BottomTabsScreenState extends State<BottomTabsScreen> {
-  int _selectedPageIndex = 0;
+
+  late int _selectedPageIndex;
+
 
   void callback() {
     print("callback");
@@ -39,7 +45,11 @@ class _BottomTabsScreenState extends State<BottomTabsScreen> {
   Map<String, Object> get currentPage {
     return _pages[_selectedPageIndex];
   }
-
+  @override
+  void initState() {
+    super.initState();
+    _selectedPageIndex = widget.initialPageIndex;
+  }
   @override
   Widget build(BuildContext context) {
     GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();

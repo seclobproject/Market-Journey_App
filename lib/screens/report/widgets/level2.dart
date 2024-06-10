@@ -2,86 +2,96 @@ import 'package:flutter/material.dart';
 
 import '../../../resources/color.dart';
 
-class leveltworeport extends StatefulWidget {
-  const leveltworeport({super.key});
+class LevelTwoReport extends StatefulWidget {
+  const LevelTwoReport({super.key});
 
   @override
-  State<leveltworeport> createState() => _leveltworeportState();
+  State<LevelTwoReport> createState() => _LevelTwoReportState();
 }
 
-class _leveltworeportState extends State<leveltworeport> {
+class _LevelTwoReportState extends State<LevelTwoReport> {
   @override
   Widget build(BuildContext context) {
-    return  Column(
-      children: [
-        SizedBox(height: 10,),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            children: [
-              Text("Amount", style: TextStyle(color: black, fontSize: 12)),
-              SizedBox(width: 70,),
-              Text("TDS Amount", style: TextStyle(color: black, fontSize: 12)),
-              Expanded(child: SizedBox()),
-              Text("Amount", style: TextStyle(color: black, fontSize: 12)),
-
-              // Text("Status", style: TextStyle(color: black, fontSize: 12)),
-            ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          SizedBox(height: 5),
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+              child: DataTable(
+                columns: const <DataColumn>[
+                  DataColumn(
+                      label: Text('Sino',
+                          style: TextStyle(
+                              color: black,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500))),
+                  DataColumn(
+                      label: Text('Date',
+                          style: TextStyle(
+                              color: black,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500))),
+                  DataColumn(
+                      label: Text('AmountFrom',
+                          style: TextStyle(
+                              color: black,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500))),
+                  DataColumn(
+                      label: Text('Franchise',
+                          style: TextStyle(
+                              color: black,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500))),
+                  DataColumn(
+                      label: Text('Percentage',
+                          style: TextStyle(
+                              color: black,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500))),
+                  DataColumn(
+                      label: Text('AmountCredited',
+                          style: TextStyle(
+                              color: black,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500))),
+                ],
+                rows: List<DataRow>.generate(
+                  20,
+                      (index) => DataRow(
+                    cells: <DataCell>[
+                      DataCell(Text('${index + 1}',
+                          style: TextStyle(color: bluem, fontSize: 12))),
+                      DataCell(Text('Fathima',
+                          style: TextStyle(
+                              color: bluem,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600))),
+                      DataCell(Text('Fathima',
+                          style: TextStyle(
+                              color: bluem,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600))),
+                      DataCell(Text('Fathima',
+                          style: TextStyle(
+                              color: bluem,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600))),
+                      DataCell(Text('Mobile franchise',
+                          style: TextStyle(color: bluem, fontSize: 12))),
+                      DataCell(Text('1000',
+                          style: TextStyle(color: bluem, fontSize: 12))),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Divider(
-            color: yellow,
-            thickness: 1,
-          ),
-        ),
-      //   Expanded(
-      //     child: ListView.builder(
-      //       itemCount: 20,
-      //       itemBuilder: (BuildContext context, int index) {
-      //         return Padding(
-      //           padding: const EdgeInsets.symmetric(horizontal: 20),
-      //           child: Column(
-      //             children: [
-      //               SizedBox(height: 5),
-      //               Row(
-      //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //                 children: [
-
-
-      //                   Column(
-      //                     crossAxisAlignment: CrossAxisAlignment.start,
-      //                     children: [
-      //                       Text("${index + 1}", style: TextStyle(color: bluem, fontSize: 12)),
-      //                     ],
-      //                   ),
-
-      //                   Text('Fathima',
-      //                       style: TextStyle(
-      //                           color: bluem,
-      //                           fontSize: 12,
-      //                           fontWeight: FontWeight.w600)),
-      //                   Center(
-      //                     child: Text(
-      //                       'Mobile franchise',
-      //                       style: TextStyle(color: bluem, fontSize: 12),
-      //                     ),
-      //                   ),
-      //                 ],
-      //               ),
-      //               SizedBox(height: 5),
-      //               Divider(
-      //                 color: black,
-      //                 thickness: 0.2,
-      //               )
-      //             ],
-      //           ),
-      //         );
-      //       },
-      //     ),
-      //   ),
-      ],
+        ],
+      ),
     );
   }
 }

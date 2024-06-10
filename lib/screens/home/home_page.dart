@@ -391,7 +391,7 @@ class _homeState extends State<home> {
                                     style: TextStyle(
                                       color: marketbg,
                                       fontSize: screenWidth *
-                                          0.04, // Adjust the font size as per requirement
+                                          0.03, // Adjust the font size as per requirement
                                     ),
                                   ),
                                 ),
@@ -401,8 +401,8 @@ class _homeState extends State<home> {
                                     profiledata['walletAmount'],
                                     style: TextStyle(
                                       color: marketbg,
-                                      fontSize: screenWidth *
-                                          0.06, // Adjust the font size as per requirement
+                                      fontSize: screenWidth * 0.06,
+                                      // Adjust the font size as per requirement
                                       fontWeight: FontWeight.w900,
                                     ),
                                   ),
@@ -434,8 +434,8 @@ class _homeState extends State<home> {
                                     child: Text(
                                       "Sharing is rewarding! Refer your friends and Life Time Income",
                                       style: TextStyle(
-                                        fontSize: screenWidth *
-                                            0.03, // Adjust the font size as per requirement
+                                        fontSize: screenWidth * 0.03,
+                                        // Adjust the font size as per requirement
                                         fontWeight: FontWeight.w400,
                                         color: marketbg,
                                       ),
@@ -477,90 +477,6 @@ class _homeState extends State<home> {
                     SizedBox(
                       height: screenHeight * 0.02,
                     ),
-                    // Padding(
-                    //   padding:
-                    //       EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
-                    //   child: Row(
-                    //     children: [
-                    //       SizedBox(
-                    //         width: screenWidth * 0.02,
-                    //         child: Divider(
-                    //           color: black,
-                    //         ),
-                    //       ),
-                    //       SizedBox(
-                    //         width: screenWidth * 0.01,
-                    //       ),
-                    //       Text(
-                    //         "Award Rewards  ",
-                    //         style: TextStyle(
-                    //             fontSize:
-                    //                 screenWidth * 0.04), // Adjust font size
-                    //       ),
-                    //       SizedBox(
-                    //         width: screenWidth * 0.01,
-                    //       ),
-                    //       SizedBox(
-                    //         width: screenWidth * 0.5,
-                    //         child: Divider(
-                    //           color: black,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: 5,
-                    // ),
-                    // Padding(
-                    //   padding: EdgeInsets.only(left: screenWidth * 0.05),
-                    //   child: Container(
-                    //     height: 111,
-                    //     width: 400,
-                    //     decoration: BoxDecoration(
-                    //       color: lightyellow,
-                    //       borderRadius: BorderRadius.all(
-                    //           Radius.circular(screenWidth * 0.025)),
-                    //     ),
-                    //     child: ListView.builder(
-                    //         scrollDirection: Axis.horizontal,
-                    //         itemCount: awardData.length,
-                    //         itemBuilder: (BuildContext context, int index) {
-                    //           // var data = awardData[index];
-                    //           return Row(
-                    //             children: [
-                    //               Padding(
-                    //                 padding: EdgeInsets.symmetric(
-                    //                   horizontal: screenWidth * 0.025,
-                    //                   vertical: screenHeight * 0.02,
-                    //                 ),
-                    //                 child: Column(
-                    //                   children: [
-                    //                     ClipOval(
-                    //                       child: Container(
-                    //                         color: Colors.orange,
-                    //                         height: 61,
-                    //                         width: 61,
-                    //                         child: Image.network(
-                    //                           awardData['memberImage'] ?? "no image",
-                    //                            fit: BoxFit.cover,
-                    //                         ),
-                    //                       ),
-                    //                     ),
-                    //                     Text(
-                    //                       awardData['memberName'] ?? 'No Name',
-                    //                       style: TextStyle(
-                    //                         fontSize: screenWidth * 0.03,
-                    //                       ),
-                    //                     ),
-                    //                   ],
-                    //                 ),
-                    //               ),
-                    //             ],
-                    //           );
-                    //         }),
-                    //   ),
-                    // ),
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
@@ -609,16 +525,8 @@ class _homeState extends State<home> {
                           padding: const EdgeInsets.all(10.0),
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
-                            itemCount: awardData.length,
+                            itemCount: 3,
                             itemBuilder: (BuildContext context, int index) {
-                              var data = awardData[index];
-                              if (data == null ||
-                                  data['memberImage'] == null ||
-                                  data['memberName'] == null) {
-                                return Center(
-                                  child: Text('No Data Available'),
-                                ); // Return an empty widget if data is null or missing required keys
-                              }
                               return Row(
                                 children: [
                                   Padding(
@@ -634,8 +542,9 @@ class _homeState extends State<home> {
                                             height: 61,
                                             width: 61,
                                             child: Image.network(
-                                              data['memberImage']!,
-                                              fit: BoxFit.cover,
+                                              awardData['awardData'][index]
+                                                  ['memberImage'],
+                                              fit: BoxFit.fill,
                                               errorBuilder:
                                                   (context, error, stackTrace) {
                                                 return Icon(Icons.error,
@@ -646,7 +555,8 @@ class _homeState extends State<home> {
                                         ),
                                         SizedBox(height: screenHeight * 0.01),
                                         Text(
-                                          data['memberName']!,
+                                          awardData['awardData'][index]
+                                              ['memberName'],
                                           style: TextStyle(
                                             fontSize: screenWidth * 0.03,
                                           ),
@@ -801,7 +711,6 @@ class _homeState extends State<home> {
                         },
                       ),
                     ),
-
                     SizedBox(
                       height: screenHeight * 0.02,
                     ),

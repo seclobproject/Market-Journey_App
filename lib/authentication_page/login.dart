@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../navigation/bottom_tabs_screen.dart';
 import '../resources/color.dart';
@@ -32,27 +32,22 @@ class _loginpageState extends State<loginpage> {
     };
     try {
       var response = await LoginService.login(reqData);
-print(response);
+      print(response);
       if (response['sts'] == '01') {
         log.i('Login Success');
         print('User ID: ${response['id']}');
         print('Token: ${response['access_token']}');
 
-        // _saveAndRedirectToHome(response['access_token'], response['name']);
-        _saveAndRedirectToHome(response['access_token'], response['id']);
+        await _saveAndRedirectToHome(response['access_token'], response['id']);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Login Success'),
         ));
         gotoHome();
       } else {
-        // log.e('Login failed: ${response['msg']}');
-
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Login failed: ${response['msg']}'),
         ));
-
-        loginpage();
       }
     } catch (error) {
       setState(() {
@@ -61,22 +56,26 @@ print(response);
       });
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Incorrect Username and password   '),
+        content: Text('Incorrect Username and password'),
       ));
       log.e('Error during login: $error');
     }
   }
 
-  void _saveAndRedirectToHome(usertoken, userId) async {
+  Future<void> _saveAndRedirectToHome(String usertoken, String userId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString("token", usertoken);
     await prefs.setString("userid", userId);
+    print("Token saved: $usertoken"); // Debug output
+    setState(() {
+      _isLoading = false;
+    });
   }
 
-  gotoHome() {
+  void gotoHome() {
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => BottomTabsScreen()),
-        (route) => false);
+            (route) => false);
   }
 
   @override
@@ -88,8 +87,8 @@ print(response);
         children: [
           Image.asset(
             'assets/logo/logomaster.png',
-            width: 150, // Set the desired width
-            height: 150, // Set the desired height
+            width: 150,
+            height: 150,
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -97,7 +96,7 @@ print(response);
                 alignment: Alignment.topLeft,
                 child: Text(
                   "Username ",
-                  style: TextStyle(color: marketbgblue,fontSize: 12),
+                  style: TextStyle(color: marketbgblue, fontSize: 12),
                 )),
           ),
           Padding(
@@ -105,9 +104,8 @@ print(response);
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Enter your username',
-                hintStyle: TextStyle(color: marketbgblue,fontWeight: FontWeight.w400),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                hintStyle: TextStyle(color: marketbgblue, fontWeight: FontWeight.w400),
+                contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                   borderSide: BorderSide(color: yellow, width: 1),
@@ -122,19 +120,17 @@ print(response);
                   email = text;
                 });
               },
-              style: TextStyle(color: black, fontSize: 12,fontWeight: FontWeight.w400),
+              style: TextStyle(color: black, fontSize: 12, fontWeight: FontWeight.w400),
             ),
           ),
-          SizedBox(
-            height: 10,
-          ),
+          SizedBox(height: 10),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Align(
                 alignment: Alignment.topLeft,
                 child: Text(
                   "Password ",
-                  style: TextStyle(color: marketbgblue,fontSize: 12),
+                  style: TextStyle(color: marketbgblue, fontSize: 12),
                 )),
           ),
           Padding(
@@ -144,8 +140,7 @@ print(response);
               decoration: InputDecoration(
                 hintText: 'Enter your password',
                 hintStyle: TextStyle(color: marketbgblue),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                   borderSide: BorderSide(color: yellow, width: 1),
@@ -155,9 +150,7 @@ print(response);
                   borderSide: BorderSide(color: yellow),
                 ),
                 suffixIcon: IconButton(
-                  icon: hidePassword
-                      ? Icon(Icons.visibility_off)
-                      : Icon(Icons.visibility),
+                  icon: hidePassword ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
                   onPressed: () {
                     setState(() {
                       hidePassword = !hidePassword;
@@ -170,42 +163,38 @@ print(response);
                   password = text;
                 });
               },
-              style: TextStyle(color: black, fontSize: 12,fontWeight: FontWeight.w400),
+              style: TextStyle(color: black, fontSize: 12, fontWeight: FontWeight.w400),
             ),
           ),
-          SizedBox(
-            height: 40,
-          ),
-          GestureDetector(
-            onTap: () {
-              _login();
-              _isLoader = true;
-              Navigator.of(context).pushAndRemoveUntil;
-              // Navigator.of(context).pushAndRemoveUntil(
-              //     MaterialPageRoute(builder: (context) => BottomTabsScreen()),
-              //         (route) => false);
-
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
-                height: 55,
-                width: 400,
-                decoration: BoxDecoration(
-                    color: yellow, borderRadius: BorderRadius.circular(10)),
-                child: Center(
-                    child: Text(
-                  "Login",
-                  style: TextStyle(
+          SizedBox(height: 40),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: _isLoading ? null : _login,
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(400, 55),
+                    backgroundColor: yellow,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    "Login",
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: Colors.black),
-                )),
-              ),
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                if (_isLoading)
+                  CupertinoActivityIndicator(),
+              ],
             ),
-
           ),
-
         ],
       ),
     );

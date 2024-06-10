@@ -137,21 +137,34 @@ class _appdrawerState extends State<appdrawer> {
             SizedBox(
               height: 20,
             ),
-            Row(
-              children: [
-                Icon(
-                  Icons.logout,
-                  color: Colors.white,
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Text('Logout', style: TextStyle(color: Colors.white)),
-              ],
+            GestureDetector(
+              onTap: () => _logout(context),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.logout,
+                    color: Colors.white,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text('Logout', style: TextStyle(color: Colors.white)),
+                ],
+              ),
             ),
           ],
         ),
       ),
     );
   }
+}
+Future<void> _logout(BuildContext context) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.clear();  // Clear all saved preferences
+
+  // Navigate to login page
+  Navigator.of(context).pushAndRemoveUntil(
+    MaterialPageRoute(builder: (context) => loginpage()),
+        (Route<dynamic> route) => false,
+  );
 }
