@@ -6,23 +6,19 @@ import 'LandingPage.dart';
 import 'login.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-
 class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
+
 class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
     Timer(
         Duration(seconds: 2),
-            () => Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => TransactionScreen(
-
-                ))));
+        () => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => loginpage())));
   }
 
   @override
