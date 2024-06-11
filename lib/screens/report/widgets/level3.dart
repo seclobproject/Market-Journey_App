@@ -18,7 +18,11 @@ class _LevelReportState extends State<LevelThreeReport> {
 
   Future<void> _fetchIncome() async {
     try {
-      var response = await LevelIncomeService.report3();
+
+      var response = await IncomeService.report3();
+
+
+
       log.i('Profile data show.... $response');
       setState(() {
         levelIncome = response['levelIncome'] ?? [];
@@ -52,6 +56,10 @@ class _LevelReportState extends State<LevelThreeReport> {
     final dateFormat = DateFormat('yyyy-MM-dd ');
     if (_isLoading) {
       return Center(child: CircularProgressIndicator());
+    }
+
+    if (levelIncome.isEmpty) {
+      return Center(child: Text('No data available'));
     }
 
     return ListView.builder(
@@ -96,7 +104,7 @@ class _LevelReportState extends State<LevelThreeReport> {
                           style: TextStyle(fontSize: 12, color: whitegray),
                         ),
                         Text(
-                            dateFormat.format(formattedDate),
+                          dateFormat.format(formattedDate),
                           style: TextStyle(fontSize: 12, color: whitegray),
                         ),
                       ],
@@ -106,7 +114,7 @@ class _LevelReportState extends State<LevelThreeReport> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                    income['amountCredited']?.toString() ?? "",
+                          income['amountCredited']?.toString() ?? "",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
@@ -122,7 +130,7 @@ class _LevelReportState extends State<LevelThreeReport> {
                           ),
                           child: Center(
                             child: Text(
-                                income['status'] ?? "",
+                              income['status'] ?? "",
                               style: TextStyle(fontSize: 8),
                             ),
                           ),

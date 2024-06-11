@@ -110,12 +110,12 @@ class _walletState extends State<wallet> {
               height: 20,
             ),
             GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Cashwithdraw()),
-                );
-              },
+              // onTap: () {
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(builder: (context) => const Cashwithdraw()),
+              //   );
+              // },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40.0),
                 child: Container(

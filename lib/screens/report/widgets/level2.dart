@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../resources/color.dart';
+import '../../../services/report_service.dart';
+import '../../../support/logger.dart';
 
 class LevelTwoReport extends StatefulWidget {
   const LevelTwoReport({super.key});
@@ -11,7 +14,55 @@ class LevelTwoReport extends StatefulWidget {
 
 class _LevelTwoReportState extends State<LevelTwoReport> {
   @override
+
+
+  List<dynamic> indirectIncome = [];
+  bool _isLoading = true;
+
+  Future<void> _fetchInDirectIncome() async {
+    try {
+      var response = await IncomeService.report2();
+      log.i('API Response: $response');
+
+      setState(() {
+        indirectIncome = response['directIncome'] ?? [];
+        log.i('indirectIncome: $indirectIncome');  // Log the directIncome list
+        _isLoading = false;
+      });
+    } catch (error) {
+      log.e('Failed to fetch data: $error');
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  String _formatDate(String date) {
+    try {
+      final parsedDate = DateTime.parse(date);
+      return DateFormat('dd-MM-yyyy').format(parsedDate);
+    } catch (e) {
+      log.e('Date format error: $e');
+      return date;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchInDirectIncome();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+
+    if (indirectIncome.isEmpty) {
+      return Center(child: Text('No data available'));
+    }
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -19,7 +70,7 @@ class _LevelTwoReportState extends State<LevelTwoReport> {
           SizedBox(height: 5),
           Expanded(
             child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+              scrollDirection: Axis.horizontal,
               child: DataTable(
                 columns: const <DataColumn>[
                   DataColumn(
@@ -59,39 +110,38 @@ class _LevelTwoReportState extends State<LevelTwoReport> {
                               fontSize: 10,
                               fontWeight: FontWeight.w500))),
                 ],
-                rows: List<DataRow>.generate(
-                  20,
-                      (index) => DataRow(
+                rows: indirectIncome.map<DataRow>((income) {
+                  return DataRow(
                     cells: <DataCell>[
-                      DataCell(Text('${index + 1}',
+                      DataCell(Text('${indirectIncome.indexOf(income) + 1}',
                           style: TextStyle(color: bluem, fontSize: 12))),
-                      DataCell(Text('Fathima',
+                      DataCell(Text(_formatDate(income['date'] ?? "No Date"),
                           style: TextStyle(
                               color: bluem,
                               fontSize: 12,
                               fontWeight: FontWeight.w600))),
-                      DataCell(Text('Fathima',
+                      DataCell(Text(income['amountFrom']?.toString() ?? "No Data",
                           style: TextStyle(
                               color: bluem,
                               fontSize: 12,
                               fontWeight: FontWeight.w600))),
-                      DataCell(Text('Fathima',
+                      DataCell(Text(income['franchise']?.toString() ?? "No Data",
                           style: TextStyle(
                               color: bluem,
                               fontSize: 12,
                               fontWeight: FontWeight.w600))),
-                      DataCell(Text('Mobile franchise',
+                      DataCell(Text(income['percentageCredited']?.toString() ?? "No Data",
                           style: TextStyle(color: bluem, fontSize: 12))),
-                      DataCell(Text('1000',
+                      DataCell(Text(income['amountCredited']?.toString() ?? "No Data",
                           style: TextStyle(color: bluem, fontSize: 12))),
                     ],
-                  ),
-                ),
+                  );
+                }).toList(),
               ),
             ),
           ),
         ],
       ),
     );
-  }
-}
+
+  }}
