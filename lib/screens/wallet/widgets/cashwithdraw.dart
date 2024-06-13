@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:master_journey/screens/wallet/wallet_page.dart';
-
+import '../../../navigation/bottom_tabs_screen.dart';
 import '../../../resources/color.dart';
+import '../../../services/wallet_service.dart';
+
 
 class Cashwithdraw extends StatefulWidget {
   const Cashwithdraw({super.key});
@@ -24,13 +26,53 @@ class _CashwithdrawState extends State<Cashwithdraw> {
 
   void _updateAmount() {
     final amount = double.tryParse(_amountController.text) ?? 0;
-    final tdsAmount = amount * 0.05;
-    final serviceAmount = amount * 0.05;
-    _tdsController.text = tdsAmount.toStringAsFixed(2);
-    _serviceController.text = serviceAmount.toStringAsFixed(2);
-    _totalController.text =
-        (amount - tdsAmount - serviceAmount).toStringAsFixed(2);
+    if (amount > 0) {
+      final tdsAmount = amount * 0.05;
+      final serviceAmount = amount * 0.05;
+      _tdsController.text = tdsAmount.toStringAsFixed(2);
+      _serviceController.text = serviceAmount.toStringAsFixed(2);
+      _totalController.text =
+          (amount - tdsAmount - serviceAmount).toStringAsFixed(2);
+    } else {
+      _tdsController.text = "0.00";
+      _serviceController.text = "0.00";
+      _totalController.text = "0.00";
+    }
   }
+
+  Future<void> _submitAmount() async {
+    final amount = double.tryParse(_amountController.text);
+    if (amount != null && amount > 0) {
+      try {
+        final response = await WalletService.Walletrequest({'withdrawAmount': amount});
+        // Handle the response as needed
+        print('Response: $response');
+
+        // Show snackbar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Withdrawal request sent to admin'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+
+        // Navigate to the wallet page after showing snackbar
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => BottomTabsScreen(initialPageIndex: 3,),
+            ),
+          );
+        });
+      } catch (e) {
+        print('Error: $e');
+      }
+    } else {
+      print('Invalid amount');
+    }
+  }
+
+
 
   @override
   void dispose() {
@@ -53,26 +95,21 @@ class _CashwithdrawState extends State<Cashwithdraw> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
-              height: 30,
-            ),
+            SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('Amount',
-                      style: TextStyle(color: marketbgblue, fontSize: 14))),
+                alignment: Alignment.topLeft,
+                child: Text('Amount', style: TextStyle(color: marketbgblue, fontSize: 14)),
+              ),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextField(
                 controller: _amountController,
                 decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     borderSide: BorderSide(color: yellow, width: 2),
@@ -82,31 +119,25 @@ class _CashwithdrawState extends State<Cashwithdraw> {
                     borderSide: BorderSide(color: yellow, width: 2),
                   ),
                 ),
-                style: TextStyle(
-                    color: black, fontSize: 12, fontWeight: FontWeight.w400),
+                style: TextStyle(color: black, fontSize: 12, fontWeight: FontWeight.w400),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('TDS Amount',
-                      style: TextStyle(color: marketbgblue, fontSize: 14))),
+                alignment: Alignment.topLeft,
+                child: Text('TDS Amount', style: TextStyle(color: marketbgblue, fontSize: 14)),
+              ),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextField(
                 controller: _tdsController,
                 readOnly: true,
                 decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     borderSide: BorderSide(color: yellow, width: 2),
@@ -116,31 +147,25 @@ class _CashwithdrawState extends State<Cashwithdraw> {
                     borderSide: BorderSide(color: yellow, width: 2),
                   ),
                 ),
-                style: TextStyle(
-                    color: black, fontSize: 12, fontWeight: FontWeight.w400),
+                style: TextStyle(color: black, fontSize: 12, fontWeight: FontWeight.w400),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('Service Amount',
-                      style: TextStyle(color: marketbgblue, fontSize: 14))),
+                alignment: Alignment.topLeft,
+                child: Text('Service Amount', style: TextStyle(color: marketbgblue, fontSize: 14)),
+              ),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextField(
                 readOnly: true,
                 controller: _serviceController,
                 decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     borderSide: BorderSide(color: yellow, width: 2),
@@ -150,31 +175,25 @@ class _CashwithdrawState extends State<Cashwithdraw> {
                     borderSide: BorderSide(color: yellow, width: 2),
                   ),
                 ),
-                style: TextStyle(
-                    color: black, fontSize: 12, fontWeight: FontWeight.w400),
+                style: TextStyle(color: black, fontSize: 12, fontWeight: FontWeight.w400),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('Total Amount',
-                      style: TextStyle(color: marketbgblue, fontSize: 14))),
+                alignment: Alignment.topLeft,
+                child: Text('Total Amount', style: TextStyle(color: marketbgblue, fontSize: 14)),
+              ),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextField(
                 readOnly: true,
                 controller: _totalController,
                 decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     borderSide: BorderSide(color: yellow, width: 2),
@@ -184,136 +203,40 @@ class _CashwithdrawState extends State<Cashwithdraw> {
                     borderSide: BorderSide(color: yellow, width: 2),
                   ),
                 ),
-                style: TextStyle(
-                    color: black, fontSize: 12, fontWeight: FontWeight.w400),
+                style: TextStyle(color: black, fontSize: 12, fontWeight: FontWeight.w400),
               ),
             ),
-            SizedBox(
-              height: 30,
-            ),
+            SizedBox(height: 30),
             Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+
+
                     Center(
-                      
                       child: GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              content: Column(
-                                mainAxisSize: MainAxisSize
-                                    .min, // Set the size of the column to min
-                                children: [
-                                  Text(
-                                    'Are you sure you want to cancel?',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  SizedBox(
-                                      height:
-                                          20), // Add some space between text and image
-                                  Image.asset(
-                                    'assets/logo/exclamation-mark.png',
-                                    width: 40,
-                                  ),
-                                ],
-                              ),
-                              actions: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      width: 60,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(6),
-                                        color: marketbgblue,
-                                      ),
-                                      alignment: Alignment.center,
-                                      child: TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context)
-                                              .pop(); // Close the dialog
-                                        },
-                                        child: Text(
-                                          'No',
-                                          style: TextStyle(color: marketbg),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    Container(
-                                      width: 60,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(6),
-                                        color: appBlueColor,
-                                      ),
-                                      child: TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) => wallet(),
-                                            ),
-                                          ); // Go back to wallet page
-                                        },
-                                        child: Text(
-                                          'Yes',
-                                          style: TextStyle(color: marketbg),
-                                        ),
-                                      ),
-                                    ), 
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        },
+                        onTap: _submitAmount,
                         child: Container(
+                          width: 150,
                           height: 40,
-                          width: 100,
                           decoration: BoxDecoration(
-                            border: Border.all(color: yellow, width: 3),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(6),
+                            color: yellow1,
                           ),
-                          child: Center(
-                            child: Text(
-                              'Cancel',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Request Withdrwal',
+                            style: TextStyle(color: marketbg, fontSize: 15, fontWeight: FontWeight.w500),
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(width: 20),
-                    Container(
-                      height: 40,
-                      width: 100,
-                      decoration: BoxDecoration(
-                          color: yellow,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Center(
-                          child: Text(
-                        'Submit',
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w500),
-                      )),
-                    )
                   ],
                 ),
+                SizedBox(height: 20),
               ],
             ),
-            SizedBox(
-              height: 30,
-            )
           ],
         ),
       ),

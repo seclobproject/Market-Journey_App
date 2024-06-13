@@ -58,8 +58,9 @@ class _walletState extends State<wallet> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: bluem,
-        title: Text("Wallet", style: TextStyle(color: marketbg, fontSize: 18)),
+        title: Center(child: Text("Wallet", style: TextStyle(color: marketbg, fontSize: 18))),
         centerTitle: true,
       ),
       backgroundColor: bluem,
@@ -110,12 +111,12 @@ class _walletState extends State<wallet> {
               height: 20,
             ),
             GestureDetector(
-              // onTap: () {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(builder: (context) => const Cashwithdraw()),
-              //   );
-              // },
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Cashwithdraw()),
+                );
+              },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40.0),
                 child: Container(

@@ -55,7 +55,10 @@ class _LevelReportState extends State<LevelThreeReport> {
   Widget build(BuildContext context) {
     final dateFormat = DateFormat('yyyy-MM-dd ');
     if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator(
+        strokeWidth: 6.0,
+        valueColor: AlwaysStoppedAnimation(yellow),
+      ),);
     }
 
     if (levelIncome.isEmpty) {

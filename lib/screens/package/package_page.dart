@@ -38,9 +38,7 @@ class _packageState extends State<package> {
           .where((package) => package['franchiseName'] == 'Courses')
           .toList();
       _isLoading = false;
-
     });
-
   }
 
   Future _initLoad() async {
@@ -63,10 +61,10 @@ class _packageState extends State<package> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: marketbg,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: marketbg,
         title: Center(
           child: Text(
@@ -75,240 +73,254 @@ class _packageState extends State<package> {
           ),
         ),
       ),
-      body:_isLoading
-          ? Center(child: CircularProgressIndicator())
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator(
+        strokeWidth: 6.0,
+        valueColor: AlwaysStoppedAnimation(yellow),
+      ),)
           : SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 24, bottom: 20),
+                  padding: const EdgeInsets.only(top: 24, bottom: 10),
                   child: Text(
                     "Franchise",
                     style: TextStyle(
                       color: Color(0xff163A56),
-                      fontSize: 14,
+                      fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
-
                 ListView.builder(
-                shrinkWrap: true,
+                    shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                itemCount:
-                franchisePackages != null ? franchisePackages?.length : 0,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 12),
-                    child: Container(
-                      height: 76,
-                      width: 312,
-                      decoration: BoxDecoration(
-                        color: bluem,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Padding(
+                    itemCount: franchisePackages != null
+                        ? franchisePackages?.length
+                        : 0,
+                    itemBuilder: (context, index) {
+                      return Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  'Franchise Package',
-                                  style: TextStyle(
-                                    color: marketbg,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                                Spacer(),
-                                Text(
-                                  'Package Amount',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 12,
-                                      color: marketbg),
-                                ),
-                              ],
+                            horizontal: 0, vertical: 10),
+                        child: Container(
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: bluem,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
                             ),
-                            SizedBox(height: 5),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  franchisePackages?[index]['packageName'],
-
-                                  style: TextStyle(
-                                    color: yellow,
-                                    fontSize: 12,
-                                  ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Franchise Package',
+                                      style: TextStyle(
+                                        color: marketbg,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    Text(
+                                      'Package Amount',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12,
+                                          color: marketbg),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                    franchisePackages?[index]
-                                        ['packageAmount'],
-                                    style: TextStyle(color: yellow)),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-            Text(
-              'Courses',
-              style: TextStyle(
-                color: Color(0xff163A56),
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount:
-                coursePackages != null ? coursePackages?.length : 0,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 12),
-                    child: Container(
-                      height: 76,
-                      width: 312,
-                      decoration: BoxDecoration(
-                        color: bluem,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  'Franchise Package',
-                                  style: TextStyle(
-                                    color: marketbg,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                                Spacer(),
-                                Text(
-                                  'Package Amount',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 12,
-                                      color: marketbg),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 5),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  coursePackages?[index]
+                                SizedBox(height: 5),
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      franchisePackages?[index]
                                       ['packageName'],
-                                  style: TextStyle(color: yellow, fontSize: 12),
-                                ),
-                                Text(
-                                    coursePackages?[index]['packageName'],
-                                    style: TextStyle(color: yellow)),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-            Text(
-              'Signals',
-              style: TextStyle(
-                color: Color(0xff163A56),
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount:
-                signalPackages != null ? signalPackages?.length : 0,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 12),
-                    child: Container(
-                      height: 76,
-                      width: 312,
-                      decoration: BoxDecoration(
-                        color: bluem,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  'Franchise Package',
-                                  style: TextStyle(
-                                    color: marketbg,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                                Spacer(),
-                                Text(
-                                  'Package Amount',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 12,
-                                      color: marketbg),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 5),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  signalPackages?[index]
-                                      ['packageName'],
-                                  style: TextStyle(
-                                    color: yellow,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                                Text(
-                                    signalPackages?[index]
+                                      style: TextStyle(
+                                        color: yellow,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    Text(
+                                        franchisePackages?[index]
                                         ['packageAmount'],
-                                    style: TextStyle(color: yellow)),
+                                        style: TextStyle(color: yellow)),
+                                  ],
+                                ),
                               ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  );
-                }),
-          ])),
+                      );
+                    }),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Courses',
+                  style: TextStyle(
+                    color: Color(0xff163A56),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount:
+                    coursePackages != null ? coursePackages?.length : 0,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Container(
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: bluem,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Franchise Package',
+                                      style: TextStyle(
+                                        color: marketbg,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    Text(
+                                      'Package Amount',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12,
+                                          color: marketbg),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 5),
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      coursePackages?[index]['packageName'],
+                                      style: TextStyle(
+                                          color: yellow, fontSize: 12),
+                                    ),
+                                    Text(
+                                        coursePackages?[index]
+                                        ['packageName'],
+                                        style: TextStyle(color: yellow)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Signals',
+                  style: TextStyle(
+                    color: Color(0xff163A56),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount:
+                    signalPackages != null ? signalPackages?.length : 0,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Container(
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: bluem,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Padding(
+                            padding:
+                            const EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Franchise Package',
+                                      style: TextStyle(
+                                        color: marketbg,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    Text(
+                                      'Package Amount',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12,
+                                          color: marketbg),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 5),
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      signalPackages?[index]['packageName'],
+                                      style: TextStyle(
+                                        color: yellow,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    Text(
+                                        signalPackages?[index]
+                                        ['packageAmount'],
+                                        style: TextStyle(color: yellow)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+              ])),
     );
   }
 }
-
-
-
-

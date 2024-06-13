@@ -5,25 +5,25 @@ import '../../../resources/color.dart';
 import '../../../services/report_service.dart';
 import '../../../support/logger.dart';
 
-class LevelOneReport extends StatefulWidget {
-  const LevelOneReport({super.key});
+class Level0neReport extends StatefulWidget {
+  const Level0neReport({super.key});
 
   @override
-  State<LevelOneReport> createState() => _LevelOneReportState();
+  State<Level0neReport> createState() => _Level0neReportState();
 }
 
-class _LevelOneReportState extends State<LevelOneReport> {
-  List<dynamic> indirectIncome = [];
+class _Level0neReportState extends State<Level0neReport> {
+  List<dynamic> directIncome = [];
   bool _isLoading = true;
 
-  Future<void> _fetchInDirectIncome() async {
+  Future<void> _fetchDirectIncome() async {
     try {
-      var response = await IncomeService.report2();
+      var response = await IncomeService.report1();
       log.i('API Response: $response');
 
       setState(() {
-        indirectIncome = response['directIncome'] ?? [];
-        log.i('indirectIncome: $indirectIncome');  // Log the directIncome list
+        directIncome = response['directIncome'] ?? [];
+        log.i('directIncome: $directIncome');  // Log the inDirectIncome list
         _isLoading = false;
       });
     } catch (error) {
@@ -47,16 +47,19 @@ class _LevelOneReportState extends State<LevelOneReport> {
   @override
   void initState() {
     super.initState();
-    _fetchInDirectIncome();
+    _fetchDirectIncome();
   }
 
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator(
+        strokeWidth: 6.0,
+        valueColor: AlwaysStoppedAnimation(yellow),
+      ),);
     }
 
-    if (indirectIncome.isEmpty) {
+    if (directIncome.isEmpty) {
       return Center(child: Text('No data available'));
     }
 
@@ -107,17 +110,17 @@ class _LevelOneReportState extends State<LevelOneReport> {
                               fontSize: 10,
                               fontWeight: FontWeight.w500))),
                 ],
-                rows: indirectIncome.map<DataRow>((income) {
+                rows: directIncome.map<DataRow>((income) {
                   return DataRow(
                     cells: <DataCell>[
-                      DataCell(Text('${indirectIncome.indexOf(income) + 1}',
+                      DataCell(Text('${directIncome.indexOf(income) + 1}',
                           style: TextStyle(color: bluem, fontSize: 12))),
-                      DataCell(Text(_formatDate(income['date'] ?? "No Date"),
+                      DataCell(Text(_formatDate(income['createdAt'] ?? "No Date"),
                           style: TextStyle(
                               color: bluem,
                               fontSize: 12,
                               fontWeight: FontWeight.w600))),
-                      DataCell(Text(income['amountFrom']?.toString() ?? "No Data",
+                      DataCell(Text(income['name']?.toString() ?? "No Data",
                           style: TextStyle(
                               color: bluem,
                               fontSize: 12,

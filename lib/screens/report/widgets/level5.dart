@@ -53,7 +53,10 @@ class _LevelFiveReportState extends State<LevelFiveReport> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator(
+        strokeWidth: 6.0,
+        valueColor: AlwaysStoppedAnimation(yellow),
+      ),);
     }
 
     if (Bonus.isEmpty) {

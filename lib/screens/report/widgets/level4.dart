@@ -55,7 +55,10 @@ class _LevelFourReportState extends State<LevelFourReport> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator(
+        strokeWidth: 6.0,
+        valueColor: AlwaysStoppedAnimation(yellow),
+      ),);
     }
 
     if (Autopool.isEmpty) {

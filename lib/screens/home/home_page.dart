@@ -17,7 +17,6 @@ import '../../services/profile_service.dart';
 import '../../support/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 import 'widget/flashfeed.dart';
 
 class home extends StatefulWidget {
@@ -40,7 +39,7 @@ class _homeState extends State<home> {
   bool _isLoading = true;
   dynamic newsData;
   dynamic homeImageData;
-  dynamic  homeVideoData;
+  dynamic homeVideoData;
 
   Future _ProfileData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -441,7 +440,7 @@ class _homeState extends State<home> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      height: screenHeight * 0.25,
+                      height: screenHeight * 0.27,
                       width: screenWidth * 0.38,
                       decoration: BoxDecoration(
                         color: bluem,
@@ -472,12 +471,11 @@ class _homeState extends State<home> {
                             Align(
                               alignment: Alignment.topLeft,
                               child: Text(
-                                "₹ ${profiledata['walletAmount']}",
+                                "₹${profiledata['walletAmount']}",
                                 style: TextStyle(
-                                  color: marketbg,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w900,
-                                ),
+                                    color: marketbg,
+                                    fontSize: screenHeight * 0.02,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                           ],
@@ -485,7 +483,7 @@ class _homeState extends State<home> {
                       ),
                     ),
                     Container(
-                      height: screenHeight * 0.25,
+                      height: screenHeight * 0.27,
                       width: screenWidth * 0.44,
                       decoration: BoxDecoration(
                         color: bluem,
@@ -508,7 +506,7 @@ class _homeState extends State<home> {
                                 child: Text(
                                   "Sharing is rewarding! Refer your friends and Life Time Income",
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: screenHeight * 0.013,
                                     fontWeight: FontWeight.w400,
                                     color: marketbg,
                                   ),
@@ -561,7 +559,7 @@ class _homeState extends State<home> {
                       ),
                     ),
                     Text(
-                      " Award Rewards ",
+                      " Award & Rewards ",
                       style: TextStyle(
                           fontSize: screenWidth * 0.04,
                           fontWeight:
@@ -581,7 +579,7 @@ class _homeState extends State<home> {
                   height: 10,
                 ),
                 Container(
-                  height: 111,
+                  height: 135,
                   width: screenWidth * 0.9,
                   decoration: BoxDecoration(
                     color: Colors.yellow[100],
@@ -601,9 +599,10 @@ class _homeState extends State<home> {
                             Padding(
                               padding: EdgeInsets.symmetric(
                                 horizontal: screenWidth * 0.025,
-                                vertical: screenHeight * 0.02,
                               ),
                               child: Column(
+                                mainAxisAlignment:
+                                MainAxisAlignment.center,
                                 children: [
                                   ClipOval(
                                     child: Container(
@@ -994,12 +993,14 @@ class _homeState extends State<home> {
                     ),
                   ],
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 15),
                 SizedBox(
-                  height: 120, // Adjust height as needed, or consider removing for flexibility
+                  height:
+                  120, // Adjust height as needed, or consider removing for flexibility
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: homeImageData['homeImageData']?.length ?? 0,
+                    itemCount:
+                    homeImageData['homeImageData']?.length ?? 0,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
                         padding: const EdgeInsets.only(right: 20),
@@ -1007,31 +1008,35 @@ class _homeState extends State<home> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const Flashfeed()),
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                  const Flashfeed()),
                             );
                           },
-                          child: ClipRRect( // Clip content that overflows
+                          child: ClipRRect(
+                            // Clip content that overflows
                             borderRadius: BorderRadius.circular(10),
-                            child: SizedBox( // Consider removing fixed height for flexibility
+                            child: SizedBox(
+                              // Consider removing fixed height for flexibility
                               width: 122, // Adjust width as needed
                               child: Stack(
                                 children: [
                                   Container(
-                                    height: 61,
+                                    height: 81,
                                     width: 122,
                                     decoration: BoxDecoration(
-                                      color: bottomtabbg,
-                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.grey[200],
+                                      borderRadius:
+                                      BorderRadius.circular(10),
                                     ),
-                                    child: ClipRRect( // Clip image within container
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image.network(
-                                        'https://admin.marketjourney.in/uploads/${homeImageData['homeImageData'][index]['homeImage']}',
-                                        fit: BoxFit.cover,
-                                        errorBuilder: (context, error, stackTrace) {
-                                          return Icon(Icons.error, color: Colors.red);
-                                        },
-                                      ),
+                                    child: Image.network(
+                                      'https://admin.marketjourney.in/uploads/${homeImageData['homeImageData'][index]['homeImage']}',
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        return Icon(Icons.error,
+                                            color: Colors.red);
+                                      },
                                     ),
                                   ),
                                   Align(
@@ -1041,11 +1046,20 @@ class _homeState extends State<home> {
                                       width: 35,
                                       decoration: BoxDecoration(
                                         color: yellow,
-                                        borderRadius: BorderRadius.circular(5),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(5),
+                                            bottomLeft:
+                                            Radius.circular(5),
+                                            bottomRight:
+                                            Radius.circular(5)),
                                       ),
                                       child: Center(
                                         child: Text(
-                                          homeImageData['homeImageData'][index]['description'] ?? "",
+                                          homeImageData['homeImageData']
+                                          [index]
+                                          ['description'] ??
+                                              "",
                                           style: TextStyle(fontSize: 10),
                                         ),
                                       ),
@@ -1060,14 +1074,13 @@ class _homeState extends State<home> {
                     },
                   ),
                 ),
-
-
-
                 SizedBox(
-                  height: 120, // Adjust height as needed, or consider removing for flexibility
+                  height:
+                  120, // Adjust height as needed, or consider removing for flexibility
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: homeVideoData['homeVideoData']?.length ?? 0,
+                    itemCount:
+                    homeVideoData['homeVideoData']?.length ?? 0,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
                         padding: const EdgeInsets.only(right: 20),
@@ -1075,27 +1088,36 @@ class _homeState extends State<home> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const Flashfeed()),
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                  const Flashfeed()),
                             );
                           },
-                          child: ClipRRect( // Clip content that overflows
+                          child: ClipRRect(
+                            // Clip content that overflows
                             borderRadius: BorderRadius.circular(10),
-                            child: SizedBox( // Consider removing fixed height for flexibility
+                            child: SizedBox(
+                              // Consider removing fixed height for flexibility
                               width: 122, // Adjust width as needed
                               child: Stack(
                                 children: [
                                   Container(
-                                    height: 61,
+                                    height: 81,
                                     width: 122,
                                     decoration: BoxDecoration(
                                       color: bottomtabbg,
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius:
+                                      BorderRadius.circular(10),
                                     ),
-                                    child: ClipRRect( // Clip image within container
-                                      borderRadius: BorderRadius.circular(10),
-                                      child:GestureDetector(
+                                    child: ClipRRect(
+                                      // Clip image within container
+                                      borderRadius:
+                                      BorderRadius.circular(10),
+                                      child: GestureDetector(
                                         onTap: () async {
-                                          final url = homeVideoData['homeVideoData'][index]['videoLink'];
+                                          final url = homeVideoData[
+                                          'homeVideoData'][index]
+                                          ['videoLink'];
                                           if (await canLaunch(url)) {
                                             await launch(url);
                                           } else {
@@ -1105,12 +1127,13 @@ class _homeState extends State<home> {
                                         child: Image.network(
                                           'https://admin.marketjourney.in/uploads/${homeVideoData['homeVideoData'][index]['videoThambnail']}',
                                           fit: BoxFit.cover,
-                                          errorBuilder: (context, error, stackTrace) {
-                                            return Icon(Icons.error, color: Colors.red);
+                                          errorBuilder: (context, error,
+                                              stackTrace) {
+                                            return Icon(Icons.error,
+                                                color: Colors.red);
                                           },
                                         ),
                                       ),
-
                                     ),
                                   ),
                                   Align(
@@ -1120,11 +1143,19 @@ class _homeState extends State<home> {
                                       width: 35,
                                       decoration: BoxDecoration(
                                         color: yellow,
-                                        borderRadius: BorderRadius.circular(5),
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(5),
+                                            bottomLeft:
+                                            Radius.circular(5),
+                                            bottomRight:
+                                            Radius.circular(5)),
                                       ),
                                       child: Center(
                                         child: Text(
-                                          homeVideoData['homeVideoData'][index]['videoTitle'] ?? "",
+                                          homeVideoData['homeVideoData']
+                                          [index]['videoTitle'] ??
+                                              "",
                                           style: TextStyle(fontSize: 10),
                                         ),
                                       ),
@@ -1139,7 +1170,6 @@ class _homeState extends State<home> {
                     },
                   ),
                 ),
-
               ],
             ),
           ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import '../../../resources/color.dart';
 import '../../../services/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,7 +14,7 @@ class Notificationscreen extends StatefulWidget {
 }
 
 class _NotificationscreenState extends State<Notificationscreen> {
- var userid;
+  var userid;
   List signals = []; // Initialize as an empty list
   bool _isLoading = true;
 
@@ -40,7 +40,22 @@ class _NotificationscreenState extends State<Notificationscreen> {
   @override
   void initState() {
     super.initState();
+    _secureScreen();
     _initLoad();
+  }
+
+  @override
+  void dispose() {
+    _clearScreenSecurity();
+    super.dispose();
+  }
+
+  void _secureScreen() {
+    FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  }
+
+  void _clearScreenSecurity() {
+    FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
   }
 
   @override
@@ -59,83 +74,84 @@ class _NotificationscreenState extends State<Notificationscreen> {
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              child: Container(
-                child: Column(
-                  children: [
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: signals.length,
-                      itemBuilder: (context, index) {
-                        var signal = signals[index]; // Correctly access the list element
-                        var dateStr = signal['createdAt'] ?? "";
-                        DateTime dateTime;
-                        try {
-                          dateTime = DateTime.parse(dateStr);
-                        } catch (e) {
-                          dateTime = DateTime.now();
-                        }
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 10),
-                          child: Container(
-                            height: 100,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: bluem,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+        child: Container(
+          child: Column(
+            children: [
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: signals.length,
+                itemBuilder: (context, index) {
+                  var signal = signals[index]; // Correctly access the list element
+                  var dateStr = signal['createdAt'] ?? "";
+                  DateTime dateTime;
+                  try {
+                    dateTime = DateTime.parse(dateStr);
+                  } catch (e) {
+                    dateTime = DateTime.now();
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 10),
+                    child: Container(
+                      height: 100,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: bluem,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: Column(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: Row(
                                 children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 10),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            signal['title'] ?? "",
-                                            style: TextStyle(
-                                              color: marketbg,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.topRight,
-                                        child: Text(
-                                          dateFormat.format(dateTime),
-                                          style: TextStyle(
-                                            color: marketbg,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 12,
-                                          ),
-                                        ),
+                                  Expanded(
+                                    child: Text(
+                                      signal['title'] ?? "",
+                                      style: TextStyle(
+                                        color: marketbg,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12,
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
-                          ),
-                        );
-                      },
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: Text(
+                                    dateFormat.format(dateTime),
+                                    style: TextStyle(
+                                      color: marketbg,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
-            ),
+            ],
+          ),
+        ),
+      ),
     );
-  }}
+  }
+}

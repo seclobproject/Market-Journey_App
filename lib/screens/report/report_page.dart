@@ -28,6 +28,7 @@ class _reportState extends State<report> {
     return Scaffold(
       backgroundColor: marketbg,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: marketbg,
         title: Center(
             child:
@@ -85,7 +86,7 @@ DefaultTabController(
       Expanded(
         child: TabBarView(
           children: [
-            LevelOneReport(),
+            Level0neReport(),
             LevelTwoReport(),
             LevelThreeReport(),
             LevelFourReport(),

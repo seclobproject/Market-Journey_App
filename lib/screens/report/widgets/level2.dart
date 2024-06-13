@@ -13,10 +13,7 @@ class LevelTwoReport extends StatefulWidget {
 }
 
 class _LevelTwoReportState extends State<LevelTwoReport> {
-  @override
-
-
-  List<dynamic> indirectIncome = [];
+  List<dynamic> inDirectIncome = [];
   bool _isLoading = true;
 
   Future<void> _fetchInDirectIncome() async {
@@ -25,8 +22,8 @@ class _LevelTwoReportState extends State<LevelTwoReport> {
       log.i('API Response: $response');
 
       setState(() {
-        indirectIncome = response['directIncome'] ?? [];
-        log.i('indirectIncome: $indirectIncome');  // Log the directIncome list
+        inDirectIncome = response['inDirectIncome'] ?? [];
+        log.i('inDirectIncome: $inDirectIncome');  // Log the inDirectIncome list
         _isLoading = false;
       });
     } catch (error) {
@@ -56,10 +53,13 @@ class _LevelTwoReportState extends State<LevelTwoReport> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator(
+        strokeWidth: 6.0,
+        valueColor: AlwaysStoppedAnimation(yellow),
+      ),);
     }
 
-    if (indirectIncome.isEmpty) {
+    if (inDirectIncome.isEmpty) {
       return Center(child: Text('No data available'));
     }
 
@@ -110,17 +110,17 @@ class _LevelTwoReportState extends State<LevelTwoReport> {
                               fontSize: 10,
                               fontWeight: FontWeight.w500))),
                 ],
-                rows: indirectIncome.map<DataRow>((income) {
+                rows: inDirectIncome.map<DataRow>((income) {
                   return DataRow(
                     cells: <DataCell>[
-                      DataCell(Text('${indirectIncome.indexOf(income) + 1}',
+                      DataCell(Text('${inDirectIncome.indexOf(income) + 1}',
                           style: TextStyle(color: bluem, fontSize: 12))),
-                      DataCell(Text(_formatDate(income['date'] ?? "No Date"),
+                      DataCell(Text(_formatDate(income['createdAt'] ?? "No Date"),
                           style: TextStyle(
                               color: bluem,
                               fontSize: 12,
                               fontWeight: FontWeight.w600))),
-                      DataCell(Text(income['amountFrom']?.toString() ?? "No Data",
+                      DataCell(Text(income['name']?.toString() ?? "No Data",
                           style: TextStyle(
                               color: bluem,
                               fontSize: 12,
@@ -143,5 +143,5 @@ class _LevelTwoReportState extends State<LevelTwoReport> {
         ],
       ),
     );
-
-  }}
+  }
+}
