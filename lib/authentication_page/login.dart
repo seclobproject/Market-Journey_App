@@ -6,16 +6,15 @@ import '../navigation/bottom_tabs_screen.dart';
 import '../resources/color.dart';
 import '../services/login_service.dart';
 import '../support/logger.dart';
-// Import the new pending page
 
 class loginpage extends StatefulWidget {
   const loginpage({super.key});
 
   @override
-  State<loginpage> createState() => _loginpageState();
+  State<loginpage> createState() => _LoginPageState();
 }
 
-class _loginpageState extends State<loginpage> {
+class _LoginPageState extends State<loginpage> {
   bool hidePassword = true;
   String? email;
   String? password;
@@ -78,9 +77,13 @@ class _loginpageState extends State<loginpage> {
 
     if (status == 'pending') {
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => BottomTabsScreen()),
+        MaterialPageRoute(builder: (context) => TransactionScreen()),
             (route) => false,
       );
+    } else if (status == 'readyToApprove') {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Your profile is not approved yet. Please try again later.'),
+      ));
     } else {
       gotoHome();
     }

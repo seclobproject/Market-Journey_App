@@ -35,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
           print("Status is pending, navigating to pending page."); // Debug output
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => BottomTabsScreen()),
+            MaterialPageRoute(builder: (context) => TransactionScreen()),
           );
         } else if (userToken == null || userToken.isEmpty) {
           print("No token found, navigating to login page."); // Debug output
