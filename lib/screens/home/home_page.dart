@@ -316,34 +316,46 @@ class _homeState extends State<home> {
                 SizedBox(
                   height: screenHeight * 0.01,
                 ),
-                Container(
-                  height: 20,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    controller: _scrollController,
-                    itemCount: newsData['newsData'].length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    Latestnews()), // Ensure LatestNews is defined
-                          );
-                        },
-                        child: Text(
-                          newsData['newsData'][index]['title'] ??
-                              'No Title',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color:
-                            marketbgblue, // Replace with marketbgblue if defined
+                GestureDetector(
+
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              Latestnews()), // Ensure LatestNews is defined
+                    );
+                  },
+
+                  child: Container(
+                    height: 20,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      controller: _scrollController,
+                      itemCount: newsData['newsData'].length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      Latestnews()), // Ensure LatestNews is defined
+                            );
+                          },
+                          child: Text(
+                            newsData['newsData'][index]['title'] ??
+                                'No Title',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color:
+                              marketbgblue, // Replace with marketbgblue if defined
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
                 SizedBox(
