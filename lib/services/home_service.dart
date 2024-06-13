@@ -1,31 +1,64 @@
 import '../networking/constant.dart';
 import '../support/dio_helper.dart';
 
-class AwardService {
+
+
+class homeservice {
   static Future viewRewards() async {
     var dio = await DioHelper.getInstance();
     var response = await dio.get('$baseURL/api/admin/view-award-details');
     print(response);
     return response.data;
   }
-}
 
-
-class LeaderService {
-  static Future viewleaders() async {
+  static Future distributedleaders() async {
     var dio = await DioHelper.getInstance();
     var response = await dio.get('$baseURL/api/user/get-pool-amount');
     return response.data;
   }
-}
+  static Future viewSubscription() async {
+    var dio = await DioHelper.getInstance();
+    var response = await dio.get('$baseURL/api/user/user-subscription-report');
+    return response.data;
+  }
 
+  static Future viewleaders() async {
+    var dio = await DioHelper.getInstance();
+    var response = await dio.get('$baseURL/api/user/get-pool-count-amount');
+    return response.data;
+  }
 
-
-class NewsService {
   static Future viewNews() async {
     var dio = await DioHelper.getInstance();
     var response = await dio.get('$baseURL/api/admin/view-news-details');
     print(response);
     return response.data;
   }
+
+  static Future viewImageFeeds() async {
+    var dio = await DioHelper.getInstance();
+    var response = await dio.get('$baseURL/api/admin/view-home-images');
+    return response.data;
+  }
+
+  static Future viewVideoFeeds() async {
+    var dio = await DioHelper.getInstance();
+    var response = await dio.get('$baseURL/api/admin/view-home-videos');
+    return response.data;
+  }
+
+  static Future uploadScreenshot(data) async {
+    try {
+      var dio = await DioHelper.getInstance();
+      var response = await dio.post('$baseURL/api/user/user-verification', data: data);
+      return response.data;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
+
+
+
+
+

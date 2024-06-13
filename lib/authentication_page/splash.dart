@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:master_journey/authentication_page/transcation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../navigation/bottom_tabs_screen.dart';
 import '../resources/color.dart';
 import 'LandingPage.dart';
 import 'login.dart';
+ // Import the new pending page
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -20,12 +23,21 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _navigateToNextPage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? userToken = prefs.getString('token');
+    String? responseStatus = prefs.getString('status'); // Retrieve the status
+
     print("Retrieved token in splash screen: $userToken"); // Debug output
+    print("Retrieved status in splash screen: $responseStatus"); // Debug output
 
     Timer(
       Duration(seconds: 2),
           () {
-        if (userToken == null || userToken!.isEmpty) {
+        if (responseStatus == 'pending') {
+          print("Status is pending, navigating to pending page."); // Debug output
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => BottomTabsScreen()),
+          );
+        } else if (userToken == null || userToken.isEmpty) {
           print("No token found, navigating to login page."); // Debug output
           Navigator.pushReplacement(
             context,

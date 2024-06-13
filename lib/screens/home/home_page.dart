@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -11,11 +13,10 @@ import '../../resources/color.dart';
 import 'package:scroll_loop_auto_scroll/scroll_loop_auto_scroll.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/home_service.dart';
-import '../../services/home_service.dart';
-import '../../services/home_service.dart';
-import '../../services/home_service.dart';
 import '../../services/profile_service.dart';
 import '../../support/logger.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 import 'widget/flashfeed.dart';
 
@@ -28,13 +29,18 @@ class home extends StatefulWidget {
 
 class _homeState extends State<home> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final ScrollController _scrollController = ScrollController();
+  Timer? _timer;
 
   var userid;
   var profiledata;
   dynamic awardData;
-  List pool = [];
+  List pool1 = [];
+  List pool2 = [];
   bool _isLoading = true;
   dynamic newsData;
+  dynamic homeImageData;
+  dynamic  homeVideoData;
 
   Future _ProfileData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -48,7 +54,7 @@ class _homeState extends State<home> {
 
   Future<void> _AwardData() async {
     try {
-      var response = await AwardService.viewRewards();
+      var response = await homeservice.viewRewards();
       log.i('Award & Reward data show.... $response');
       setState(() {
         awardData = response ?? [];
@@ -58,10 +64,9 @@ class _homeState extends State<home> {
     }
   }
 
-
   Future<void> _NewsData() async {
     try {
-      var response = await NewsService.viewNews();
+      var response = await homeservice.viewNews();
       log.i('Award & Reward data show.... $response');
       setState(() {
         newsData = response ?? [];
@@ -71,13 +76,39 @@ class _homeState extends State<home> {
     }
   }
 
-  Future _leadersboard() async {
+  Future<void> _getImageFeed() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userid = prefs.getString('userid');
-    var response = await LeaderService.viewleaders();
+    var response = await homeservice.viewImageFeeds();
+    log.i('Image data: $response');
+    setState(() {
+      homeImageData = response;
+    });
+  }
+
+  Future<void> _getVideoFeed() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString('userid');
+    var response = await homeservice.viewVideoFeeds();
+    log.i('Video data: $response');
+    setState(() {
+      homeVideoData = response;
+    });
+  }
+
+  Future _leadersboard() async {
+    var response = await homeservice.viewleaders();
     log.i(' data show.... $response');
     setState(() {
-      pool = response['pool'] ?? [];
+      pool1 = response['pool'] ?? [];
+    });
+  }
+
+  Future _distributedleadersboard() async {
+    var response = await homeservice.distributedleaders();
+    log.i(' data show.... $response');
+    setState(() {
+      pool2 = response['pool'] ?? [];
     });
   }
 
@@ -87,7 +118,10 @@ class _homeState extends State<home> {
         _ProfileData(),
         _AwardData(),
         _NewsData(),
-        _leadersboard()
+        _leadersboard(),
+        _distributedleadersboard(),
+        _getImageFeed(),
+        _getVideoFeed()
         ///////
       ],
     );
@@ -101,6 +135,34 @@ class _homeState extends State<home> {
     super.initState();
     setState(() {
       _initLoad();
+      _startAutoScroll();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _startAutoScroll() {
+    _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+      if (_scrollController.hasClients) {
+        final maxScroll = _scrollController.position.maxScrollExtent;
+        final currentScroll = _scrollController.offset;
+        final nextScroll = currentScroll + 1.5;
+
+        if (nextScroll >= maxScroll) {
+          _scrollController.jumpTo(0.0); // Reset to the beginning if at the end
+        } else {
+          _scrollController.animateTo(
+            nextScroll,
+            duration: Duration(milliseconds: 100),
+            curve: Curves.linear,
+          );
+        }
+      }
     });
   }
 
@@ -108,6 +170,7 @@ class _homeState extends State<home> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
         backgroundColor: marketbg,
         key: _scaffoldKey,
@@ -254,31 +317,36 @@ class _homeState extends State<home> {
                 SizedBox(
                   height: screenHeight * 0.01,
                 ),
-            Container(
-              height: 20,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: newsData['newsData'].length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Latestnews()), // Ensure LatestNews is defined
+                Container(
+                  height: 20,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    controller: _scrollController,
+                    itemCount: newsData['newsData'].length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    Latestnews()), // Ensure LatestNews is defined
+                          );
+                        },
+                        child: Text(
+                          newsData['newsData'][index]['title'] ??
+                              'No Title',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color:
+                            marketbgblue, // Replace with marketbgblue if defined
+                          ),
+                        ),
                       );
                     },
-                    child: Text(
-                      newsData['newsData'][index]['title'] ?? 'No Title',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color:marketbgblue, // Replace with marketbgblue if defined
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+                  ),
+                ),
                 SizedBox(
                   height: screenHeight * 0.03,
                 ),
@@ -297,7 +365,7 @@ class _homeState extends State<home> {
                         Row(
                           children: [
                             Text(
-                              "10",
+                              profiledata['daysUntilRenewal'].toString(),
                               style: TextStyle(
                                   fontSize: 30,
                                   fontWeight: FontWeight.w700,
@@ -322,7 +390,7 @@ class _homeState extends State<home> {
                           children: [
                             Expanded(
                               child: Text(
-                                "Your monthly subscription plan has 10 days to renew Subscription is 0m Please upload the screenshot",
+                                "Attention! Your subscription plan is set to renew in just  ${profiledata['daysUntilRenewal']} days. Renew to continue enjoying all the benefits of your subscription!",
                                 style: TextStyle(
                                     color: marketbg,
                                     fontSize: 12,
@@ -525,7 +593,8 @@ class _homeState extends State<home> {
                     padding: const EdgeInsets.all(10.0),
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: awardData['awardData'].length, // Ensure itemCount matches list length
+                      itemCount: awardData['awardData']
+                          .length, // Ensure itemCount matches list length
                       itemBuilder: (BuildContext context, int index) {
                         return Row(
                           children: [
@@ -544,15 +613,18 @@ class _homeState extends State<home> {
                                       child: Image.network(
                                         'https://admin.marketjourney.in/uploads/${awardData['awardData'][index]['memberImage']}',
                                         fit: BoxFit.cover,
-                                        errorBuilder: (context, error, stackTrace) {
-                                          return Icon(Icons.error, color: Colors.red);
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Icon(Icons.error,
+                                              color: Colors.red);
                                         },
                                       ),
                                     ),
                                   ),
                                   SizedBox(height: 1),
                                   Text(
-                                    awardData['awardData'][index]['memberName'],
+                                    awardData['awardData'][index]
+                                    ['memberName'],
                                     style: TextStyle(
                                       fontSize: 10,
                                     ),
@@ -564,11 +636,8 @@ class _homeState extends State<home> {
                         );
                       },
                     ),
-
                   ),
                 ),
-
-
                 SizedBox(
                   height: 20,
                 ),
@@ -601,106 +670,132 @@ class _homeState extends State<home> {
                 SizedBox(
                   height: 100,
                   child: ListView.builder(
-                    itemCount: pool.length,
+                    itemCount: pool1.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
-                      var pooldata = pool[index];
+                      var pooldata = pool1[index];
+                      // Define a list of static titles
+                      List<String> titles = [
+                        'Team Leader (A)',
+                        'Business Development Manager (B)',
+                        'Regional Manager (C)',
+                        'Territory Manager (D)',
+                        'Associate Direction (E)',
+                        // Add more titles as needed
+                      ];
+                      // Use the index to fetch the corresponding title
+                      String title = titles.length > index
+                          ? titles[index]
+                          : 'Default Title';
+
                       return Padding(
                         padding: const EdgeInsets.only(right: 20),
                         child: Container(
-                          width: 170,
+                          width: 200,
                           height: 88,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: marketbgblue),
+                            borderRadius: BorderRadius.circular(10),
+                            color: marketbgblue,
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
-                            child: Column(children: [
-                              Text(
-                                'Team Leader(A)',
-                                style: TextStyle(
+                            child: Column(
+                              children: [
+                                Text(
+                                  title, // Use the static title
+                                  style: TextStyle(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w500,
-                                    color: marketbg),
-                              ),
-                              SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
-                                children: [
-                                  Column(
+                                    color: marketbg,
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20),
+                                  child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.center,
+                                    MainAxisAlignment.spaceAround,
                                     children: [
-                                      Text(
-                                        "Member’s",
-                                        style: TextStyle(
-                                            fontSize: 8,
-                                            fontWeight: FontWeight.w500,
-                                            color: marketbg),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Container(
-                                        height: 25,
-                                        width: 33,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(4),
-                                          color: yellow1,
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            pooldata['count']
-                                                ?.toString() ??
-                                                "0",
+                                      Column(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Member’s",
                                             style: TextStyle(
-                                                fontWeight:
-                                                FontWeight.w500,
-                                                fontSize: 10),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        " Amount",
-                                        style: TextStyle(
-                                            fontSize: 8,
-                                            fontWeight: FontWeight.w500,
-                                            color: marketbg),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 3, horizontal: 13),
-                                        height: 25,
-                                        width: 33,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(4),
-                                          color: yellow1,
-                                        ),
-                                        child: Text(
-                                          pooldata['count']?.toString() ??
-                                              "0",
-                                          style: TextStyle(
+                                              fontSize: 8,
                                               fontWeight: FontWeight.w500,
-                                              fontSize: 10),
-                                        ),
+                                              color: marketbg,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Container(
+                                            height: 25,
+                                            width: 40,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  4),
+                                              color: yellow1,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                pooldata['count']
+                                                    ?.toString() ??
+                                                    "0",
+                                                style: TextStyle(
+                                                  fontWeight:
+                                                  FontWeight.w500,
+                                                  fontSize: 10,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Amount",
+                                            style: TextStyle(
+                                              fontSize: 8,
+                                              fontWeight: FontWeight.w500,
+                                              color: marketbg,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Container(
+                                            height: 25,
+                                            width: 40,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  4),
+                                              color: yellow1,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                pooldata['amount']
+                                                    ?.toString() ??
+                                                    "0",
+                                                style: TextStyle(
+                                                  fontWeight:
+                                                  FontWeight.w500,
+                                                  fontSize: 10,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
-                            ]),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
@@ -739,106 +834,132 @@ class _homeState extends State<home> {
                 SizedBox(
                   height: 100,
                   child: ListView.builder(
-                    itemCount: pool.length,
+                    itemCount: pool2.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
-                      var pooldata = pool[index];
+                      var pooldata2 = pool2[index];
+                      // Define a list of static titles
+                      List<String> titles = [
+                        'Team Leader (A)',
+                        'Business Development Manager (B)',
+                        'Regional Manager (C)',
+                        'Territory Manager (D)',
+                        'Associate Direction (E)',
+                        // Add more titles as needed
+                      ];
+                      // Use the index to fetch the corresponding title
+                      String title = titles.length > index
+                          ? titles[index]
+                          : 'Default Title';
+
                       return Padding(
                         padding: const EdgeInsets.only(right: 20),
                         child: Container(
-                          width: 170,
+                          width: 200,
                           height: 88,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: marketbgblue),
+                            borderRadius: BorderRadius.circular(10),
+                            color: marketbgblue,
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
-                            child: Column(children: [
-                              Text(
-                                'Team Leader(A)',
-                                style: TextStyle(
+                            child: Column(
+                              children: [
+                                Text(
+                                  title, // Use the static title
+                                  style: TextStyle(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w500,
-                                    color: marketbg),
-                              ),
-                              SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
-                                children: [
-                                  Column(
+                                    color: marketbg,
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20),
+                                  child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.center,
+                                    MainAxisAlignment.spaceAround,
                                     children: [
-                                      Text(
-                                        "Member’s",
-                                        style: TextStyle(
-                                            fontSize: 8,
-                                            fontWeight: FontWeight.w500,
-                                            color: marketbg),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Container(
-                                        height: 25,
-                                        width: 33,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(4),
-                                          color: yellow1,
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            pooldata['count']
-                                                ?.toString() ??
-                                                "0",
+                                      Column(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Member’s",
                                             style: TextStyle(
-                                                fontWeight:
-                                                FontWeight.w500,
-                                                fontSize: 10),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        " Amount",
-                                        style: TextStyle(
-                                            fontSize: 8,
-                                            fontWeight: FontWeight.w500,
-                                            color: marketbg),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 3, horizontal: 13),
-                                        height: 25,
-                                        width: 33,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                          BorderRadius.circular(4),
-                                          color: yellow1,
-                                        ),
-                                        child: Text(
-                                          pooldata['count']?.toString() ??
-                                              "0",
-                                          style: TextStyle(
+                                              fontSize: 8,
                                               fontWeight: FontWeight.w500,
-                                              fontSize: 10),
-                                        ),
+                                              color: marketbg,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Container(
+                                            height: 25,
+                                            width: 40,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  4),
+                                              color: yellow1,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                pooldata2['count']
+                                                    ?.toString() ??
+                                                    "0",
+                                                style: TextStyle(
+                                                  fontWeight:
+                                                  FontWeight.w500,
+                                                  fontSize: 10,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Amount",
+                                            style: TextStyle(
+                                              fontSize: 8,
+                                              fontWeight: FontWeight.w500,
+                                              color: marketbg,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Container(
+                                            height: 25,
+                                            width: 40,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  4),
+                                              color: yellow1,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                pooldata2['amount']
+                                                    ?.toString() ??
+                                                    "0",
+                                                style: TextStyle(
+                                                  fontWeight:
+                                                  FontWeight.w500,
+                                                  fontSize: 10,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
-                            ]),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
@@ -873,119 +994,152 @@ class _homeState extends State<home> {
                     ),
                   ],
                 ),
+                SizedBox(height: 10),
                 SizedBox(
-                  height: 10,
-                ),
-                SizedBox(
-                  height: 120,
+                  height: 120, // Adjust height as needed, or consider removing for flexibility
                   child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 5,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 20),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 81,
-                                width: 122,
-                                decoration: BoxDecoration(
-                                    color: bottomtabbg,
-                                    borderRadius:
-                                    BorderRadius.circular(10)),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  // Adjust the value as per your preference
-                                  child: Image.network(
-                                    'https://i.insider.com/6247782ae22adb0018d1b640?width=700',
-                                    fit: BoxFit.fill,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: homeImageData['homeImageData']?.length ?? 0,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const Flashfeed()),
+                            );
+                          },
+                          child: ClipRRect( // Clip content that overflows
+                            borderRadius: BorderRadius.circular(10),
+                            child: SizedBox( // Consider removing fixed height for flexibility
+                              width: 122, // Adjust width as needed
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    height: 61,
+                                    width: 122,
+                                    decoration: BoxDecoration(
+                                      color: bottomtabbg,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: ClipRRect( // Clip image within container
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                        'https://admin.marketjourney.in/uploads/${homeImageData['homeImageData'][index]['homeImage']}',
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (context, error, stackTrace) {
+                                          return Icon(Icons.error, color: Colors.red);
+                                        },
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              Text(
-                                "Journey of inspiration\nand discovery",
-                                style: TextStyle(
-                                    fontSize: 10,
-                                    overflow: TextOverflow.ellipsis),
-                              )
-                            ],
-                          ),
-                        );
-                      }),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                SizedBox(
-                  height: 120,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 5,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 20),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                    const Flashfeed()),
-                              );
-                            },
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: [
-                                Stack(
-                                  children: [
-                                    Container(
-                                      // This is the container for the image
-                                      height: 81,
-                                      width: 122,
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Container(
+                                      height: 20,
+                                      width: 35,
                                       decoration: BoxDecoration(
-                                        color: bottomtabbg,
-                                        borderRadius:
-                                        BorderRadius.circular(10),
+                                        color: yellow,
+                                        borderRadius: BorderRadius.circular(5),
                                       ),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                        BorderRadius.circular(10),
-                                        child: Image.network(
-                                          'https://www.simplilearn.com/ice9/free_resources_article_thumb/What_is_the_Importance_of_Technology.jpg',
-                                          fit: BoxFit.fill,
+                                      child: Center(
+                                        child: Text(
+                                          homeImageData['homeImageData'][index]['description'] ?? "",
+                                          style: TextStyle(fontSize: 10),
                                         ),
                                       ),
                                     ),
-                                    // This is the container for aligning at the top right corner
-                                    Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Container(
-                                        height: 20,
-                                        width: 35,
-                                        decoration: BoxDecoration(
-                                          color: yellow,
-                                          borderRadius:
-                                          BorderRadius.circular(5),
-                                        ),
-                                        child: Center(
-                                            child: Text(
-                                              "New",
-                                              style: TextStyle(fontSize: 10),
-                                            )),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        );
-                      }),
+                        ),
+                      );
+                    },
+                  ),
                 ),
+
+
+
+                SizedBox(
+                  height: 120, // Adjust height as needed, or consider removing for flexibility
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: homeVideoData['homeVideoData']?.length ?? 0,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const Flashfeed()),
+                            );
+                          },
+                          child: ClipRRect( // Clip content that overflows
+                            borderRadius: BorderRadius.circular(10),
+                            child: SizedBox( // Consider removing fixed height for flexibility
+                              width: 122, // Adjust width as needed
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    height: 61,
+                                    width: 122,
+                                    decoration: BoxDecoration(
+                                      color: bottomtabbg,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: ClipRRect( // Clip image within container
+                                      borderRadius: BorderRadius.circular(10),
+                                      child:GestureDetector(
+                                        onTap: () async {
+                                          final url = homeVideoData['homeVideoData'][index]['videoLink'];
+                                          if (await canLaunch(url)) {
+                                            await launch(url);
+                                          } else {
+                                            throw 'Could not launch $url';
+                                          }
+                                        },
+                                        child: Image.network(
+                                          'https://admin.marketjourney.in/uploads/${homeVideoData['homeVideoData'][index]['videoThambnail']}',
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (context, error, stackTrace) {
+                                            return Icon(Icons.error, color: Colors.red);
+                                          },
+                                        ),
+                                      ),
+
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Container(
+                                      height: 20,
+                                      width: 35,
+                                      decoration: BoxDecoration(
+                                        color: yellow,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          homeVideoData['homeVideoData'][index]['videoTitle'] ?? "",
+                                          style: TextStyle(fontSize: 10),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
               ],
             ),
           ),

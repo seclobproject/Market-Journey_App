@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:master_journey/authentication_page/transcation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../navigation/bottom_tabs_screen.dart';
 import 'login.dart';
+
 
 class Landing_Page extends StatefulWidget {
   const Landing_Page({Key? key, required this.title}) : super(key: key);
@@ -19,9 +21,14 @@ class _Landing_PageState extends State<Landing_Page> {
   Future<void> _checkAuthenticated() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userToken = prefs.getString('token');
+    String? responseStatus = prefs.getString('status'); // Retrieve the status
     print("Retrieved token: $userToken"); // Debug output
+    print("Retrieved status: $responseStatus"); // Debug output
 
-    if (userToken == null || userToken!.isEmpty) {
+    if (responseStatus == 'pending') {
+      print("Status is pending, navigating to pending page."); // Debug output
+      gotoPending();
+    } else if (userToken == null || userToken!.isEmpty) {
       print("No token found, navigating to login page."); // Debug output
       gotoLogin();
     } else {
@@ -62,6 +69,13 @@ class _Landing_PageState extends State<Landing_Page> {
   void gotoLogin() {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => loginpage()),
+          (route) => false,
+    );
+  }
+
+  void gotoPending() {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => BottomTabsScreen()),
           (route) => false,
     );
   }

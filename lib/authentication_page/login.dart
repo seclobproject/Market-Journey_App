@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:master_journey/authentication_page/transcation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../navigation/bottom_tabs_screen.dart';
 import '../resources/color.dart';
 import '../services/login_service.dart';
 import '../support/logger.dart';
+// Import the new pending page
 
 class loginpage extends StatefulWidget {
   const loginpage({super.key});
@@ -37,13 +39,13 @@ class _loginpageState extends State<loginpage> {
         log.i('Login Success');
         print('User ID: ${response['id']}');
         print('Token: ${response['access_token']}');
+        print('Profile Status:${response['status']}');
 
-        await _saveAndRedirectToHome(response['access_token'], response['id']);
+        await _saveAndRedirectToHome(response['access_token'], response['id'], response['status']);
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Login Success'),
         ));
-        gotoHome();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Login failed: ${response['msg']}'),
@@ -62,20 +64,33 @@ class _loginpageState extends State<loginpage> {
     }
   }
 
-  Future<void> _saveAndRedirectToHome(String usertoken, String userId) async {
+  Future<void> _saveAndRedirectToHome(String usertoken, String userId, String status) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString("token", usertoken);
     await prefs.setString("userid", userId);
+    await prefs.setString("status", status); // Save the status
     print("Token saved: $usertoken"); // Debug output
+    print("Status saved: $status"); // Debug output
+
     setState(() {
       _isLoading = false;
     });
+
+    if (status == 'pending') {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => BottomTabsScreen()),
+            (route) => false,
+      );
+    } else {
+      gotoHome();
+    }
   }
 
   void gotoHome() {
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => BottomTabsScreen()),
-            (route) => false);
+      MaterialPageRoute(builder: (context) => BottomTabsScreen()),
+          (route) => false,
+    );
   }
 
   @override
@@ -93,11 +108,12 @@ class _loginpageState extends State<loginpage> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Username ",
-                  style: TextStyle(color: marketbgblue, fontSize: 12),
-                )),
+              alignment: Alignment.topLeft,
+              child: Text(
+                "Username ",
+                style: TextStyle(color: marketbgblue, fontSize: 12),
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -127,11 +143,12 @@ class _loginpageState extends State<loginpage> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  "Password ",
-                  style: TextStyle(color: marketbgblue, fontSize: 12),
-                )),
+              alignment: Alignment.topLeft,
+              child: Text(
+                "Password ",
+                style: TextStyle(color: marketbgblue, fontSize: 12),
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),

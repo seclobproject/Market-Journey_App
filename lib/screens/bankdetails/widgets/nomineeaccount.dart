@@ -6,61 +6,69 @@ import '../../../services/profile_service.dart';
 import '../../../support/logger.dart';
 
 class Nomineeaccount extends StatefulWidget {
-  const Nomineeaccount({super.key});
+  const Nomineeaccount({Key? key}) : super(key: key);
 
   @override
   State<Nomineeaccount> createState() => _NomineeaccountState();
 }
 
 class _NomineeaccountState extends State<Nomineeaccount> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController pancardNumController = TextEditingController();
+  TextEditingController aadhaarNumController = TextEditingController();
+  TextEditingController bankNameController = TextEditingController();
+  TextEditingController accountNumController = TextEditingController();
+  TextEditingController ifscCodeController = TextEditingController();
+
   String? userId;
   bool _isLoading = false;
   bool _isEditing = false;
-
-  String? name;
-  int? phone;
-  String? Address;
-  int? pancard;
-  int? adhaar;
-  int? accountNum;
-  String? bankName;
-  String? ifscCode;
+  bool _hasNomineeDetails = false;
 
   @override
   void initState() {
     super.initState();
-    _fetchBankDetails();
+    _fetchnomineeDetails();
   }
 
-  Future<void> _fetchBankDetails() async {
+  Future<void> _fetchnomineeDetails() async {
     setState(() {
       _isLoading = true;
     });
 
     try {
       var response = await ProfileService.profile();
-      if (response['sts'] == '01') {
+      if (response != null && response['sts'] == '01') {
         var nomineeDetails = response['nomineeDetails'];
-        setState(() {
-          name = nomineeDetails['holderName'];
-          phone = int.tryParse(nomineeDetails['phone']);
-          Address = nomineeDetails['address'];
-          adhaar = int.tryParse(nomineeDetails['aadhaar2']);
-          bankName = nomineeDetails['bankName'];
-          accountNum = int.tryParse(nomineeDetails['accountNum']);
-          ifscCode = nomineeDetails['ifscCode'];
-        });
+        if (nomineeDetails != null) {
+          setState(() {
+            nameController.text = nomineeDetails['name'];
+            phoneController.text = nomineeDetails['phone'];
+            addressController.text = nomineeDetails['address'];
+            pancardNumController.text = nomineeDetails['pancardNum'];
+            aadhaarNumController.text = nomineeDetails['aadhaarNum'];
+            bankNameController.text = nomineeDetails['bankName'];
+            accountNumController.text = nomineeDetails['accountNum'];
+            ifscCodeController.text = nomineeDetails['ifscCode'];
+            _hasNomineeDetails = true;
+          });
+        } else {
+          setState(() {
+            _hasNomineeDetails = false;
+          });
+        }
       } else {
         log.e('Fetch bank details failed: ${response['msg']}');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text('Fetch bank details failed: ${response['msg']}')),
+          SnackBar(content: Text('Fetch bank details failed')),
         );
       }
     } catch (error) {
       log.e('Error fetching bank details: $error');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error fetching bank details: $error')),
+        SnackBar(content: Text('No Bank Account Found')),
       );
     } finally {
       setState(() {
@@ -76,22 +84,24 @@ class _NomineeaccountState extends State<Nomineeaccount> {
       _isLoading = true;
     });
 
-    if (name == null ||
-        name!.isEmpty ||
-        phone == null ||
-        phone.toString().isEmpty ||
-        Address == null ||
-        Address!.isEmpty ||
-        pancard == null ||
-        pancard.toString().isEmpty ||
-        adhaar == null ||
-        adhaar.toString().isEmpty ||
-        bankName == null ||
-        bankName!.isEmpty ||
-        accountNum == null ||
-        accountNum.toString().isEmpty ||
-        ifscCode == null ||
-        ifscCode!.isEmpty) {
+    // Extract text values from controllers
+    String name = nameController.text;
+    String phone = phoneController.text;
+    String address = addressController.text;
+    String pancardNum = pancardNumController.text;
+    String aadhaarNum = aadhaarNumController.text;
+    String bankName = bankNameController.text;
+    String accountNum = accountNumController.text;
+    String ifscCode = ifscCodeController.text;
+
+    if (name.isEmpty ||
+        phone.isEmpty ||
+        address.isEmpty ||
+        pancardNum.isEmpty ||
+        aadhaarNum.isEmpty ||
+        bankName.isEmpty ||
+        accountNum.isEmpty ||
+        ifscCode.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('All fields are required')),
       );
@@ -103,12 +113,12 @@ class _NomineeaccountState extends State<Nomineeaccount> {
 
     var reqData = {
       'name': name,
-      'phone': phone.toString(),
-      'address': Address,
-      'pancard': pancard.toString(),
-      'aadhaar2': adhaar.toString(),
+      'phone': phone,
+      'address': address,
+      'pancardNum': pancardNum,
+      'aadhaarNum': aadhaarNum,
       'bankName': bankName,
-      'accountNum': accountNum.toString(),
+      'accountNum': accountNum,
       'ifscCode': ifscCode,
     };
     log.i('Request Data: $reqData');
@@ -118,6 +128,10 @@ class _NomineeaccountState extends State<Nomineeaccount> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Bank data added successfully')),
         );
+        setState(() {
+          _hasNomineeDetails = true;
+          _isEditing = false;
+        });
       } else {
         log.e('Add bank failed: ${response['msg']}');
         ScaffoldMessenger.of(context).showSnackBar(
@@ -132,353 +146,202 @@ class _NomineeaccountState extends State<Nomineeaccount> {
     } finally {
       setState(() {
         _isLoading = false;
-        _isEditing = false;
       });
     }
   }
 
-  Future _initLoad() async {
-    await Future.wait(
-      [
-        _Nominee(),
-      ],
+  Widget _buildTextField({
+    required String label,
+    required String hintText,
+    required TextEditingController controller,
+    TextInputType keyboardType = TextInputType.text,
+    bool enabled = true,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(color: marketbgblue, fontSize: 14),
+          ),
+          SizedBox(height: 10),
+          TextField(
+            controller: controller,
+            decoration: InputDecoration(
+              contentPadding:
+              EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderSide: BorderSide(color: yellow, width: 2),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderSide: BorderSide(color: yellow, width: 2),
+              ),
+              hintText: hintText,
+            ),
+            keyboardType: keyboardType,
+            style: TextStyle(
+                color: black, fontSize: 12, fontWeight: FontWeight.w400),
+            enabled: enabled,
+          ),
+        ],
+      ),
     );
-    _isLoading = false;
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _initLoad();
-  // }
+  @override
+  void dispose() {
+    nameController.dispose();
+    phoneController.dispose();
+    addressController.dispose();
+    pancardNumController.dispose();
+    aadhaarNumController.dispose();
+    bankNameController.dispose();
+    accountNumController.dispose();
+    ifscCodeController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: marketbg,
-      body: SingleChildScrollView(
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : _hasNomineeDetails
+          ? SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
-              height: 10,
+            SizedBox(height: 10),
+            _buildTextField(
+              label: 'Name',
+              hintText: 'Enter your name',
+              controller: nameController,
+              enabled: _isEditing,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('Name',
-                      style: TextStyle(color: marketbgblue, fontSize: 14))),
+            _buildTextField(
+              label: 'Phone',
+              hintText: 'Enter your phone',
+              controller: phoneController,
+              enabled: _isEditing,
             ),
-            SizedBox(
-              height: 10,
+            _buildTextField(
+              label: 'Address',
+              hintText: 'Enter your bank name',
+              controller: addressController,
+              enabled: _isEditing,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 2),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 2),
-                  ),
-                ),
-                onChanged: (text) {
-                  setState(() {
-                    accountNum = int.tryParse(text);
-                  });
-                },
-                style: TextStyle(
-                    color: black, fontSize: 12, fontWeight: FontWeight.w400),
-              ),
+            _buildTextField(
+              label: 'Adhaar Number',
+              hintText: 'Enter your bank name',
+              controller: aadhaarNumController,
+              enabled: _isEditing,
             ),
-            SizedBox(
-              height: 10,
+            _buildTextField(
+              label: 'Pancard Number',
+              hintText: 'Enter your bank name',
+              controller: pancardNumController,
+              enabled: _isEditing,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('Phone',
-                      style: TextStyle(color: marketbgblue, fontSize: 14))),
+            _buildTextField(
+              label: 'Bank Name',
+              hintText: 'Enter your bank name',
+              controller: bankNameController,
+              enabled: _isEditing,
             ),
-            SizedBox(
-              height: 10,
+            _buildTextField(
+              label: 'Account Number',
+              hintText: 'Enter your account number',
+              controller: accountNumController,
+              keyboardType: TextInputType.number,
+              enabled: _isEditing,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 2),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 2),
-                  ),
-                ),
-                onChanged: (text) {
-                  setState(() {
-                    accountNum = int.tryParse(text);
-                  });
-                },
-                style: TextStyle(
-                    color: black, fontSize: 12, fontWeight: FontWeight.w400),
-              ),
+            _buildTextField(
+              label: 'IFSC Code',
+              hintText: 'Enter your IFSC code',
+              controller: ifscCodeController,
+              enabled: _isEditing,
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('Address',
-                      style: TextStyle(color: marketbgblue, fontSize: 14))),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 2),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 2),
-                  ),
-                ),
-                onChanged: (text) {
-                  setState(() {
-                    name = text;
-                  });
-                },
-                style: TextStyle(
-                    color: black, fontSize: 12, fontWeight: FontWeight.w400),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('Adhaar Number',
-                      style: TextStyle(color: marketbgblue, fontSize: 14))),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 2),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 2),
-                  ),
-                ),
-                onChanged: (text) {
-                  setState(() {
-                    accountNum = int.tryParse(text);
-                  });
-                },
-                style: TextStyle(
-                    color: black, fontSize: 12, fontWeight: FontWeight.w400),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('Pancard Number',
-                      style: TextStyle(color: marketbgblue, fontSize: 14))),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 2),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 2),
-                  ),
-                ),
-                onChanged: (text) {
-                  setState(() {
-                    accountNum = int.tryParse(text);
-                  });
-                },
-                style: TextStyle(
-                    color: black, fontSize: 12, fontWeight: FontWeight.w400),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('Bank Name',
-                      style: TextStyle(color: marketbgblue, fontSize: 14))),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 2),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 2),
-                  ),
-                ),
-                onChanged: (text) {
-                  setState(() {
-                    name = text;
-                  });
-                },
-                style: TextStyle(
-                    color: black, fontSize: 12, fontWeight: FontWeight.w400),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('Account Number',
-                      style: TextStyle(color: marketbgblue, fontSize: 14))),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 2),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 2),
-                  ),
-                ),
-                onChanged: (text) {
-                  setState(() {
-                    accountNum = int.tryParse(text);
-                  });
-                },
-                style: TextStyle(
-                    color: black, fontSize: 12, fontWeight: FontWeight.w400),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('IFSC Code',
-                      style: TextStyle(color: marketbgblue, fontSize: 14))),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 2),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 2),
-                  ),
-                ),
-                onChanged: (text) {
-                  setState(() {
-                    name = text;
-                  });
-                },
-                style: TextStyle(
-                    color: black, fontSize: 12, fontWeight: FontWeight.w400),
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Align(
+            SizedBox(height: 30),
+            _isEditing
+                ? Align(
               alignment: Alignment.centerRight,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Container(
-                  height: 40,
-                  width: 400,
-                  decoration: BoxDecoration(
-                      color: yellow, borderRadius: BorderRadius.circular(8)),
-                  child: Center(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 20),
+                child: GestureDetector(
+                  onTap: _Nominee,
+                  child: Container(
+                    height: 40,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: yellow,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Center(
                       child: Text(
-                    'Submit',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-                  )),
+                        'Submit',
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+                : Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 20),
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _isEditing = true;
+                    });
+                  },
+                  child: Container(
+                    height: 40,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: yellow,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Update Bank Details',
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
-            SizedBox(
-              height: 30,
-            ),
+            SizedBox(height: 30),
           ],
+        ),
+      )
+          : Center(
+        child: ElevatedButton(
+          onPressed: () {
+            setState(() {
+              _isEditing = true;
+              _hasNomineeDetails = true;
+            });
+          },
+          child: Text(
+            'Add Bank Details',
+            style: TextStyle(color: marketbg),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: yellow,
+          ),
         ),
       ),
     );

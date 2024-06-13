@@ -1,144 +1,10 @@
-// import 'package:flutter/material.dart';
-// import 'package:master_journey/resources/color.dart';
-
-// class Dematedetails extends StatefulWidget {
-//   const Dematedetails({super.key});
-
-//   @override
-//   State<Dematedetails> createState() => _DematedetailsState();
-// }
-
-// class _DematedetailsState extends State<Dematedetails> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         appBar: AppBar(
-//           title: Text(
-//             'Demat details',
-//             style: TextStyle(color: black, fontSize: 16),
-//           ),
-//           centerTitle: true,
-//           backgroundColor: marketbg,
-//         ),
-//         body: SingleChildScrollView(
-//           child: Column(
-//             children: [
-//               ListView.builder(
-//                   itemCount: 10,
-//                   itemBuilder: (BuildContext context, int index) {
-//                     return Padding(
-//                       padding: const EdgeInsets.symmetric(
-//                           horizontal: 20, vertical: 10),
-//                       child: Container(
-//                         height: 107,
-//                         width: 400,
-//                         decoration: BoxDecoration(
-//                             color: bluem,
-//                             borderRadius: BorderRadius.circular(10)),
-//                         child: Column(
-//                           mainAxisAlignment: MainAxisAlignment.center,
-//                           children: [
-//                             Padding(
-//                               padding:
-//                                   const EdgeInsets.symmetric(horizontal: 20),
-//                               child: Row(
-//                                 children: [
-//                                   Text(
-//                                     "Name",
-//                                     style: TextStyle(
-//                                         fontSize: 12, color: marketbg),
-//                                   ),
-//                                   SizedBox(
-//                                     width: 40,
-//                                   ),
-//                                   Text(":",
-//                                       style: TextStyle(
-//                                           fontSize: 12, color: marketbg)),
-//                                   SizedBox(
-//                                     width: 20,
-//                                   ),
-//                                   Text(
-//                                     "Fathima ",
-//                                     style: TextStyle(
-//                                         fontSize: 12, color: marketbg),
-//                                   ),
-//                                 ],
-//                               ),
-//                             ),
-//                             SizedBox(
-//                               height: 10,
-//                             ),
-//                             Padding(
-//                               padding:
-//                                   const EdgeInsets.symmetric(horizontal: 20),
-//                               child: Row(
-//                                 children: [
-//                                   Text(
-//                                     "Franchise",
-//                                     style: TextStyle(
-//                                         fontSize: 12, color: marketbg),
-//                                   ),
-//                                   SizedBox(
-//                                     width: 16,
-//                                   ),
-//                                   Text(":",
-//                                       style: TextStyle(
-//                                           fontSize: 12, color: marketbg)),
-//                                   SizedBox(
-//                                     width: 20,
-//                                   ),
-//                                   Text(
-//                                     "Mobile Franchise  ",
-//                                     style: TextStyle(
-//                                         fontSize: 12, color: marketbg),
-//                                   ),
-//                                 ],
-//                               ),
-//                             ),
-//                             SizedBox(
-//                               height: 10,
-//                             ),
-//                             Padding(
-//                               padding:
-//                                   const EdgeInsets.symmetric(horizontal: 20),
-//                               child: Row(
-//                                 children: [
-//                                   Text(
-//                                     "Package",
-//                                     style: TextStyle(
-//                                         fontSize: 12, color: marketbg),
-//                                   ),
-//                                   SizedBox(
-//                                     width: 24,
-//                                   ),
-//                                   Text(":",
-//                                       style: TextStyle(
-//                                           fontSize: 12, color: marketbg)),
-//                                   SizedBox(
-//                                     width: 20,
-//                                   ),
-//                                   Text(
-//                                     "₹1000 ",
-//                                     style: TextStyle(
-//                                         fontSize: 12, color: marketbg),
-//                                   ),
-//                                 ],
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                     );
-//                   },),
-//             ],
-//           ),
-//         ),);
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:master_journey/resources/color.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:master_journey/screens/demateaccount/widget/demataccount.dart';
+
+import '../../services/bank_service.dart';
+import '../../support/logger.dart';
 
 class Dematedetails extends StatefulWidget {
   const Dematedetails({super.key});
@@ -148,6 +14,29 @@ class Dematedetails extends StatefulWidget {
 }
 
 class _DematedetailsState extends State<Dematedetails> {
+  var userid;
+  List<dynamic> demateAccounts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _Dematedetail();
+  }
+
+  Future<void> _Dematedetail() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      userid = prefs.getString('userid');
+      var response = await BankService.Dematedetail();
+      log.i('Profile data show.... $response');
+      setState(() {
+        demateAccounts = response['demateAccounts'] ?? [];
+      });
+    } catch (error) {
+      log.e('Error fetching award data: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,7 +50,7 @@ class _DematedetailsState extends State<Dematedetails> {
       ),
       backgroundColor: marketbg,
       body: ListView.builder(
-        itemCount: 10,
+        itemCount: demateAccounts.length,
         padding: EdgeInsets.symmetric(vertical: 10),
         itemBuilder: (BuildContext context, int index) {
           return Padding(
@@ -180,7 +69,7 @@ class _DematedetailsState extends State<Dematedetails> {
                     child: Row(
                       children: [
                         Text(
-                          "District",
+                          'District',
                           style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
@@ -196,7 +85,7 @@ class _DematedetailsState extends State<Dematedetails> {
                         ),
                         SizedBox(width: 20),
                         Text(
-                          "",
+                          demateAccounts[index]['district'] ?? 'No Title',
                           style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
@@ -227,7 +116,7 @@ class _DematedetailsState extends State<Dematedetails> {
                         ),
                         SizedBox(width: 20),
                         Text(
-                          "",
+                          demateAccounts[index]['name'] ?? '',
                           style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
@@ -258,7 +147,7 @@ class _DematedetailsState extends State<Dematedetails> {
                         ),
                         SizedBox(width: 20),
                         Text(
-                          "",
+                          demateAccounts[index]['demateUserName'] ?? '',
                           style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
@@ -289,7 +178,7 @@ class _DematedetailsState extends State<Dematedetails> {
                         ),
                         SizedBox(width: 20),
                         Text(
-                          "",
+                          demateAccounts[index]['phone'].toString(),
                           style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
@@ -320,7 +209,7 @@ class _DematedetailsState extends State<Dematedetails> {
                         ),
                         SizedBox(width: 20),
                         Text(
-                          "",
+                          demateAccounts[index]['email'] ?? '',
                           style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
@@ -351,7 +240,7 @@ class _DematedetailsState extends State<Dematedetails> {
                         ),
                         SizedBox(width: 20),
                         Text(
-                          "",
+                          demateAccounts[index]['address'] ?? '',
                           style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
@@ -367,19 +256,16 @@ class _DematedetailsState extends State<Dematedetails> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        // isExtended: true,
         child: Icon(
           Icons.add,
           color: bluem,
         ),
         backgroundColor: yellow,
         onPressed: () {
-          setState(() {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const Demataccount()),
-            );
-          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Demataccount()),
+          );
         },
       ),
     );
