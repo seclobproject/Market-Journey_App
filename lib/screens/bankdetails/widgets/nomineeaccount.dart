@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../resources/color.dart';
 import '../../../services/bank_service.dart';
@@ -31,6 +32,12 @@ class _NomineeaccountState extends State<Nomineeaccount> {
   void initState() {
     super.initState();
     _fetchnomineeDetails();
+    ifscCodeController.addListener(() {
+      ifscCodeController.value = ifscCodeController.value.copyWith(
+        text: ifscCodeController.text.toUpperCase(),
+        selection: ifscCodeController.selection,
+      );
+    });
   }
 
   Future<void> _fetchnomineeDetails() async {
@@ -68,7 +75,7 @@ class _NomineeaccountState extends State<Nomineeaccount> {
     } catch (error) {
       log.e('Error fetching bank details: $error');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('No Bank Account Found')),
+        SnackBar(content: Text('Add Nominee Account')),
       );
     } finally {
       setState(() {
@@ -155,6 +162,7 @@ class _NomineeaccountState extends State<Nomineeaccount> {
     required String hintText,
     required TextEditingController controller,
     TextInputType keyboardType = TextInputType.text,
+    List<TextInputFormatter> inputFormatters = const [],
     bool enabled = true,
   }) {
     return Padding(
@@ -183,6 +191,7 @@ class _NomineeaccountState extends State<Nomineeaccount> {
               hintText: hintText,
             ),
             keyboardType: keyboardType,
+            inputFormatters: inputFormatters,
             style: TextStyle(
                 color: black, fontSize: 12, fontWeight: FontWeight.w400),
             enabled: enabled,
@@ -226,6 +235,11 @@ class _NomineeaccountState extends State<Nomineeaccount> {
               label: 'Phone',
               hintText: 'Enter your phone',
               controller: phoneController,
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter
+                    .digitsOnly // Allow only numbers
+              ],
               enabled: _isEditing,
             ),
             _buildTextField(
@@ -238,6 +252,11 @@ class _NomineeaccountState extends State<Nomineeaccount> {
               label: 'Adhaar Number',
               hintText: 'Enter your bank name',
               controller: aadhaarNumController,
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter
+                    .digitsOnly // Allow only numbers
+              ],
               enabled: _isEditing,
             ),
             _buildTextField(
@@ -257,12 +276,22 @@ class _NomineeaccountState extends State<Nomineeaccount> {
               hintText: 'Enter your account number',
               controller: accountNumController,
               keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter
+                    .digitsOnly // Allow only numbers
+              ],
               enabled: _isEditing,
             ),
             _buildTextField(
               label: 'IFSC Code',
               hintText: 'Enter your IFSC code',
               controller: ifscCodeController,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp(r'[A-Z0-9]')),
+                LengthLimitingTextInputFormatter(
+                    11), // IFSC code is typically 11 characters
+              ],
               enabled: _isEditing,
             ),
             SizedBox(height: 30),

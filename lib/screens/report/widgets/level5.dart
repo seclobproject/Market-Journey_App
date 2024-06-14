@@ -62,80 +62,101 @@ class _LevelFiveReportState extends State<LevelFiveReport> {
     if (Bonus.isEmpty) {
       return const Center(child: Text('No data available'));
     }
-
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          const SizedBox(height: 5),
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Container(
-                width: MediaQuery.of(context).size.width - 16, // Subtracting padding
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: DataTable(
-                    columns: const <DataColumn>[
-                      DataColumn(
-                          label: Text('Sino',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500
-                              )
-                          )
+          SizedBox(height: 5),
+          Container(
+            height: 35,
+            width: double.infinity,
+            decoration: BoxDecoration(color: whitegray),
+            child: Center(
+              child: Table(
+                children: const [
+                  TableRow(
+                    children: [
+                      Center(
+                        child: Text("Sino",
+                            style: TextStyle(
+                                color: black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500)),
                       ),
-                      DataColumn(
-                          label: Text('Date',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500
-                              )
-                          )
+                      Center(
+                        child: Text("Date",
+                            style: TextStyle(
+                                color: black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500)),
                       ),
-                      DataColumn(
-                          label: Text('BonusAmount',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500
-                              )
-                          )
+
+
+
+                      Center(
+                        child: Text(" Bonus Amount",
+                            style: TextStyle(
+                                color: black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500)),
                       ),
                     ],
-                    rows: Bonus.asMap().entries.map<DataRow>((entry) {
-                      int index = entry.key;
-                      var income = entry.value;
-                      return DataRow(
-                        cells: <DataCell>[
-                          DataCell(Text(
-                              '${index + 1}',
-                              style: TextStyle(color: bluem, fontSize: 12)
-                          )),
-                          DataCell(Text(
-                              _formatDate(income['date'] ?? "No Date"),
-                              style: TextStyle(
-                                  color: bluem,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600
-                              )
-                          )),
-                          DataCell(Text(
-                              income['Bonus']?.toString() ?? "No Data",
-                              style: TextStyle(
-                                  color: bluem,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600
-                              )
-                          )),
-                        ],
-                      );
-                    }).toList(),
                   ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.grey.shade300,
+                  width: 1,
                 ),
               ),
+            ),
+            child: Table(
+              children: Bonus.map<TableRow>((income) {
+                return TableRow(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Center(
+                        child: Text(
+                          '${Bonus.indexOf(income) + 1}',
+                          style: TextStyle(
+                              color: bluem,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        _formatDate(income['createdAt'] ?? "No Date"),
+                        style: TextStyle(
+                            color: bluem,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        income['bonus']?.toString() ?? "No Data",
+                        style: TextStyle(
+                            color: bluem,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ),
+
+
+                  ],
+                );
+              }).toList(),
             ),
           ),
         ],

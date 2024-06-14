@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:master_journey/services/bank_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../resources/color.dart';
@@ -27,6 +28,12 @@ class _BankaccountState extends State<Bankaccount> {
   void initState() {
     super.initState();
     _fetchBankDetails();
+    ifscCodeController.addListener(() {
+      ifscCodeController.value = ifscCodeController.value.copyWith(
+        text: ifscCodeController.text.toUpperCase(),
+        selection: ifscCodeController.selection,
+      );
+    });
   }
 
   Future<void> _fetchBankDetails() async {
@@ -54,14 +61,13 @@ class _BankaccountState extends State<Bankaccount> {
       } else {
         log.e('Fetch bank details failed: ${response['msg']}');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text('Fetch bank details failed')),
+          SnackBar(content: Text('Fetch bank details failed')),
         );
       }
     } catch (error) {
       log.e('Error fetching bank details: $error');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('No Bank Account Found')),
+        SnackBar(content: Text('Add Bank Account')),
       );
     } finally {
       setState(() {
@@ -130,6 +136,7 @@ class _BankaccountState extends State<Bankaccount> {
     required String hintText,
     required TextEditingController controller,
     TextInputType keyboardType = TextInputType.text,
+    List<TextInputFormatter> inputFormatters = const [],
     bool enabled = true,
   }) {
     return Padding(
@@ -158,6 +165,7 @@ class _BankaccountState extends State<Bankaccount> {
               hintText: hintText,
             ),
             keyboardType: keyboardType,
+            inputFormatters: inputFormatters,
             style: TextStyle(
                 color: black, fontSize: 12, fontWeight: FontWeight.w400),
             enabled: enabled,
@@ -204,12 +212,22 @@ class _BankaccountState extends State<Bankaccount> {
               hintText: 'Enter your account number',
               controller: accountNumController,
               keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter
+                    .digitsOnly // Allow only numbers
+              ],
               enabled: _isEditing,
             ),
             _buildTextField(
               label: 'IFSC Code',
               hintText: 'Enter your IFSC code',
               controller: ifscCodeController,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp(r'[A-Z0-9]')),
+                LengthLimitingTextInputFormatter(
+                    11), // IFSC code is typically 11 characters
+              ],
               enabled: _isEditing,
             ),
             SizedBox(height: 30),
@@ -217,7 +235,8 @@ class _BankaccountState extends State<Bankaccount> {
                 ? Align(
               alignment: Alignment.centerRight,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 20),
                 child: GestureDetector(
                   onTap: _addBank,
                   child: Container(
@@ -242,7 +261,8 @@ class _BankaccountState extends State<Bankaccount> {
                 : Align(
               alignment: Alignment.centerRight,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 20),
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -280,9 +300,10 @@ class _BankaccountState extends State<Bankaccount> {
               _hasBankDetails = true;
             });
           },
-          child: Text('Add Bank Details',style: TextStyle(
-            color: marketbg
-          ),),
+          child: Text(
+            'Add Bank Details',
+            style: TextStyle(color: marketbg),
+          ),
           style: ElevatedButton.styleFrom(
             backgroundColor: yellow,
           ),

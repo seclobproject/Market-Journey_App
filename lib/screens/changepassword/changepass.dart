@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-
+import 'package:master_journey/services/home_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../resources/color.dart';
+import '../../support/logger.dart';
 
 class Changepassword extends StatefulWidget {
   const Changepassword({super.key});
@@ -10,13 +12,69 @@ class Changepassword extends StatefulWidget {
 }
 
 class _ChangepasswordState extends State<Changepassword> {
+  TextEditingController newTextController = TextEditingController();
+  TextEditingController chnageTextController = TextEditingController();
   bool _obscurenewText = true;
   bool _obscurechangeText = true;
+  bool _isLoading = false;
 
-  void _togglenewVisibility() {
+  var userId;
+
+  Future<void> _changePass() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userId = prefs.getString('userid');
     setState(() {
-      _obscurenewText = !_obscurenewText;
+      _isLoading = true;
     });
+
+    if (newTextController.text.isEmpty || chnageTextController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('All fields are required')),
+      );
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
+    if (newTextController.text != chnageTextController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Passwords do not match')),
+      );
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
+    var reqData = {
+      'password': chnageTextController.text,
+    };
+    log.i('Request Data: $reqData');
+    try {
+      var response = await homeservice.ChangePass(reqData);
+      if (response['sts'] == '01') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Password Changed successfully')),
+        );
+        newTextController.clear();
+        chnageTextController.clear();
+      } else {
+        log.e('Add Demat failed: ${response['msg']}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Password Change failed: ${response['msg']}')),
+        );
+      }
+    } catch (error) {
+      log.e('Error Change Password: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error Change Password ')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   void _togglechangeVisibility() {
@@ -54,22 +112,14 @@ class _ChangepasswordState extends State<Changepassword> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: TextField(
-                  obscureText: _obscurenewText,
+                  controller: newTextController,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.lock_open),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurenewText
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                      ),
-                      onPressed: _togglenewVisibility,
-                    ),
                     hintText: 'Create New Password',
                     hintStyle: TextStyle(
                         color: marketbgblue, fontWeight: FontWeight.w400),
                     contentPadding:
-                        EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       borderSide: BorderSide(color: yellow, width: 2),
@@ -79,11 +129,6 @@ class _ChangepasswordState extends State<Changepassword> {
                       borderSide: BorderSide(color: yellow),
                     ),
                   ),
-                  onChanged: (text) {
-                    setState(() {
-                      // email = text;
-                    });
-                  },
                   style: TextStyle(
                       color: black, fontSize: 12, fontWeight: FontWeight.w400),
                 ),
@@ -94,6 +139,7 @@ class _ChangepasswordState extends State<Changepassword> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: TextField(
+                  controller: chnageTextController,
                   obscureText: _obscurechangeText,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.lock_outline),
@@ -109,7 +155,7 @@ class _ChangepasswordState extends State<Changepassword> {
                     hintStyle: TextStyle(
                         color: marketbgblue, fontWeight: FontWeight.w400),
                     contentPadding:
-                        EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       borderSide: BorderSide(color: yellow, width: 2),
@@ -119,11 +165,6 @@ class _ChangepasswordState extends State<Changepassword> {
                       borderSide: BorderSide(color: yellow),
                     ),
                   ),
-                  onChanged: (text) {
-                    setState(() {
-                      // email = text;
-                    });
-                  },
                   style: TextStyle(
                       color: black, fontSize: 12, fontWeight: FontWeight.w400),
                 ),
@@ -131,25 +172,27 @@ class _ChangepasswordState extends State<Changepassword> {
               SizedBox(
                 height: 30,
               ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      height: 40,
-                      width: 400,
-                      decoration: BoxDecoration(
-                          color: yellow,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Center(
-                          child: Text(
-                        'Confirm',
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w500),
-                      )),
-                    ),
+              _isLoading
+                  ? CircularProgressIndicator(
+                strokeWidth: 6.0,
+                valueColor: AlwaysStoppedAnimation(yellow),
+              )
+                  : ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: yellow,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding:
+                  EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                ),
+                onPressed: _changePass,
+                child: Text(
+                  'Submit',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),

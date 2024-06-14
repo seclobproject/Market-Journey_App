@@ -21,7 +21,11 @@ class homeservice {
     var response = await dio.get('$baseURL/api/user/user-subscription-report');
     return response.data;
   }
-
+  static Future viewRenewalpackage() async {
+    var dio = await DioHelper.getInstance();
+    var response = await dio.get('$baseURL/api/user/view-renewal-packages');
+    return response.data;
+  }
   static Future viewleaders() async {
     var dio = await DioHelper.getInstance();
     var response = await dio.get('$baseURL/api/user/get-pool-count-amount');
@@ -55,6 +59,12 @@ class homeservice {
     } catch (e) {
       rethrow;
     }
+  }
+  static Future ChangePass(Map<String, String> reqData) async {
+    var dio = await DioHelper.getInstance();
+    var response = await dio.post('$baseURL/api/user/change-password');
+    print(response);
+    return response.data;
   }
 }
 

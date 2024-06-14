@@ -44,10 +44,7 @@ class _memberspageState extends State<memberspage> {
           setState(() {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => const AddMemberPage(
-                        id: 'id',name: 'name',
-                      )),
+              MaterialPageRoute(builder: (context) => const AddMemberPage()),
             );
           });
         },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../resources/color.dart';
@@ -40,6 +41,19 @@ class _DemataccountState extends State<Demataccount> {
   String? panchayathDropdown;
   List<String> panchayathVal = [];
 
+  Future<bool> _isFieldUnique(String fieldName, String fieldValue) async {
+    try {
+      bool isUnique = await BankService.checkFieldUnique(fieldName, fieldValue);
+      if (!isUnique) {
+        log.e('Error checking $fieldName uniqueness: Value already exists');
+      }
+      return isUnique;
+    } catch (error) {
+      log.e('Exception while checking $fieldName uniqueness: $error');
+      return false;
+    }
+  }
+
   Future<void> _addDemate() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userId = prefs.getString('userid');
@@ -61,9 +75,47 @@ class _DemataccountState extends State<Demataccount> {
       return;
     }
 
+    // Validate email format
+    String emailPattern = r'^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$';
+    RegExp regExp = RegExp(emailPattern);
+    if (!regExp.hasMatch(emailController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Invalid email format')),
+      );
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
+    // Check for email, and username uniqueness
+    bool isEmailUnique = await _isFieldUnique('email', emailController.text);
+    bool isUsernameUnique =
+    await _isFieldUnique('demateUserName', userdemateController.text);
+
+    if (!isEmailUnique) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Email is already in use')),
+      );
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
+    if (!isUsernameUnique) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Username for Demat Account is already in use')),
+      );
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
     var reqData = {
       'name': nameController.text,
-      'phone': phoneController.text,
+      'phone': int.tryParse(phoneController.text) ?? 0,
       'address': addressController.text,
       'email': emailController.text,
       'demateUserName': userdemateController.text,
@@ -293,6 +345,11 @@ class _DemataccountState extends State<Demataccount> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextField(
+                keyboardType: TextInputType.phone,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter
+                      .digitsOnly // Allow only numbers
+                ],
                 controller: phoneController,
                 decoration: InputDecoration(
                   contentPadding:

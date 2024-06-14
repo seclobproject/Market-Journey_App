@@ -71,93 +71,137 @@ class _LevelFourReportState extends State<LevelFourReport> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
-          children: [
-            SizedBox(height: 5),
-            Expanded(
-              child: SingleChildScrollView(
-
-
-
-                scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-
-                child: DataTable(
-                  columns: const <DataColumn>[
-                    DataColumn(
-                        label: Text('Sino',
+        children: [
+          SizedBox(height: 5),
+          Container(
+            height: 35,
+            width: double.infinity,
+            decoration: BoxDecoration(color: whitegray),
+            child: Center(
+              child: Table(
+                children: const [
+                  TableRow(
+                    children: [
+                      Center(
+                        child: Text("Sino",
                             style: TextStyle(
                                 color: black,
                                 fontSize: 10,
-                                fontWeight: FontWeight.w500))),
-                    DataColumn(
-                        label: Text('Date',
+                                fontWeight: FontWeight.w500)),
+                      ),
+                      Center(
+                        child: Text("Date",
                             style: TextStyle(
                                 color: black,
                                 fontSize: 10,
-                                fontWeight: FontWeight.w500))),
-
-
-                    DataColumn(
-                        label: Text('Designation',style: TextStyle(
-                            color: black,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500))),
-
-                    DataColumn(
-                        label: Text('AmountFrom',
+                                fontWeight: FontWeight.w500)),
+                      ),
+                      Center(
+                        child: Text("Designation",
                             style: TextStyle(
                                 color: black,
                                 fontSize: 10,
-                                fontWeight: FontWeight.w500))),
-                    DataColumn(
-                        label: Text('Franchise',
-
+                                fontWeight: FontWeight.w500)),
+                      ),
+                      Center(
+                        child: Text("Franchise",
                             style: TextStyle(
                                 color: black,
                                 fontSize: 10,
-                                fontWeight: FontWeight.w500))),
-                    DataColumn(
-                        label: Text('Percentage',
+                                fontWeight: FontWeight.w500)),
+                      ),
+                      Center(
+                        child: Text("Percentage",
                             style: TextStyle(
                                 color: black,
                                 fontSize: 10,
-                                fontWeight: FontWeight.w500))),
-                    DataColumn(
-                        label: Text('AmountCredited',
+                                fontWeight: FontWeight.w500)),
+                      ),
+                      Center(
+                        child: Text("Amount Credited",
                             style: TextStyle(
                                 color: black,
                                 fontSize: 10,
-                                fontWeight: FontWeight.w500))),
-                  ],
-
-                  rows: Autopool.map<DataRow>((income) {
-                    return DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text('${Autopool.indexOf(income) + 1}',
-                            style: TextStyle(color: bluem, fontSize: 12))),
-                        DataCell(Text(_formatDate(income['date'] ?? "No Date"))),
-
-
-
-
-                        DataCell(Text(income['Designation']?.toString() ?? "No Data")),
-
-
-                        DataCell(Text(income['percentageCredited']?.toString() ?? "No Data",
-                            style: TextStyle(color: bluem, fontSize: 12))),
-                        DataCell(Text(income['amountCredited']?.toString() ?? "No Data",
-                            style: TextStyle(color: bluem, fontSize: 12))),
-                      ],
-                    );
-                  }).toList(),
-
-
-
+                                fontWeight: FontWeight.w500)),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.grey.shade300,
+                  width: 1,
                 ),
               ),
-
             ),
-          ]),
-    );
+            child: Table(
+              children: Autopool.map<TableRow>((income) {
+                return TableRow(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Center(
+                        child: Text(
+                          '${Autopool.indexOf(income) + 1}',
+                          style: TextStyle(
+                              color: bluem,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        _formatDate(income['createdAt'] ?? "No Date"),
+                        style: TextStyle(
+                            color: bluem,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        income['designation']?.toString() ?? "No Data",
+                        style: TextStyle(
+                            color: bluem,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ),
 
+                    Center(
+                      child: Text(
+                        income['percentageCredited']?.toString() ?? "No Data",
+                        style: TextStyle(
+                            color: bluem,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        income['amountCredited']?.toString() ?? "No Data",
+                        style: TextStyle(
+                            color: bluem,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                  ],
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

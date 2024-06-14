@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:master_journey/screens/home/widget/renewal_package.dart';
 import 'package:master_journey/services/home_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../resources/color.dart';
@@ -117,17 +119,25 @@ class _SubscriptionState extends State<Subscription> {
                               ),
                             ),
                             SizedBox(height: 10),
-                            Container(
-                              height: 30,
-                              width: 160,
-                              decoration: BoxDecoration(
-                                color: yellow,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Subscription Package',
-                                  style: TextStyle(fontSize: 10),
+                            GestureDetector(
+                              onTap: (){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => Renewalpackage()),
+                                );
+                              },
+                              child: Container(
+                                height: 30,
+                                width: 160,
+                                decoration: BoxDecoration(
+                                  color: yellow,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Subscription Package',
+                                    style: TextStyle(fontSize: 10),
+                                  ),
                                 ),
                               ),
                             ),

@@ -170,77 +170,81 @@ class _homeState extends State<home> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-        backgroundColor: marketbg,
-        key: _scaffoldKey,
-        drawerEnableOpenDragGesture: false,
-        endDrawerEnableOpenDragGesture: false,
-        drawer: appdrawer(),
-        body: _isLoading
-            ? Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 6.0,
-            valueColor: AlwaysStoppedAnimation(yellow),
-          ),
-        )
-            : SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+    return SafeArea(
+       child: Scaffold(
+          backgroundColor: marketbg,
+          key: _scaffoldKey,
+          drawerEnableOpenDragGesture: false,
+          endDrawerEnableOpenDragGesture: false,
+          drawer: appdrawer(),
+          body: _isLoading
+              ? Center(
+            child: CircularProgressIndicator(
+              strokeWidth: 6.0,
+              valueColor: AlwaysStoppedAnimation(yellow),
+            ),
+          )
+              : SingleChildScrollView(
             child: Column(
               children: [
                 SizedBox(
-                  height: screenHeight * 0.06,
-                ),
-                GestureDetector(
-                  // onTap: () {
-                  //   _scaffoldKey.currentState?.openDrawer();
-                  //   // Navigator.of(context).push(MaterialPageRoute(builder: (context) => myHome()));
-                  // },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          _scaffoldKey.currentState?.openDrawer();
-                          // Navigator.of(context).push(MaterialPageRoute(
-                          //     builder: (context) => home()));
-                        },
-                        child: SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: SvgPicture.asset(
-                            'assets/svg/drawrwhite.svg',
-                            color: black,
-                            width: screenWidth * 0.03,
-                            height: screenHeight * 0.03,
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                const Notificationscreen()),
-                          );
-                        },
-                        child: SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: SvgPicture.asset(
-                            'assets/svg/notifications_unread.svg',
-                            width: screenWidth * 0.04,
-                            height: screenHeight * 0.04,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  height: screenHeight * 0.02,
                 ),
                 Padding(
                   padding:
-                  EdgeInsets.symmetric(vertical: screenHeight * 0.03),
+                  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  child: GestureDetector(
+                    // onTap: () {
+                    //   _scaffoldKey.currentState?.openDrawer();
+                    //   // Navigator.of(context).push(MaterialPageRoute(builder: (context) => myHome()));
+                    // },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _scaffoldKey.currentState?.openDrawer();
+                            // Navigator.of(context).push(MaterialPageRoute(
+                            //     builder: (context) => home()));
+                          },
+                          child: SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: SvgPicture.asset(
+                              'assets/svg/drawrwhite.svg',
+                              color: black,
+                              width: screenWidth * 0.03,
+                              height: screenHeight * 0.03,
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                  const Notificationscreen()),
+                            );
+                          },
+                          child: SizedBox(
+                            height: 30,
+                            width: 30,
+                            child: SvgPicture.asset(
+                              'assets/svg/notifications_unread.svg',
+                              width: screenWidth * 0.04,
+                              height: screenHeight * 0.04,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: screenHeight * 0.03,
+                      horizontal: screenWidth * 0.06),
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Column(
@@ -264,331 +268,336 @@ class _homeState extends State<home> {
                     ),
                   ),
                 ),
-                Container(
-                  height: screenHeight * 0.05,
-                  width: screenWidth * 0.9,
-                  decoration: BoxDecoration(
-                    color: appBlueColor,
-                    borderRadius:
-                    BorderRadius.circular(screenWidth * 0.025),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/svg/verified.svg',
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text("Verified your profile"),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: screenHeight * 0.03,
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: screenWidth * 0.02,
-                      child: Divider(
-                        color: black,
-                      ),
-                    ),
-                    Text(
-                      " LATEST NEWS ",
-                      style: TextStyle(
-                          fontSize: screenWidth * 0.04,
-                          fontWeight:
-                          FontWeight.w600), // Adjust font size
-                    ),
-                    SizedBox(
-                      width: screenWidth * 0.01,
-                    ),
-                    Expanded(
-                      child: Divider(
-                        color: black,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: screenHeight * 0.01,
-                ),
-                GestureDetector(
-
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              Latestnews()), // Ensure LatestNews is defined
-                    );
-                  },
-
+                Padding(
+                  padding:
+                  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
                   child: Container(
-                    height: 20,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      controller: _scrollController,
-                      itemCount: newsData['newsData'].length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      Latestnews()), // Ensure LatestNews is defined
-                            );
-                          },
-                          child: Text(
-                            newsData['newsData'][index]['title'] ??
-                                'No Title',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color:
-                              marketbgblue, // Replace with marketbgblue if defined
-                            ),
-                          ),
-                        );
-                      },
+                    height: screenHeight * 0.05,
+                    decoration: BoxDecoration(
+                      color: appBlueColor,
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                  ),
-                ),
-                SizedBox(
-                  height: screenHeight * 0.03,
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 9, right: 6),
-                  width: double.infinity,
-                  height: 180,
-                  decoration: BoxDecoration(
-                    color: bluem,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              profiledata['daysUntilRenewal'].toString(),
-                              style: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.w700,
-                                  color: marketbg),
-                            ),
-                            SizedBox(
-                              width: 7,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: Text(
-                                "Days left",
-                                style: TextStyle(
-                                    fontSize: 17, color: marketbg),
-                              ),
-                            ),
-                          ],
+                        SvgPicture.asset(
+                          'assets/svg/verified.svg',
                         ),
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "Attention! Your subscription plan is set to renew in just  ${profiledata['daysUntilRenewal']} days. Renew to continue enjoying all the benefits of your subscription!",
-                                style: TextStyle(
-                                    color: marketbg,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ),
-                            Image.asset(
-                              'assets/logo/freemium.png',
-                              height: 83,
-                              width: 83,
-                            ),
-                          ],
+                        SizedBox(
+                          width: 8,
                         ),
-                        Align(
-                          alignment: Alignment.bottomLeft,
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                    const Subscription()),
-                              );
-                            },
-                            child: Container(
-                              height: 26,
-                              width: 52,
-                              decoration: BoxDecoration(
-                                  color: yellow,
-                                  borderRadius:
-                                  BorderRadius.circular(10)),
-                              child: Center(
-                                  child: Text(
-                                    'Click',
-                                    style: TextStyle(fontSize: 10),
-                                  )),
-                            ),
-                          ),
-                        ),
+                        Text("Verified your profile"),
                       ],
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: screenHeight * 0.03,
+                  height: screenHeight * 0.02,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      height: screenHeight * 0.27,
-                      width: screenWidth * 0.38,
-                      decoration: BoxDecoration(
-                        color: bluem,
-                        borderRadius:
-                        BorderRadius.circular(screenWidth * 0.025),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(screenWidth * 0.05),
-                        child: Column(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Image.asset(
-                              'assets/logo/walletimg1.png',
-                              height: screenHeight * 0.08,
-                              width: screenHeight * 0.08,
-                            ),
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                "My balance",
-                                style: TextStyle(
-                                  color: marketbg,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                "₹${profiledata['walletAmount']}",
-                                style: TextStyle(
-                                    color: marketbg,
-                                    fontSize: screenHeight * 0.02,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
+                Padding(
+                  padding:
+                  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: screenWidth * 0.02,
+                        child: Divider(
+                          color: black,
                         ),
                       ),
-                    ),
-                    Container(
-                      height: screenHeight * 0.27,
-                      width: screenWidth * 0.44,
-                      decoration: BoxDecoration(
-                        color: bluem,
-                        borderRadius:
-                        BorderRadius.circular(screenWidth * 0.025),
+                      Text(
+                        " LATEST NEWS ",
+                        style: TextStyle(
+                            fontSize: screenWidth * 0.04,
+                            fontWeight:
+                            FontWeight.w600), // Adjust font size
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.all(screenWidth * 0.025),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              'assets/logo/refferpage.png',
-                              height: screenHeight *
-                                  0.1, // Adjusted for responsiveness
-                            ),
-                            Flexible(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: screenWidth * 0.03),
+                      SizedBox(
+                        width: screenWidth * 0.01,
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: screenHeight * 0.02,
+                ),
+                Container(
+                  height: 20,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    controller: _scrollController,
+                    itemCount: newsData['newsData'].length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    Latestnews()), // Ensure LatestNews is defined
+                          );
+                        },
+                        child: Text(
+                          "                            ${newsData['newsData'][index]['title'] ?? 'No Title'}                            ",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color:
+                            marketbgblue, // Replace with marketbgblue if defined
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: screenHeight * 0.02,
+                ),
+                Padding(
+                  padding:
+                  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  child: Container(
+                    padding: EdgeInsets.only(left: 9, right: 6),
+                    width: double.infinity,
+                    height: 180,
+                    decoration: BoxDecoration(
+                      color: bluem,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                profiledata['daysUntilRenewal'].toString(),
+                                style: TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w700,
+                                    color: marketbg),
+                              ),
+                              SizedBox(
+                                width: 7,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
                                 child: Text(
-                                  "Sharing is rewarding! Refer your friends and Life Time Income",
+                                  "Days left",
                                   style: TextStyle(
-                                    fontSize: screenHeight * 0.013,
-                                    fontWeight: FontWeight.w400,
-                                    color: marketbg,
-                                  ),
-                                  textAlign: TextAlign.left,
+                                      fontSize: 17, color: marketbg),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: screenWidth * 0.03,
-                                  top: screenHeight * 0.01),
-                              child: Align(
-                                alignment: Alignment.topLeft,
-                                child: Container(
-                                  height: screenHeight *
-                                      0.05, // Adjusted for responsiveness
-                                  width: screenWidth *
-                                      0.25, // Adjusted for responsiveness
-                                  decoration: BoxDecoration(
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "Attention! Your subscription plan is set to renew in just  ${profiledata['daysUntilRenewal']} days. Renew to continue enjoying all the benefits of your subscription!",
+                                  style: TextStyle(
+                                      color: marketbg,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ),
+                              Image.asset(
+                                'assets/logo/freemium.png',
+                                height: 83,
+                                width: 83,
+                              ),
+                            ],
+                          ),
+                          Align(
+                            alignment: Alignment.bottomLeft,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                      const Subscription()),
+                                );
+                              },
+                              child: Container(
+                                height: 26,
+                                width: 52,
+                                decoration: BoxDecoration(
                                     color: yellow,
-                                    borderRadius: BorderRadius.circular(
-                                        screenWidth * 0.01),
-                                  ),
-                                  child: Center(
+                                    borderRadius:
+                                    BorderRadius.circular(10)),
+                                child: Center(
                                     child: Text(
-                                      "Refer Now",
-                                      style: TextStyle(
-                                        fontSize: screenWidth * 0.03,
+                                      'Click',
+                                      style: TextStyle(fontSize: 10),
+                                    )),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: screenHeight * 0.02,
+                ),
+                Padding(
+                  padding:
+                  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        height: screenHeight * 0.27,
+                        width: screenWidth * 0.40,
+                        decoration: BoxDecoration(
+                          color: bluem,
+                          borderRadius:
+                          BorderRadius.circular(screenWidth * 0.025),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(screenWidth * 0.05),
+                          child: Column(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Image.asset(
+                                'assets/logo/walletimg1.png',
+                                height: screenHeight * 0.08,
+                                width: screenHeight * 0.08,
+                              ),
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  "My balance",
+                                  style: TextStyle(
+                                    color: marketbg,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  "₹${profiledata['walletAmount']}",
+                                  style: TextStyle(
+                                      color: marketbg,
+                                      fontSize: screenHeight * 0.02,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: screenHeight * 0.27,
+                        width: screenWidth * 0.45,
+                        decoration: BoxDecoration(
+                          color: bluem,
+                          borderRadius:
+                          BorderRadius.circular(screenWidth * 0.025),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(screenWidth * 0.025),
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                'assets/logo/refferpage.png',
+                                height: screenHeight *
+                                    0.1, // Adjusted for responsiveness
+                              ),
+                              Flexible(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: screenWidth * 0.03),
+                                  child: Text(
+                                    "Sharing is rewarding! Refer your friends and Life Time Income",
+                                    style: TextStyle(
+                                      fontSize: screenHeight * 0.013,
+                                      fontWeight: FontWeight.w400,
+                                      color: marketbg,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: screenWidth * 0.03,
+                                    top: screenHeight * 0.01),
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Container(
+                                    height: screenHeight *
+                                        0.05, // Adjusted for responsiveness
+                                    width: screenWidth *
+                                        0.25, // Adjusted for responsiveness
+                                    decoration: BoxDecoration(
+                                      color: yellow,
+                                      borderRadius: BorderRadius.circular(
+                                          screenWidth * 0.01),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Refer Now",
+                                        style: TextStyle(
+                                          fontSize: screenWidth * 0.03,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: screenHeight * 0.02,
                 ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: screenWidth * 0.02,
-                      child: Divider(
-                        color: black,
+                Padding(
+                  padding:
+                  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: screenWidth * 0.02,
+                        child: Divider(
+                          color: black,
+                        ),
                       ),
-                    ),
-                    Text(
-                      " Award & Rewards ",
-                      style: TextStyle(
-                          fontSize: screenWidth * 0.04,
-                          fontWeight:
-                          FontWeight.w600), // Adjust font size
-                    ),
-                    SizedBox(
-                      width: screenWidth * 0.01,
-                    ),
-                    Expanded(
-                      child: Divider(
-                        color: black,
+                      Text(
+                        " Award Rewards ",
+                        style: TextStyle(
+                            fontSize: screenWidth * 0.04,
+                            fontWeight:
+                            FontWeight.w600), // Adjust font size
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        width: screenWidth * 0.01,
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: black,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: screenHeight * 0.02,
                 ),
                 Container(
                   height: 135,
@@ -613,8 +622,7 @@ class _homeState extends State<home> {
                                 horizontal: screenWidth * 0.025,
                               ),
                               child: Column(
-                                mainAxisAlignment:
-                                MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   ClipOval(
                                     child: Container(
@@ -650,34 +658,38 @@ class _homeState extends State<home> {
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: screenHeight * 0.02,
                 ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: screenWidth * 0.02,
-                      child: Divider(
-                        color: black,
+                Padding(
+                  padding:
+                  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: screenWidth * 0.02,
+                        child: Divider(
+                          color: black,
+                        ),
                       ),
-                    ),
-                    Text(
-                      " Leader Boards ",
-                      style: TextStyle(
-                          fontSize: screenWidth * 0.04,
-                          fontWeight:
-                          FontWeight.w600), // Adjust font size
-                    ),
-                    SizedBox(
-                      width: screenWidth * 0.01,
-                    ),
-                    Expanded(
-                      child: Divider(
-                        color: black,
+                      Text(
+                        " Leader Boards ",
+                        style: TextStyle(
+                            fontSize: screenWidth * 0.04,
+                            fontWeight:
+                            FontWeight.w600), // Adjust font size
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        width: screenWidth * 0.01,
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: black,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: screenHeight * 0.02),
                 SizedBox(
                   height: 100,
                   child: ListView.builder(
@@ -700,7 +712,7 @@ class _homeState extends State<home> {
                           : 'Default Title';
 
                       return Padding(
-                        padding: const EdgeInsets.only(right: 20),
+                        padding: const EdgeInsets.only(left: 20),
                         child: Container(
                           width: 200,
                           height: 88,
@@ -746,8 +758,7 @@ class _homeState extends State<home> {
                                             width: 40,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(
-                                                  4),
+                                              BorderRadius.circular(4),
                                               color: yellow1,
                                             ),
                                             child: Center(
@@ -783,8 +794,7 @@ class _homeState extends State<home> {
                                             width: 40,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(
-                                                  4),
+                                              BorderRadius.circular(4),
                                               color: yellow1,
                                             ),
                                             child: Center(
@@ -814,34 +824,38 @@ class _homeState extends State<home> {
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: screenHeight * 0.02,
                 ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: screenWidth * 0.02,
-                      child: Divider(
-                        color: black,
+                Padding(
+                  padding:
+                  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: screenWidth * 0.02,
+                        child: Divider(
+                          color: black,
+                        ),
                       ),
-                    ),
-                    Text(
-                      " Distributed Leader Boards ",
-                      style: TextStyle(
-                          fontSize: screenWidth * 0.04,
-                          fontWeight:
-                          FontWeight.w600), // Adjust font size
-                    ),
-                    SizedBox(
-                      width: screenWidth * 0.01,
-                    ),
-                    Expanded(
-                      child: Divider(
-                        color: black,
+                      Text(
+                        " Distributed Leader Boards ",
+                        style: TextStyle(
+                            fontSize: screenWidth * 0.04,
+                            fontWeight:
+                            FontWeight.w600), // Adjust font size
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        width: screenWidth * 0.01,
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: black,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: screenHeight * 0.02),
                 SizedBox(
                   height: 100,
                   child: ListView.builder(
@@ -864,7 +878,7 @@ class _homeState extends State<home> {
                           : 'Default Title';
 
                       return Padding(
-                        padding: const EdgeInsets.only(right: 20),
+                        padding: const EdgeInsets.only(left: 20),
                         child: Container(
                           width: 200,
                           height: 88,
@@ -910,8 +924,7 @@ class _homeState extends State<home> {
                                             width: 40,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(
-                                                  4),
+                                              BorderRadius.circular(4),
                                               color: yellow1,
                                             ),
                                             child: Center(
@@ -947,8 +960,7 @@ class _homeState extends State<home> {
                                             width: 40,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(
-                                                  4),
+                                              BorderRadius.circular(4),
                                               color: yellow1,
                                             ),
                                             child: Center(
@@ -978,109 +990,121 @@ class _homeState extends State<home> {
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: screenHeight * 0.04,
                 ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: screenWidth * 0.02,
-                      child: Divider(
-                        color: black,
+                Padding(
+                  padding:
+                  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: screenWidth * 0.02,
+                        child: Divider(
+                          color: black,
+                        ),
                       ),
-                    ),
-                    Text(
-                      " FLASH FEED ",
-                      style: TextStyle(
-                          fontSize: screenWidth * 0.04,
-                          fontWeight:
-                          FontWeight.w600), // Adjust font size
-                    ),
-                    SizedBox(
-                      width: screenWidth * 0.01,
-                    ),
-                    Expanded(
-                      child: Divider(
-                        color: black,
+                      Text(
+                        " FLASH FEED ",
+                        style: TextStyle(
+                            fontSize: screenWidth * 0.04,
+                            fontWeight:
+                            FontWeight.w600), // Adjust font size
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        width: screenWidth * 0.01,
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: black,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 15),
+                SizedBox(
+                  height: screenHeight * 0.02,
+                ),
                 SizedBox(
                   height:
-                  120, // Adjust height as needed, or consider removing for flexibility
+                  180, // Adjust height as needed, or consider removing for flexibility
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount:
-                    homeImageData['homeImageData']?.length ?? 0,
+                    itemCount: homeImageData['homeImageData']?.length ?? 0,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
-                        padding: const EdgeInsets.only(right: 20),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                  const Flashfeed()),
-                            );
-                          },
-                          child: ClipRRect(
-                            // Clip content that overflows
-                            borderRadius: BorderRadius.circular(10),
-                            child: SizedBox(
-                              // Consider removing fixed height for flexibility
-                              width: 122, // Adjust width as needed
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    height: 81,
-                                    width: 122,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[200],
-                                      borderRadius:
-                                      BorderRadius.circular(10),
-                                    ),
-                                    child: Image.network(
-                                      'https://admin.marketjourney.in/uploads/${homeImageData['homeImageData'][index]['homeImage']}',
-                                      fit: BoxFit.cover,
-                                      errorBuilder:
-                                          (context, error, stackTrace) {
-                                        return Icon(Icons.error,
-                                            color: Colors.red);
-                                      },
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Container(
-                                      height: 20,
-                                      width: 35,
+                        padding: EdgeInsets.only(left: screenWidth * 0.05),
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                      const Flashfeed()),
+                                );
+                              },
+                              child: ClipRRect(
+                                // Clip content that overflows
+                                borderRadius: BorderRadius.circular(10),
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      height: 88,
+                                      width: 122,
                                       decoration: BoxDecoration(
-                                        color: yellow,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(5),
-                                            bottomLeft:
-                                            Radius.circular(5),
-                                            bottomRight:
-                                            Radius.circular(5)),
+                                        color: Colors.grey[200],
+                                        borderRadius:
+                                        BorderRadius.circular(10),
                                       ),
-                                      child: Center(
-                                        child: Text(
-                                          homeImageData['homeImageData']
-                                          [index]
-                                          ['description'] ??
-                                              "",
-                                          style: TextStyle(fontSize: 10),
-                                        ),
+                                      child: Image.network(
+                                        'https://admin.marketjourney.in/uploads/${homeImageData['homeImageData'][index]['homeImage']}',
+                                        fit: BoxFit.fitHeight,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Icon(Icons.error,
+                                              color: Colors.red);
+                                        },
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    // Expanded(
+                                    //   child: SizedBox(
+                                    //     width: 122,
+                                    //     child: Text(
+                                    //       homeImageData['homeImageData'][index]
+                                    //               ['description'] ??
+                                    //           "",
+                                    //       style: TextStyle(
+                                    //           fontSize: 10,
+                                    //           fontWeight: FontWeight.w400,
+                                    //           color: Color(0xff000080)),
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Expanded(
+                              child: SizedBox(
+                                width: 122,
+                                child: Text(
+                                  homeImageData['homeImageData'][index]
+                                  ['description'] ??
+                                      "",
+                                  style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xff000080)),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },
@@ -1088,93 +1112,73 @@ class _homeState extends State<home> {
                 ),
                 SizedBox(
                   height:
-                  120, // Adjust height as needed, or consider removing for flexibility
+                  180, // Adjust height as needed, or consider removing for flexibility
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount:
-                    homeVideoData['homeVideoData']?.length ?? 0,
+                    itemCount: homeVideoData['homeVideoData']?.length ?? 0,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
-                        padding: const EdgeInsets.only(right: 20),
+                        padding: EdgeInsets.only(left: screenWidth * 0.05),
                         child: GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                  const Flashfeed()),
+                                  builder: (context) => const Flashfeed()),
                             );
                           },
                           child: ClipRRect(
                             // Clip content that overflows
                             borderRadius: BorderRadius.circular(10),
-                            child: SizedBox(
-                              // Consider removing fixed height for flexibility
-                              width: 122, // Adjust width as needed
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    height: 81,
-                                    width: 122,
-                                    decoration: BoxDecoration(
-                                      color: bottomtabbg,
-                                      borderRadius:
-                                      BorderRadius.circular(10),
-                                    ),
-                                    child: ClipRRect(
-                                      // Clip image within container
-                                      borderRadius:
-                                      BorderRadius.circular(10),
-                                      child: GestureDetector(
-                                        onTap: () async {
-                                          final url = homeVideoData[
-                                          'homeVideoData'][index]
-                                          ['videoLink'];
-                                          if (await canLaunch(url)) {
-                                            await launch(url);
-                                          } else {
-                                            throw 'Could not launch $url';
-                                          }
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 88,
+                                  width: 122,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: ClipRRect(
+                                    // Clip image within container
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        final url =
+                                        homeVideoData['homeVideoData']
+                                        [index]['videoLink'];
+                                        if (await canLaunch(url)) {
+                                          await launch(url);
+                                        } else {
+                                          throw 'Could not launch $url';
+                                        }
+                                      },
+                                      child: Image.network(
+                                        'https://admin.marketjourney.in/uploads/${homeVideoData['homeVideoData'][index]['videoThambnail']}',
+                                        fit: BoxFit.fitHeight,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Icon(Icons.error,
+                                              color: Colors.red);
                                         },
-                                        child: Image.network(
-                                          'https://admin.marketjourney.in/uploads/${homeVideoData['homeVideoData'][index]['videoThambnail']}',
-                                          fit: BoxFit.cover,
-                                          errorBuilder: (context, error,
-                                              stackTrace) {
-                                            return Icon(Icons.error,
-                                                color: Colors.red);
-                                          },
-                                        ),
                                       ),
                                     ),
                                   ),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Container(
-                                      height: 20,
-                                      width: 35,
-                                      decoration: BoxDecoration(
-                                        color: yellow,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(5),
-                                            bottomLeft:
-                                            Radius.circular(5),
-                                            bottomRight:
-                                            Radius.circular(5)),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          homeVideoData['homeVideoData']
-                                          [index]['videoTitle'] ??
-                                              "",
-                                          style: TextStyle(fontSize: 10),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  homeVideoData['homeVideoData'][index]
+                                  ['videoTitle'] ??
+                                      "",
+                                  style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xff000080)),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -1184,7 +1188,7 @@ class _homeState extends State<home> {
                 ),
               ],
             ),
-          ),
-        ));
+          )),
+     );
   }
 }
