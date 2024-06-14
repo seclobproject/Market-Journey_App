@@ -7,7 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:master_journey/authentication_page/login.dart';
 import 'package:master_journey/resources/color.dart';
 
-import '../navigation/bottom_tabs_screen.dart'; // Import the next page widget
+import '../navigation/bottom_tabs_screen.dart';
+import '../services/profile_service.dart';
+import '../support/logger.dart'; // Import the next page widget
 
 class TransactionScreen extends StatefulWidget {
   const TransactionScreen({super.key});
@@ -21,6 +23,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
   bool uploading = false;
   bool isLoading = false;
   String? _fileName;
+  var profiledata;
   TextEditingController _transactionIdController =
       TextEditingController(); // Add a controller for the text field
 
@@ -37,7 +40,23 @@ class _TransactionScreenState extends State<TransactionScreen> {
       print("No image selected."); // Debug log
     }
   }
-
+  Future _initLoad() async {
+    await Future.wait(
+      [
+        _ProfileData(),
+        ///////
+      ],
+    );
+    isLoading = false;
+  }
+  Future _ProfileData() async {
+    var response = await ProfileService.profile();
+    log.i('Profile data show.... $response');
+    setState(() {
+      profiledata = response;
+      isLoading = false;
+    });
+  }
   Future<String> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('token') ?? '';
@@ -169,10 +188,17 @@ class _TransactionScreenState extends State<TransactionScreen> {
     );
   }
 
-
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _initLoad();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Align(
         alignment: Alignment.center,
@@ -200,7 +226,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   height: 9,
                 ),
                 Text(
-                  '₹10000',
+                  profiledata['tempPackageAmount'].toString(),
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 24,

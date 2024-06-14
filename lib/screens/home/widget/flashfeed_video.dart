@@ -3,34 +3,35 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../resources/color.dart';
 import '../../../services/home_service.dart';
 import '../../../support/logger.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class Flashfeed extends StatefulWidget {
-  const Flashfeed({super.key});
+class Flashfeedvideo extends StatefulWidget {
+  const Flashfeedvideo({super.key});
 
   @override
-  State<Flashfeed> createState() => _FlashfeedState();
+  State<Flashfeedvideo> createState() => _FlashfeedvideoState();
 }
 
-class _FlashfeedState extends State<Flashfeed> {
+class _FlashfeedvideoState extends State<Flashfeedvideo> {
   var userid;
 
-  dynamic homeImageData;
+  dynamic homeVideoData;
   bool _isLoading = true;
 
-  Future<void> _getImageFeed() async {
+  Future<void> _getVideoFeed() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userid = prefs.getString('userid');
-    var response = await homeservice.viewImageFeeds();
-    log.i('Image data: $response');
+    var response = await homeservice.viewVideoFeeds();
+    log.i('Video data: $response');
     setState(() {
-      homeImageData = response;
+      homeVideoData = response;
     });
   }
 
   Future _initLoad() async {
     await Future.wait(
       [
-        _getImageFeed(),
+        _getVideoFeed(),
       ],
     );
     setState(() {
@@ -72,12 +73,12 @@ class _FlashfeedState extends State<Flashfeed> {
           padding: const EdgeInsets.only(left: 24),
           child: Column(
             children: [
-              if (homeImageData != null &&
-                  homeImageData['homeImageData'] != null)
+              if (homeVideoData != null &&
+                  homeVideoData['homeVideoData'] != null)
                 ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: homeImageData['homeImageData'].length,
+                  itemCount: homeVideoData['homeVideoData']?.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -98,14 +99,30 @@ class _FlashfeedState extends State<Flashfeed> {
                                     child: ClipRRect(
                                       borderRadius:
                                       BorderRadius.circular(10),
-                                      child: Image.network(
-                                        'https://admin.marketjourney.in/uploads/${homeImageData['homeImageData'][index]['homeImage']}',
-                                        fit: BoxFit.fitHeight,
-                                        errorBuilder:
-                                            (context, error, stackTrace) {
-                                          return Icon(Icons.error,
-                                              color: Colors.red);
+                                      child: GestureDetector(
+                                        onTap: () async {
+                                          final url = homeVideoData[
+                                          'homeVideoData'][index]
+                                          ['videoLink'];
+                                          final uri = Uri.parse(url);
+
+                                          if (await canLaunchUrl(uri)) {
+                                            await launchUrl(uri,
+                                                mode: LaunchMode
+                                                    .externalApplication);
+                                          } else {
+                                            throw 'Could not launch $url';
+                                          }
                                         },
+                                        child: Image.network(
+                                          'https://admin.marketjourney.in/uploads/${homeVideoData['homeVideoData'][index]['videoThambnail']}',
+                                          fit: BoxFit.fitHeight,
+                                          errorBuilder: (context, error,
+                                              stackTrace) {
+                                            return Icon(Icons.error,
+                                                color: Colors.red);
+                                          },
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -122,9 +139,8 @@ class _FlashfeedState extends State<Flashfeed> {
                                       ),
                                       child: Center(
                                         child: Text(
-                                          homeImageData['homeImageData']
-                                          [index]
-                                          ['description'] ??
+                                          homeVideoData['homeVideoData']
+                                          [index]['videoTitle'] ??
                                               "",
                                           style: TextStyle(
                                               fontSize: 10,

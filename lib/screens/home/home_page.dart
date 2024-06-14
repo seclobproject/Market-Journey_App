@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:master_journey/screens/home/widget/flashfeed_video.dart';
 import 'package:master_journey/screens/home/widget/latestnews.dart';
 import 'package:master_journey/screens/home/widget/notification.dart';
 import 'package:master_journey/screens/home/widget/subscription.dart';
@@ -18,6 +19,7 @@ import '../../support/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'widget/flashfeed.dart';
+
 
 class home extends StatefulWidget {
   const home({super.key});
@@ -171,7 +173,7 @@ class _homeState extends State<home> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return SafeArea(
-       child: Scaffold(
+      child: Scaffold(
           backgroundColor: marketbg,
           key: _scaffoldKey,
           drawerEnableOpenDragGesture: false,
@@ -191,8 +193,8 @@ class _homeState extends State<home> {
                   height: screenHeight * 0.02,
                 ),
                 Padding(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.05),
                   child: GestureDetector(
                     // onTap: () {
                     //   _scaffoldKey.currentState?.openDrawer();
@@ -269,8 +271,8 @@ class _homeState extends State<home> {
                   ),
                 ),
                 Padding(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.05),
                   child: Container(
                     height: screenHeight * 0.05,
                     decoration: BoxDecoration(
@@ -295,8 +297,8 @@ class _homeState extends State<home> {
                   height: screenHeight * 0.02,
                 ),
                 Padding(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.05),
                   child: Row(
                     children: [
                       SizedBox(
@@ -359,8 +361,8 @@ class _homeState extends State<home> {
                   height: screenHeight * 0.02,
                 ),
                 Padding(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.05),
                   child: Container(
                     padding: EdgeInsets.only(left: 9, right: 6),
                     width: double.infinity,
@@ -376,7 +378,8 @@ class _homeState extends State<home> {
                           Row(
                             children: [
                               Text(
-                                profiledata['daysUntilRenewal'].toString(),
+                                profiledata['daysUntilRenewal']
+                                    .toString(),
                                 style: TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.w700,
@@ -450,8 +453,8 @@ class _homeState extends State<home> {
                   height: screenHeight * 0.02,
                 ),
                 Padding(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.05),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -568,8 +571,8 @@ class _homeState extends State<home> {
                   height: screenHeight * 0.02,
                 ),
                 Padding(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.05),
                   child: Row(
                     children: [
                       SizedBox(
@@ -622,7 +625,8 @@ class _homeState extends State<home> {
                                 horizontal: screenWidth * 0.025,
                               ),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment:
+                                MainAxisAlignment.center,
                                 children: [
                                   ClipOval(
                                     child: Container(
@@ -661,8 +665,8 @@ class _homeState extends State<home> {
                   height: screenHeight * 0.02,
                 ),
                 Padding(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.05),
                   child: Row(
                     children: [
                       SizedBox(
@@ -758,7 +762,8 @@ class _homeState extends State<home> {
                                             width: 40,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(4),
+                                              BorderRadius.circular(
+                                                  4),
                                               color: yellow1,
                                             ),
                                             child: Center(
@@ -794,7 +799,8 @@ class _homeState extends State<home> {
                                             width: 40,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(4),
+                                              BorderRadius.circular(
+                                                  4),
                                               color: yellow1,
                                             ),
                                             child: Center(
@@ -827,8 +833,8 @@ class _homeState extends State<home> {
                   height: screenHeight * 0.02,
                 ),
                 Padding(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.05),
                   child: Row(
                     children: [
                       SizedBox(
@@ -924,7 +930,8 @@ class _homeState extends State<home> {
                                             width: 40,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(4),
+                                              BorderRadius.circular(
+                                                  4),
                                               color: yellow1,
                                             ),
                                             child: Center(
@@ -960,7 +967,8 @@ class _homeState extends State<home> {
                                             width: 40,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(4),
+                                              BorderRadius.circular(
+                                                  4),
                                               color: yellow1,
                                             ),
                                             child: Center(
@@ -993,8 +1001,8 @@ class _homeState extends State<home> {
                   height: screenHeight * 0.04,
                 ),
                 Padding(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.05),
                   child: Row(
                     children: [
                       SizedBox(
@@ -1029,10 +1037,12 @@ class _homeState extends State<home> {
                   180, // Adjust height as needed, or consider removing for flexibility
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: homeImageData['homeImageData']?.length ?? 0,
+                    itemCount:
+                    homeImageData['homeImageData']?.length ?? 0,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
-                        padding: EdgeInsets.only(left: screenWidth * 0.05),
+                        padding:
+                        EdgeInsets.only(left: screenWidth * 0.05),
                         child: Column(
                           children: [
                             GestureDetector(
@@ -1115,41 +1125,51 @@ class _homeState extends State<home> {
                   180, // Adjust height as needed, or consider removing for flexibility
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: homeVideoData['homeVideoData']?.length ?? 0,
+                    itemCount:
+                    homeVideoData['homeVideoData']?.length ?? 0,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
-                        padding: EdgeInsets.only(left: screenWidth * 0.05),
+                        padding:
+                        EdgeInsets.only(left: screenWidth * 0.05),
                         child: GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const Flashfeed()),
+                                  builder: (context) =>
+                                  const Flashfeedvideo()),
                             );
                           },
                           child: ClipRRect(
                             // Clip content that overflows
                             borderRadius: BorderRadius.circular(10),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
                               children: [
                                 Container(
                                   height: 88,
                                   width: 122,
                                   decoration: BoxDecoration(
                                     color: Colors.grey[200],
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius:
+                                    BorderRadius.circular(10),
                                   ),
                                   child: ClipRRect(
                                     // Clip image within container
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius:
+                                    BorderRadius.circular(10),
                                     child: GestureDetector(
                                       onTap: () async {
                                         final url =
                                         homeVideoData['homeVideoData']
                                         [index]['videoLink'];
-                                        if (await canLaunch(url)) {
-                                          await launch(url);
+                                        final uri = Uri.parse(url);
+
+                                        if (await canLaunchUrl(uri)) {
+                                          await launchUrl(uri,
+                                              mode: LaunchMode
+                                                  .externalApplication);
                                         } else {
                                           throw 'Could not launch $url';
                                         }
@@ -1189,6 +1209,6 @@ class _homeState extends State<home> {
               ],
             ),
           )),
-     );
+    );
   }
 }
