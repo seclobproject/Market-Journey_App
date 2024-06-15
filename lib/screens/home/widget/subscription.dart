@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:master_journey/screens/home/widget/renewal_package.dart';
 import 'package:master_journey/screens/home/widget/renewal_package_addon.dart';
 import 'package:master_journey/screens/home/widget/renewal_package_franchise.dart';
+import 'package:master_journey/screens/home/widget/signaladdonplusconvert.dart';
 import 'package:master_journey/services/home_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../resources/color.dart';
@@ -123,25 +124,30 @@ class _SubscriptionState extends State<Subscription> {
                             SizedBox(height: 10),
                             GestureDetector(
                               onTap: () {
-                                if (profiledata['packageType'] == "Courses" || profiledata['packageType'] == "Signals") {
+                                if (profiledata['renewalStatus'] == "true" || profiledata['packageType'] == "Courses" || profiledata['packageType'] == "Signals") {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => Renewalpackage()),
+                                    MaterialPageRoute(builder: (context) => Renewalpackagesignal()),
                                   );
-                                } else if (profiledata['renewalStatus'] == "true" || profiledata['packageType'] == "Franchise") {
+                                } else if (profiledata['packageType'] == "Franchise") {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) => Renewalpackageaddon()),
                                   );
-                                } else
-                                {
-
-                                      Navigator.push(
+                                } else if (profiledata['packageType'] == "Courses" || profiledata['packageType'] == "Signals") {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => Renewalpackage()),
+                                  );
+                                } else {
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) => Renewalpackagefranchise()),
                                   );
                                 }
                               }
+
+
                               ,
                               child: Container(
                                 height: 30,
