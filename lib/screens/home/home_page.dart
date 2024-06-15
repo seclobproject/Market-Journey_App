@@ -11,7 +11,7 @@ import 'package:master_journey/screens/home/widget/notification.dart';
 import 'package:master_journey/screens/home/widget/subscription.dart';
 import '../../navigation/app_drawer.dart';
 import '../../resources/color.dart';
-import 'package:scroll_loop_auto_scroll/scroll_loop_auto_scroll.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/home_service.dart';
 import '../../services/profile_service.dart';
@@ -19,7 +19,7 @@ import '../../support/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'widget/flashfeed.dart';
-
+import 'package:share_plus/share_plus.dart';
 
 class home extends StatefulWidget {
   const home({super.key});
@@ -431,14 +431,14 @@ class _homeState extends State<home> {
                               },
                               child: Container(
                                 height: 26,
-                                width: 52,
+                                width: 150,
                                 decoration: BoxDecoration(
                                     color: yellow,
                                     borderRadius:
                                     BorderRadius.circular(10)),
                                 child: Center(
                                     child: Text(
-                                      'Click',
+                                      'Subscription Package',
                                       style: TextStyle(fontSize: 10),
                                     )),
                               ),
@@ -503,7 +503,7 @@ class _homeState extends State<home> {
                       ),
                       Container(
                         height: screenHeight * 0.27,
-                        width: screenWidth * 0.45,
+                        width: screenWidth * 0.44,
                         decoration: BoxDecoration(
                           color: bluem,
                           borderRadius:
@@ -539,21 +539,28 @@ class _homeState extends State<home> {
                                     top: screenHeight * 0.01),
                                 child: Align(
                                   alignment: Alignment.topLeft,
-                                  child: Container(
-                                    height: screenHeight *
-                                        0.05, // Adjusted for responsiveness
-                                    width: screenWidth *
-                                        0.25, // Adjusted for responsiveness
-                                    decoration: BoxDecoration(
-                                      color: yellow,
-                                      borderRadius: BorderRadius.circular(
-                                          screenWidth * 0.01),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        "Refer Now",
-                                        style: TextStyle(
-                                          fontSize: screenWidth * 0.03,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      final url =
+                                          'https://member.marketjourney.in/auth/boxed-signup/${profiledata['id']}';
+                                      Share.share(url);
+                                    },
+                                    child: Container(
+                                      height: screenHeight *
+                                          0.05, // Adjusted for responsiveness
+                                      width: screenWidth *
+                                          0.25, // Adjusted for responsiveness
+                                      decoration: BoxDecoration(
+                                        color: yellow,
+                                        borderRadius: BorderRadius.circular(
+                                            screenWidth * 0.01),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "Refer Now",
+                                          style: TextStyle(
+                                            fontSize: screenWidth * 0.03,
+                                          ),
                                         ),
                                       ),
                                     ),

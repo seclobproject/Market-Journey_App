@@ -10,17 +10,16 @@ import 'dart:io';
 import '../../../resources/color.dart';
 import '../../../support/logger.dart';
 
-class Renewalpackage extends StatefulWidget {
-  const Renewalpackage({super.key});
+class Renewalpackagefranchise extends StatefulWidget {
+  const Renewalpackagefranchise({super.key});
 
   @override
-  State<Renewalpackage> createState() => _RenewalpackageState();
+  State<Renewalpackagefranchise> createState() => _RenewalpackagefranchiseState();
 }
 
-class _RenewalpackageState extends State<Renewalpackage> {
+class _RenewalpackagefranchiseState extends State<Renewalpackagefranchise> {
   var userid;
   List<dynamic> renewalPackage = [];
-  List<dynamic> renewalcoPackage = [];
   XFile? _imageFile;
 
   Future<void> _viewpak() async {
@@ -37,25 +36,13 @@ class _RenewalpackageState extends State<Renewalpackage> {
     }
   }
 
-  Future<void> _viewrenewpak() async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      userid = prefs.getString('userid');
-      var response = await homeservice.viewConvertpackage();
-      log.i('Profile data show.... $response');
-      setState(() {
-        renewalcoPackage = response['anotherPackages'] ?? [];
-      });
-    } catch (error) {
-      log.e('Error fetching subscription history data: $error');
-    }
-  }
+
+
 
   @override
   void initState() {
     super.initState();
     _viewpak();
-    _viewrenewpak();
   }
 
   Future<void> _pickImage(StateSetter setState) async {
@@ -75,80 +62,77 @@ class _RenewalpackageState extends State<Renewalpackage> {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return Container(
+            return AlertDialog(
+              title: Text( 'Renewal Package',style: TextStyle(
+                  color: yellow1
+              ),)
+              ,
+              content: Column(
 
-              child: AlertDialog(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(transaction['packageName'] ?? 'No Name',style: TextStyle(
+                      color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold
 
-                title: Text('Renewal Package', style: TextStyle(color: yellow1)),
-                content: Column(
 
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      transaction['packageName'] ?? 'No Name',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),)
+                  ,
+                  Text("₹${transaction['packageAmount'] ?? '0'}"),
+                  SizedBox(height: 20),
+                  _imageFile == null
+                      ? Text("No image selected.")
+                      : Text((_imageFile?.path ?? 'No image selected').substring(
+                    (_imageFile?.path ?? 'No image selected').length - 50,
+                  )),
+
+
+                  SizedBox(height: 20),
+                  TextField(
+                    controller: _transactionIdController,
+                    decoration: InputDecoration(
+                      labelText: 'Transaction ID',
                     ),
-                    Text("₹${transaction['packageAmount'] ?? '0'}"),
-                    SizedBox(height: 20),
-                    _imageFile == null
-                        ? Text("No image selected.")
-                        : Text(
-                      (_imageFile?.path ?? 'No image selected').substring(
-                        (_imageFile?.path ?? 'No image selected').length -
-                            50,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    TextField(
-                      controller: _transactionIdController,
-                      decoration: InputDecoration(
-                        labelText: 'Transaction ID',
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () => _pickImage(setState),
-                      child: Text("Upload Screenshot"),
-                    ),
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text("Close"),
                   ),
+                  SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {
-                      double? packageAmount =
-                      double.tryParse(transaction['packageAmount'].toString());
-                      if (packageAmount == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Invalid package amount.'),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                        return;
-                      }
-                      uploadPackageDetails(
-                        packageName: transaction['packageName'],
-                        packageAmount: packageAmount,
-                        image: _imageFile,
-                        transactionIdController: _transactionIdController,
-                        context: context,
-                      );
-                    },
-                    child: Text("Submit"),
+                    onPressed: () => _pickImage(setState),
+                    child: Text("Upload Screenshot"),
                   ),
                 ],
               ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Close"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    double? packageAmount = double.tryParse(transaction['packageAmount'].toString());
+                    if (packageAmount == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Invalid package amount.'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return;
+                    }
+                    uploadPackageDetails(
+                      packageName: transaction['packageName'],
+                      packageAmount: packageAmount,
+                      image: _imageFile,
+                      transactionIdController: _transactionIdController,
+                      context: context,
+                    );
+                  },
+                  child: Text("Submit"),
+                ),
+              ],
             );
           },
         );
@@ -226,8 +210,8 @@ class _RenewalpackageState extends State<Renewalpackage> {
           handleResponse(response);
           if (response.statusCode == 200) {
             // Navigate to the login page upon successful upload
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Subscription()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Subscription()));
+
           }
         } else {
           print("No image to upload.");
@@ -269,38 +253,42 @@ class _RenewalpackageState extends State<Renewalpackage> {
     bool isPortrait = screenOrientation == Orientation.portrait;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Renewal Package ',
-          style: TextStyle(color: black, fontSize: 16),
+        appBar: AppBar(
+          title: Text(
+            'Renewal Package ',
+            style: TextStyle(color: black, fontSize: 16),
+          ),
+          centerTitle: true,
+          backgroundColor: marketbg,
         ),
-        centerTitle: true,
         backgroundColor: marketbg,
-      ),
-      backgroundColor: marketbg,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(left: 20),
+        body: LayoutBuilder(
+        builder: (context, constraints) {
+      return Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(left: 20),
+            child: Align(
+              alignment: Alignment.topLeft,
+              // child: Text(
+              //   // renewalPackage[1]['franchiseName'] ?? 'No Name',
+              //   style: TextStyle(
+              //     color: Color(0xff163A56),
+              //     fontSize: 14,
+              //     fontWeight: FontWeight.w500,
+              //   ),
+              // ),
             ),
-            SizedBox(height: 10),
-            Text(
-              "Add on",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: yellow1,
-                  fontSize: 15),
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+          ),
+          SizedBox(height: 10),
+          Expanded(
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
               itemCount: renewalPackage.length,
               itemBuilder: (BuildContext context, int index) {
                 var transaction = renewalPackage[index];
                 return Padding(
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: GestureDetector(
                     onTap: () => _showPackageDetails(context, transaction),
                     child: Container(
@@ -350,74 +338,11 @@ class _RenewalpackageState extends State<Renewalpackage> {
                 );
               },
             ),
-            Text(
-              "Convert Packages",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: yellow1,
-                  fontSize: 15),
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: renewalcoPackage.length,
-              itemBuilder: (BuildContext context, int index) {
-                var transaction2 = renewalcoPackage[index];
-                return Padding(
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: GestureDetector(
-                    onTap: () => _showPackageDetails(context, transaction2),
-                    child: Container(
-                      height: 80,
-                      width: 300,
-                      decoration: BoxDecoration(
-                        color: bluem,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  transaction2['packageName'] ?? 'No Name',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    color: marketbg,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Expanded(child: SizedBox()),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "₹${transaction2['packageAmount'] ?? '0'}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    color: marketbg,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
+          ),
+        ],
+      );
+        },
         ),
-      ),
     );
   }
 }

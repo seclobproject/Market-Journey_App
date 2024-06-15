@@ -5,14 +5,14 @@ import '../../../resources/color.dart';
 import '../../../services/report_service.dart';
 import '../../../support/logger.dart';
 
-class Level0neReport extends StatefulWidget {
-  const Level0neReport({super.key});
+class LevelOneReport extends StatefulWidget {
+  const LevelOneReport({super.key});
 
   @override
-  State<Level0neReport> createState() => _Level0neReportState();
+  State<LevelOneReport> createState() => _Level0neReportState();
 }
 
-class _Level0neReportState extends State<Level0neReport> {
+class _Level0neReportState extends State<LevelOneReport> {
   List<dynamic> directIncome = [];
   bool _isLoading = true;
 

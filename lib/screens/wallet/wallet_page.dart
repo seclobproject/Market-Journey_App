@@ -60,11 +60,17 @@ class _walletState extends State<wallet> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: bluem,
-        title: Center(child: Text("Wallet", style: TextStyle(color: marketbg, fontSize: 18))),
+        title: Center(
+          child:
+          Text("Wallet", style: TextStyle(color: marketbg, fontSize: 18)),
+        ),
         centerTitle: true,
       ),
       backgroundColor: bluem,
-      body: SingleChildScrollView(
+      body: profiledata == null
+          ? Center(child: CircularProgressIndicator())
+          : profiledata!['packageType'] == 'Franchise'
+          ? SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),
         child: Column(
           children: [
@@ -81,7 +87,8 @@ class _walletState extends State<wallet> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        profiledata?['walletAmount']?.toString() ?? '0.00',
+                        profiledata?['walletAmount']?.toString() ??
+                            '0.00',
                         style: TextStyle(
                           color: marketbg,
                           fontSize: 25,
@@ -92,9 +99,10 @@ class _walletState extends State<wallet> {
                         height: 50,
                         width: 50,
                         decoration: BoxDecoration(
-                            color: whitegray,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
+                          color: whitegray,
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(10)),
+                        ),
                         child: SizedBox(
                           child: Image.asset(
                             'assets/logo/wallet.png',
@@ -107,24 +115,23 @@ class _walletState extends State<wallet> {
                 ],
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Cashwithdraw()),
+                  MaterialPageRoute(
+                      builder: (context) => const Cashwithdraw()),
                 );
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40.0),
                 child: Container(
                   height: 40,
-                  // width: 150,
                   decoration: BoxDecoration(
                     color: yellow,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(10)),
                   ),
                   child: Center(
                     child: Text(
@@ -166,6 +173,23 @@ class _walletState extends State<wallet> {
               ),
             ),
             SizedBox(height: 40),
+          ],
+        ),
+      )
+          : Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/logo/exclamation-mark.png', // Replace with your image path
+              width: 25,
+              height: 25,
+            ),
+            SizedBox(height: 10),
+            Text(
+              'You Are Not Authorized to View This Page',
+              style: TextStyle(color: marketbg, fontSize: 12),
+            ),
           ],
         ),
       ),

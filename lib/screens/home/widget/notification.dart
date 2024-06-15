@@ -82,7 +82,8 @@ class _NotificationscreenState extends State<Notificationscreen> {
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: signals.length,
                 itemBuilder: (context, index) {
-                  var signal = signals[index]; // Correctly access the list element
+                  var signal =
+                  signals[index]; // Correctly access the list element
                   var dateStr = signal['createdAt'] ?? "";
                   DateTime dateTime;
                   try {
@@ -113,13 +114,27 @@ class _NotificationscreenState extends State<Notificationscreen> {
                               child: Row(
                                 children: [
                                   Expanded(
-                                    child: Text(
-                                      signal['title'] ?? "",
-                                      style: TextStyle(
-                                        color: marketbg,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12,
-                                      ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          signal['title'] ?? "",
+                                          style: TextStyle(
+                                            color: marketbg,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        Text(
+                                          signal['description'] ?? "",
+                                          style: TextStyle(
+                                            color: marketbg,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],

@@ -279,19 +279,19 @@ class _AddMemberPageState extends State<AddMemberPage> {
         'dob': dobController.text, // Ensure dob is in the correct format
         'address': addressController.text,
         'password': passwordController.text,
-        'franchise': packageTypedropdownvalue,
-        'packageName': packageNamedropdownvalue,
+        'packageName': packageTypedropdownvalue,
+        'franchise': packageNamedropdownvalue,
         'packageAmount': packageAmount,
         'packageAmountGST': packageAmountGST,
         'state': stateTypedropdownvalue,
         'district': districtTypedropdownvalue,
-        'zonal': zonalTypedropdownvalue,
-        'panchayath': panchayathTypedropdownvalue,
+        'zonal': zonalTypedropdownvalue!,
+        'panchayath': panchayathTypedropdownvalue!,
       };
 
       log.i('Request Data: $reqData');
 
-      var response = await MemberService.addMember(reqData);
+      var response = await MemberService.AddMember(reqData);
       if (response['sts'] == '01') {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Add member success')),

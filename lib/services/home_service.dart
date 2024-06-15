@@ -4,6 +4,11 @@ import '../support/dio_helper.dart';
 
 
 class homeservice {
+  static Future viewpackageaddon() async {
+    var dio = await DioHelper.getInstance();
+    var response = await dio.get('$baseURL/api/user/view-addon-signals');
+    return response.data;
+  }
   static Future viewRewards() async {
     var dio = await DioHelper.getInstance();
     var response = await dio.get('$baseURL/api/admin/view-award-details');
@@ -11,7 +16,7 @@ class homeservice {
     return response.data;
   }
 
-  static Future distributedleaders() async {
+  static Future viewleaders() async {
     var dio = await DioHelper.getInstance();
     var response = await dio.get('$baseURL/api/user/get-pool-amount');
     return response.data;
@@ -26,7 +31,13 @@ class homeservice {
     var response = await dio.get('$baseURL/api/user/view-renewal-packages');
     return response.data;
   }
-  static Future viewleaders() async {
+
+  static Future viewConvertpackage() async {
+    var dio = await DioHelper.getInstance();
+    var response = await dio.get('$baseURL/api/user/view-convert-packages');
+    return response.data;
+  }
+  static Future distributedleaders()  async {
     var dio = await DioHelper.getInstance();
     var response = await dio.get('$baseURL/api/user/get-pool-count-amount');
     return response.data;

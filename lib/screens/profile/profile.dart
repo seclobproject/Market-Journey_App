@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../resources/color.dart';
@@ -138,8 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           ),
                                           Column(children: [
                                             Text(
-                                                '₹${profiledata['inDirectIncome']}'
-                                                   ,
+                                                '₹${profiledata['inDirectIncome']}',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.w500,
                                                     fontSize: 11)),
@@ -369,12 +369,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                               color: marketbgblue),
                                         ),
                                         SizedBox(width: 5),
-                                        Text(
-                                          '${profiledata['address']}',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 12,
-                                              color: marketbgblue),
+                                        Expanded(
+                                          child: Text(
+                                            '${profiledata['address']}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 12,
+                                                color: marketbgblue),
+                                          ),
                                         )
                                       ],
                                     ),
@@ -416,7 +418,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         ),
                                         SizedBox(width: 5),
                                         Text(
-                                          '${profiledata['packageAmount']}',
+                                          '${profiledata != null ? profiledata['packageAmount'] ?? '' : ''}',
                                           style: TextStyle(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 12,
@@ -439,7 +441,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         ),
                                         SizedBox(width: 5),
                                         Text(
-                                          '${profiledata['franchiseName']}',
+                                          '${profiledata['franchise']}',
                                           style: TextStyle(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 12,
@@ -485,7 +487,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         ),
                                         SizedBox(width: 5),
                                         Text(
-                                          '${profiledata['walletAmount']}',
+                                          '${profiledata['walletAmount']}  ',
                                           style: TextStyle(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 12,
@@ -522,11 +524,75 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           )
                               : isSelectedIndex == 0
-                              ? Container(child: Text('Certificate')
-                            // SvgPicture.asset(
-                            //   'assets/svg/certificate.svg',
-                            //       height:200,
-                            // ),
+                              ? Container(
+                            child: Column(
+                              mainAxisAlignment:
+                              MainAxisAlignment.center,
+                              children: [
+                                Text('Certificate'),
+                                Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'assets/logo/Certificate.png',
+                                      height: 250,
+                                    ),
+                                    Positioned(
+                                      bottom:
+                                      140, // Position the text where you want
+                                      child: Text(
+                                        profiledata['name']
+                                            ?.toUpperCase() ??
+                                            '',
+                                        style: TextStyle(
+                                          color: black,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                          // Optional background color for better readability
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom:
+                                      100, // Position the text where you want
+                                      child: Container(
+                                        width:
+                                        250, // Match the width of the image
+                                        child: RichText(
+                                          textAlign: TextAlign.center,
+                                          text: TextSpan(
+                                            text:
+                                            'This Certificate is proudly presented for the Membership of ',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 8,
+                                            ),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text:
+                                                '${profiledata['franchise']}',
+                                                style: TextStyle(
+                                                  fontWeight:
+                                                  FontWeight.bold,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text:
+                                                ' Market Journey. We welcome you warmly into our community and look forward to your active participation and valuable contributions.',
+                                                style: TextStyle(
+                                                  fontWeight:
+                                                  FontWeight.normal,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           )
                               : Container(
                             padding: const EdgeInsets.symmetric(
@@ -535,14 +601,22 @@ class _ProfilePageState extends State<ProfilePage> {
                               children: [
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
+                                  MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment
+                                      .start, // Align to top
                                   children: [
-                                    SvgPicture.asset(
-                                      'assets/svg/barcode.svg',
-                                      height: 26,
+                                    BarcodeWidget(
+                                      barcode: Barcode
+                                          .code128(), // Example barcode type
+                                      data: profiledata[
+                                      'id'], // Replace with actual barcode data
+                                      width: 100,
+                                      height: 28,
+                                      drawText:
+                                      false, // Whether to draw text (default: false)
                                     ),
-                                    SvgPicture.asset(
-                                      'assets/svg/logo.svg',
+                                    Image.asset(
+                                      'assets/logo/logorebrand.png',
                                       height: 56,
                                     ),
                                   ],
@@ -660,7 +734,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 alignment:
                                                 Alignment.topRight,
                                                 child: Text(
-                                                  '${profiledata['packageAmount']}',
+                                                  '${profiledata != null ? profiledata['packageAmount'] ?? '' : ''}',
                                                   style: TextStyle(
                                                       fontWeight:
                                                       FontWeight
@@ -778,7 +852,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                               ),
                                               Center(
                                                 child: Text(
-                                                  '${profiledata['packageAmount']}',
+                                                  '${profiledata != null ? profiledata['packageAmount'] ?? '' : ''}',
                                                   style: TextStyle(
                                                       fontWeight:
                                                       FontWeight
