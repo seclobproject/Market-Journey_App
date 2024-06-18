@@ -75,7 +75,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
           response['msg'] == 'Packages retrieved successfully') {
         setState(() {
           packageData =
-          List<Map<String, dynamic>>.from(response['packageData']);
+              List<Map<String, dynamic>>.from(response['packageData']);
 
           // Extract package types and remove duplicates
           packageType = packageData
@@ -275,18 +275,18 @@ class _AddMemberPageState extends State<AddMemberPage> {
         'name': nameController.text,
         'email': emailController.text,
         'phone':
-        int.tryParse(phoneController.text) ?? 0, // Convert phone to integer
+            int.tryParse(phoneController.text) ?? 0, // Convert phone to integer
         'dob': dobController.text, // Ensure dob is in the correct format
         'address': addressController.text,
         'password': passwordController.text,
-        'packageName': packageTypedropdownvalue,
+        'packageType': packageTypedropdownvalue,
         'franchise': packageNamedropdownvalue,
         'packageAmount': packageAmount,
         'packageAmountGST': packageAmountGST,
         'state': stateTypedropdownvalue,
         'district': districtTypedropdownvalue,
-        'zonal': zonalTypedropdownvalue!,
-        'panchayath': panchayathTypedropdownvalue!,
+        'zonal': zonalTypedropdownvalue,
+        'panchayath': panchayathTypedropdownvalue,
       };
 
       log.i('Request Data: $reqData');
@@ -321,7 +321,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
       if (packageNamedropdownvalue != null) {
         // Fetch the selected package data
         var selectedPackage = packageData.firstWhere((packagedata) =>
-        packagedata['packageName'] == packageNamedropdownvalue);
+            packagedata['packageName'] == packageNamedropdownvalue);
 
         // Set the package amount
         packageAmount = selectedPackage['packageAmount'].toString();
@@ -362,897 +362,893 @@ class _AddMemberPageState extends State<AddMemberPage> {
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('Name',
-                      style:
-                      TextStyle(color: marketbgblue, fontSize: 14))),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                controller: nameController,
-                decoration: InputDecoration(
-                  hintText: 'Enter your username',
-                  hintStyle: TextStyle(
-                      color: marketbgblue, fontWeight: FontWeight.w400),
-                  contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 1),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 10,
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text('Name',
+                            style:
+                                TextStyle(color: marketbgblue, fontSize: 14))),
                   ),
-                ),
-                style: TextStyle(
-                    color: black,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400),
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child:
-                Text('Email', style: TextStyle(color: marketbgblue)),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  hintText: 'Enter your email',
-                  hintStyle: TextStyle(
-                      color: marketbgblue, fontWeight: FontWeight.w400),
-                  contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 1),
+                  SizedBox(
+                    height: 10,
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow),
-                  ),
-                ),
-                style: TextStyle(
-                    color: black,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400),
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    'Phone',
-                    style: TextStyle(color: marketbgblue),
-                  )),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                controller: phoneController,
-                keyboardType: TextInputType.phone,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter
-                      .digitsOnly // Allow only numbers
-                ],
-                decoration: InputDecoration(
-                  hintText: 'Enter your phone',
-                  hintStyle: TextStyle(
-                      color: marketbgblue, fontWeight: FontWeight.w400),
-                  contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 1),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow),
-                  ),
-                ),
-                style: TextStyle(
-                    color: black,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400),
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    'Address',
-                    style: TextStyle(color: marketbgblue),
-                  )),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                controller: addressController,
-                decoration: InputDecoration(
-                  hintText: 'Enter your address',
-                  hintStyle: TextStyle(
-                      color: marketbgblue, fontWeight: FontWeight.w400),
-                  contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 1),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow),
-                  ),
-                ),
-                style: TextStyle(
-                    color: black,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400),
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    'Date of birth',
-                    style: TextStyle(color: marketbgblue),
-                  )),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                controller: dobController,
-                readOnly: true,
-                keyboardType: TextInputType.datetime,
-                decoration: InputDecoration(
-                    hintText: 'Enter your dob',
-                    hintStyle: TextStyle(
-                        color: marketbgblue, fontWeight: FontWeight.w400),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(10.0)),
-                      borderSide: BorderSide(color: yellow, width: 1),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(10.0)),
-                      borderSide: BorderSide(color: yellow),
-                    ),
-                    suffixIcon: Icon(Icons.calendar_month)
-                  // icon: Icon(Icons.calendar_month)
-                ),
-                onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime(2101),
-                  );
-
-                  if (pickedDate != null) {
-                    setState(() {
-                      dob = pickedDate
-                          .millisecondsSinceEpoch; // Save the date as an integer (timestamp)
-                      dobController.text =
-                      "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}"; // Format the date and display it
-                    });
-                  }
-                },
-                style: TextStyle(
-                    color: black,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400),
-              ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text('Package Type',
-                    style: TextStyle(color: marketbgblue)),
-              ),
-            ),
-            SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
-                height: 45,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                ),
-                child: Center(
-                  child: DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(color: yellow, width: 1),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextField(
+                      controller: nameController,
+                      decoration: InputDecoration(
+                        hintText: 'Enter your username',
+                        hintStyle: TextStyle(
+                            color: marketbgblue, fontWeight: FontWeight.w400),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: yellow, width: 1),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: yellow),
+                        ),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(color: yellow),
-                      ),
-                      hintText: 'Select Package Type',
-                      hintStyle:
-                      TextStyle(fontSize: 12, color: marketbgblue),
+                      style: TextStyle(
+                          color: black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400),
                     ),
-                    isExpanded: true,
-                    icon: Icon(Icons.arrow_drop_down),
-                    iconSize: 20,
-                    elevation: 10,
-                    style: TextStyle(fontSize: 15),
-                    items: packageType.map((String packagedata) {
-                      return DropdownMenuItem<String>(
-                        value: packagedata,
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child:
+                          Text('Email', style: TextStyle(color: marketbgblue)),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        hintText: 'Enter your email',
+                        hintStyle: TextStyle(
+                            color: marketbgblue, fontWeight: FontWeight.w400),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: yellow, width: 1),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: yellow),
+                        ),
+                      ),
+                      style: TextStyle(
+                          color: black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Align(
+                        alignment: Alignment.topLeft,
                         child: Text(
-                          packagedata,
-                          style: TextStyle(
-                              fontSize: 12, color: marketbgblue),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (String? newVal) {
-                      setState(() {
-                        packageTypedropdownvalue = newVal;
-                        packageNamedropdownvalue = null;
-                        packageAmount = '';
-                        packageAmountGST = '';
-                        if (packageTypedropdownvalue != null) {
-                          // Filter package names based on selected package type
-                          PackageName = packageData
-                              .where((packagedata) =>
-                          packagedata['franchiseName'] ==
-                              packageTypedropdownvalue)
-                              .map((packagedata) =>
-                          packagedata['packageName'] as String)
-                              .toList();
-                        } else {
-                          PackageName = [];
-                        }
-                      });
-                    },
-                    value: packageTypedropdownvalue,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text('Package Name',
-                    style: TextStyle(color: marketbgblue)),
-              ),
-            ),
-            SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
-                height: 45,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                ),
-                child: Center(
-                  child: DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(color: yellow, width: 1),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(color: yellow),
-                      ),
-                      hintText: 'Select Package Name',
-                      hintStyle:
-                      TextStyle(fontSize: 12, color: marketbgblue),
-                    ),
-                    isExpanded: true,
-                    icon: Icon(Icons.arrow_drop_down),
-                    iconSize: 20,
-                    elevation: 10,
-                    style: TextStyle(fontSize: 15),
-                    items: PackageName.map((String item) {
-                      return DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(
-                          item,
-                          style: TextStyle(
-                              fontSize: 12, color: marketbgblue),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: _updatePackageAmountAndGST,
-                    value: packageNamedropdownvalue,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  'Package Amount',
-                  style: TextStyle(color: bluem, fontSize: 14),
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                readOnly: true,
-                decoration: InputDecoration(
-                  hintText: 'Package amount',
-                  hintStyle: TextStyle(
-                      color: bluem, fontWeight: FontWeight.w400),
-                  contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 1),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow),
-                  ),
-                ),
-                onChanged: (text) {
-                  setState(() {
-                    packageAmount = text;
-                  });
-                },
-                style: TextStyle(
-                    color: bluem,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400),
-                controller: TextEditingController(text: packageAmount),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('Package Amount GST',
-                      style:
-                      TextStyle(color: marketbgblue, fontSize: 14))),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                readOnly: true,
-                decoration: InputDecoration(
-                  hintText: 'Package amount GST',
-                  hintStyle: TextStyle(
-                      color: marketbgblue, fontWeight: FontWeight.w400),
-                  contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 1),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow),
-                  ),
-                ),
-                onChanged: (text) {
-                  setState(() {
-                    packageAmountGST = text;
-                  });
-                },
-                style: TextStyle(
-                    color: bluem,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400),
-                controller: TextEditingController(text: packageAmountGST),
-              ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Column(children: [
-              if (packageNamedropdownvalue == 'District Franchise' ||
-                  packageNamedropdownvalue == 'Zonal Franchise' ||
-                  packageNamedropdownvalue == 'Mobile Franchise' ||
-                  packageTypedropdownvalue == 'Courses' ||
-                  packageTypedropdownvalue == 'Signals') ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'State',
-                      style: TextStyle(color: bluem),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Container(
-                    height: 45,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                    child: Center(
-                      child: DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0)),
-                            borderSide:
-                            BorderSide(color: yellow, width: 1),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: yellow),
-                          ),
-                          hintText: 'Select State',
-                          hintStyle:
-                          TextStyle(fontSize: 12, color: bluem),
-                        ),
-                        isExpanded: true,
-                        icon: Icon(Icons.arrow_drop_down),
-                        iconSize: 20,
-                        elevation: 10,
-                        style: TextStyle(fontSize: 15),
-                        items: stateType.map((String state) {
-                          return DropdownMenuItem<String>(
-                            value: state,
-                            child: Text(
-                              state,
-                              style:
-                              TextStyle(fontSize: 12, color: bluem),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (String? newVal) {
-                          setState(() {
-                            stateTypedropdownvalue = newVal;
-                            districtTypedropdownvalue = null;
-                            zonalTypedropdownvalue = null;
-                            districtType = [];
-                            notdistrictType = [];
-                            zonalType = [];
-                            notzonalType = [];
-                            if (stateTypedropdownvalue != null) {
-                              // Find the state ID corresponding to the selected state name
-                              String selectedStateId = states['states']
-                                  .firstWhere((state) =>
-                              state['stateName'] ==
-                                  stateTypedropdownvalue)['id'];
-                              if (packageNamedropdownvalue ==
-                                  'District Franchise') {
-                                _Membernotdistrict(selectedStateId);
-                              } else {
-                                _Memberdistrict(selectedStateId);
-                              }
-                            }
-                          });
-                        },
-                        value: stateTypedropdownvalue,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'District',
-                      style: TextStyle(color: bluem),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Container(
-                    height: 45,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                    child: Center(
-                      child: DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0)),
-                            borderSide:
-                            BorderSide(color: yellow, width: 1),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: yellow),
-                          ),
-                          hintText: 'Select District',
-                          hintStyle:
-                          TextStyle(fontSize: 12, color: bluem),
-                        ),
-                        isExpanded: true,
-                        icon: Icon(Icons.arrow_drop_down),
-                        iconSize: 20,
-                        elevation: 10,
-                        style: TextStyle(fontSize: 15),
-                        items: (packageNamedropdownvalue ==
-                            'District Franchise'
-                            ? notdistrictType
-                            : districtType)
-                            .map((String district) {
-                          return DropdownMenuItem<String>(
-                            value: district,
-                            child: Text(
-                              district,
-                              style:
-                              TextStyle(fontSize: 12, color: bluem),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (String? newVal) {
-                          setState(() {
-                            districtTypedropdownvalue = newVal;
-                            zonalTypedropdownvalue = null;
-                            zonalType = [];
-
-                            if (districtTypedropdownvalue != null) {
-                              try {
-                                // Debugging: Print the API response
-                                print(
-                                    'Selected District: $districtTypedropdownvalue');
-
-                                // Find the district ID corresponding to the selected district name
-                                String selectedDistrictId =
-                                (packageNamedropdownvalue ==
-                                    'District Franchise'
-                                    ? notdistricts
-                                    : districts)
-                                    .firstWhere((district) =>
-                                district['name'] ==
-                                    districtTypedropdownvalue)[
-                                'id'];
-
-                                if (packageNamedropdownvalue ==
-                                    'Zonal Franchise') {
-                                  _Membernotzonal(selectedDistrictId);
-                                } else {
-                                  _Memberzonal(selectedDistrictId);
-                                }
-
-                                print(
-                                    'Selected District ID: $selectedDistrictId');
-                                _Memberzonal(selectedDistrictId);
-                              } catch (e) {
-                                // Handle error if district is not found
-                                print('Error finding district ID: $e');
-                              }
-                            }
-                          });
-                        },
-                        value: districtTypedropdownvalue,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-              if (packageNamedropdownvalue == 'Zonal Franchise' ||
-                  packageNamedropdownvalue == 'Mobile Franchise' ||
-                  packageTypedropdownvalue == 'Courses' ||
-                  packageTypedropdownvalue == 'Signals') ...[
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Zonal',
-                      style: TextStyle(color: bluem),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Container(
-                    height: 45,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                    child: Center(
-                      child: DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0)),
-                            borderSide:
-                            BorderSide(color: yellow, width: 1),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: yellow),
-                          ),
-                          hintText: 'Select Zonal',
-                          hintStyle:
-                          TextStyle(fontSize: 12, color: bluem),
-                        ),
-                        isExpanded: true,
-                        icon: Icon(Icons.arrow_drop_down),
-                        iconSize: 20,
-                        elevation: 10,
-                        style: TextStyle(fontSize: 15),
-                        items:
-                        (packageNamedropdownvalue == 'Zonal Franchise'
-                            ? notzonalType
-                            : zonalType)
-                            .map((String zonal) {
-                          return DropdownMenuItem<String>(
-                            value: zonal,
-                            child: Text(
-                              zonal,
-                              style:
-                              TextStyle(fontSize: 12, color: bluem),
-                            ),
-                          );
-                        }).toList(),
-                        // onChanged: (String? newVal) {
-                        //   setState(() {
-                        //     zonalTypedropdownvalue = newVal;
-                        //     panchayathTypedropdownvalue = null;
-                        //     panchayathType = [];
-                        //     if (zonalTypedropdownvalue != null) {
-                        //
-                        //       // Find the zonal ID corresponding to the selected zonal name
-                        //       String selectedZonalId = zonals.firstWhere(
-                        //           (zonal) =>
-                        //               zonal['name'] ==
-                        //               zonalTypedropdownvalue)['id'];
-                        //       _Memberpanchayath(selectedZonalId);
-                        //     }
-                        //   });
-                        // },
-
-                        onChanged: (String? newVal) {
-                          setState(() {
-                            zonalTypedropdownvalue = newVal;
-                            panchayathTypedropdownvalue = null;
-                            panchayathType = [];
-
-                            if (zonalTypedropdownvalue != null) {
-                              try {
-                                // Debugging: Print the API response
-                                print(
-                                    'Selected Zonal: $zonalTypedropdownvalue');
-
-                                // Find the district ID corresponding to the selected district name
-                                String selectedZonalId =
-                                (packageNamedropdownvalue ==
-                                    'Zonal Franchise'
-                                    ? notzonals
-                                    : zonals)
-                                    .firstWhere((zonal) =>
-                                zonal['name'] ==
-                                    zonalTypedropdownvalue)['id'];
-
-                                print(
-                                    'Selected Zonal ID: $selectedZonalId');
-                                _Memberpanchayath(selectedZonalId);
-                              } catch (e) {
-                                // Handle error if district is not found
-                                print('Error finding Zonal ID: $e');
-                              }
-                            }
-                          });
-                        },
-                        value: zonalTypedropdownvalue,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-              if (packageNamedropdownvalue == 'Mobile Franchise' ||
-                  packageTypedropdownvalue == 'Courses' ||
-                  packageTypedropdownvalue == 'Signals') ...[
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Panchayath',
-                      style: TextStyle(color: bluem),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Container(
-                    height: 45,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                    ),
-                    child: Center(
-                      child: DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0)),
-                            borderSide:
-                            BorderSide(color: yellow, width: 1),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: yellow),
-                          ),
-                          hintText: 'Select Panchayath',
-                          hintStyle:
-                          TextStyle(fontSize: 12, color: bluem),
-                        ),
-                        isExpanded: true,
-                        icon: Icon(Icons.arrow_drop_down),
-                        iconSize: 20,
-                        elevation: 10,
-                        style: TextStyle(fontSize: 15),
-                        items: panchayathType.map((String panchayath) {
-                          return DropdownMenuItem<String>(
-                            value: panchayath,
-                            child: Text(
-                              panchayath,
-                              style:
-                              TextStyle(fontSize: 12, color: bluem),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (String? newVal) {
-                          setState(() {
-                            panchayathTypedropdownvalue = newVal;
-                          });
-                        },
-                        value: panchayathTypedropdownvalue,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ]),
-            const SizedBox(
-              height: 10,
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    'Password',
-                    style: TextStyle(color: marketbgblue),
-                  )),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: TextField(
-                controller: passwordController,
-                decoration: InputDecoration(
-                  hintText: 'Enter your Password',
-                  hintStyle: TextStyle(
-                      color: marketbgblue, fontWeight: FontWeight.w400),
-                  contentPadding:
-                  EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow, width: 1),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    borderSide: BorderSide(color: yellow),
-                  ),
-                ),
-                style: TextStyle(
-                    color: black,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400),
-              ),
-            ),
-            SizedBox(
-              height: 18,
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: GestureDetector(
-                  onTap: () {
-                    _addMember();
-                  },
-                  child: Container(
-                    height: 40,
-                    width: 400,
-                    decoration: BoxDecoration(
-                        color: yellow,
-                        borderRadius: BorderRadius.circular(8)),
-                    child: Center(
-                        child: Text(
-                          'Submit',
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.w500),
+                          'Phone',
+                          style: TextStyle(color: marketbgblue),
                         )),
                   ),
-                ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextField(
+                      controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter
+                            .digitsOnly // Allow only numbers
+                      ],
+                      decoration: InputDecoration(
+                        hintText: 'Enter your phone',
+                        hintStyle: TextStyle(
+                            color: marketbgblue, fontWeight: FontWeight.w400),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: yellow, width: 1),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: yellow),
+                        ),
+                      ),
+                      style: TextStyle(
+                          color: black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Address',
+                          style: TextStyle(color: marketbgblue),
+                        )),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextField(
+                      controller: addressController,
+                      decoration: InputDecoration(
+                        hintText: 'Enter your address',
+                        hintStyle: TextStyle(
+                            color: marketbgblue, fontWeight: FontWeight.w400),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: yellow, width: 1),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: yellow),
+                        ),
+                      ),
+                      style: TextStyle(
+                          color: black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Date of birth',
+                          style: TextStyle(color: marketbgblue),
+                        )),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextField(
+                      controller: dobController,
+                      readOnly: true,
+                      keyboardType: TextInputType.datetime,
+                      decoration: InputDecoration(
+                          hintText: 'Enter your dob',
+                          hintStyle: TextStyle(
+                              color: marketbgblue, fontWeight: FontWeight.w400),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: yellow, width: 1),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide: BorderSide(color: yellow),
+                          ),
+                          suffixIcon: Icon(Icons.calendar_month)
+                          // icon: Icon(Icons.calendar_month)
+                          ),
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime(2101),
+                        );
+
+                        if (pickedDate != null) {
+                          setState(() {
+                            dob = pickedDate
+                                .millisecondsSinceEpoch; // Save the date as an integer (timestamp)
+                            dobController.text =
+                                "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}"; // Format the date and display it
+                          });
+                        }
+                      },
+                      style: TextStyle(
+                          color: black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child:
+                          Text('Package Type', style: TextStyle(color: bluem)),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Container(
+                      height: 45,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                      child: Center(
+                        child: DropdownButtonFormField<String>(
+                          decoration: const InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(color: yellow, width: 1),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(color: yellow),
+                            ),
+                            hintText: 'Select Package Type',
+                            hintStyle: TextStyle(fontSize: 12, color: bluem),
+                          ),
+                          isExpanded: true,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 20,
+                          elevation: 10,
+                          style: TextStyle(fontSize: 15),
+                          items: packageType.map((String packagedata) {
+                            return DropdownMenuItem<String>(
+                              value: packagedata,
+                              child: Text(
+                                packagedata,
+                                style: TextStyle(fontSize: 12, color: bluem),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (String? newVal) {
+                            setState(() {
+                              packageTypedropdownvalue = newVal;
+                              packageNamedropdownvalue = null;
+                              packageAmount = '';
+                              packageAmountGST = '';
+                              if (packageTypedropdownvalue != null) {
+                                // Filter package names based on selected package type
+                                PackageName = packageData
+                                    .where((packagedata) =>
+                                        packagedata['franchiseName'] ==
+                                        packageTypedropdownvalue)
+                                    .map((packagedata) =>
+                                        packagedata['packageName'] as String)
+                                    .toList();
+                              } else {
+                                PackageName = [];
+                              }
+                            });
+                          },
+                          value: packageTypedropdownvalue,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child:
+                          Text('Package Name', style: TextStyle(color: bluem)),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Container(
+                      height: 45,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                      child: Center(
+                        child: DropdownButtonFormField<String>(
+                          decoration: const InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(color: yellow, width: 1),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide(color: yellow),
+                            ),
+                            hintText: 'Select Package Name',
+                            hintStyle: TextStyle(fontSize: 12, color: bluem),
+                          ),
+                          isExpanded: true,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 20,
+                          elevation: 10,
+                          style: TextStyle(fontSize: 15),
+                          items: PackageName.map((String item) {
+                            return DropdownMenuItem<String>(
+                              value: item,
+                              child: Text(
+                                item,
+                                style: TextStyle(fontSize: 12, color: bluem),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (String? newVal) {
+                            _updatePackageAmountAndGST(newVal);
+                          },
+                          value: packageNamedropdownvalue,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text('Package Amount',
+                          style: TextStyle(color: bluem)),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextField(
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        hintText: 'Package amount',
+                        hintStyle: TextStyle(
+                            color: bluem, fontWeight: FontWeight.w400),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: yellow, width: 1),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: yellow),
+                        ),
+                      ),
+                      onChanged: (text) {
+                        setState(() {
+                          packageAmount = text;
+                        });
+                      },
+                      style: TextStyle(
+                          color: bluem,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400),
+                      controller: TextEditingController(text: packageAmount),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text('Package Amount GST',
+                            style:
+                                TextStyle(color: marketbgblue, fontSize: 14))),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextField(
+                      readOnly: true,
+                      decoration: InputDecoration(
+                        hintText: 'Package amount GST',
+                        hintStyle: TextStyle(
+                            color: marketbgblue, fontWeight: FontWeight.w400),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: yellow, width: 1),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: yellow),
+                        ),
+                      ),
+                      onChanged: (text) {
+                        setState(() {
+                          packageAmountGST = text;
+                        });
+                      },
+                      style: TextStyle(
+                          color: bluem,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400),
+                      controller: TextEditingController(text: packageAmountGST),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Column(children: [
+                    if (packageNamedropdownvalue == 'District Franchise' ||
+                        packageNamedropdownvalue == 'Zonal Franchise' ||
+                        packageNamedropdownvalue == 'Mobile Franchise' ||
+                        packageTypedropdownvalue == 'Courses' ||
+                        packageTypedropdownvalue == 'Signals') ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            'State',
+                            style: TextStyle(color: bluem),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Container(
+                          height: 45,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          ),
+                          child: Center(
+                            child: DropdownButtonFormField<String>(
+                              decoration: const InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide:
+                                      BorderSide(color: yellow, width: 1),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide(color: yellow),
+                                ),
+                                hintText: 'Select State',
+                                hintStyle:
+                                    TextStyle(fontSize: 12, color: bluem),
+                              ),
+                              isExpanded: true,
+                              icon: Icon(Icons.arrow_drop_down),
+                              iconSize: 20,
+                              elevation: 10,
+                              style: TextStyle(fontSize: 15),
+                              items: stateType.map((String state) {
+                                return DropdownMenuItem<String>(
+                                  value: state,
+                                  child: Text(
+                                    state,
+                                    style:
+                                        TextStyle(fontSize: 12, color: bluem),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (String? newVal) {
+                                setState(() {
+                                  stateTypedropdownvalue = newVal;
+                                  districtTypedropdownvalue = null;
+                                  zonalTypedropdownvalue = null;
+                                  districtType = [];
+                                  notdistrictType = [];
+                                  zonalType = [];
+                                  notzonalType = [];
+                                  if (stateTypedropdownvalue != null) {
+                                    // Find the state ID corresponding to the selected state name
+                                    String selectedStateId = states['states']
+                                        .firstWhere((state) =>
+                                            state['stateName'] ==
+                                            stateTypedropdownvalue)['id'];
+                                    if (packageNamedropdownvalue ==
+                                        'District Franchise') {
+                                      _Membernotdistrict(selectedStateId);
+                                    } else {
+                                      _Memberdistrict(selectedStateId);
+                                    }
+                                  }
+                                });
+                              },
+                              value: stateTypedropdownvalue,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            'District',
+                            style: TextStyle(color: bluem),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Container(
+                          height: 45,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          ),
+                          child: Center(
+                            child: DropdownButtonFormField<String>(
+                              decoration: const InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide:
+                                      BorderSide(color: yellow, width: 1),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide(color: yellow),
+                                ),
+                                hintText: 'Select District',
+                                hintStyle:
+                                    TextStyle(fontSize: 12, color: bluem),
+                              ),
+                              isExpanded: true,
+                              icon: Icon(Icons.arrow_drop_down),
+                              iconSize: 20,
+                              elevation: 10,
+                              style: TextStyle(fontSize: 15),
+                              items: (packageNamedropdownvalue ==
+                                          'District Franchise'
+                                      ? notdistrictType
+                                      : districtType)
+                                  .map((String district) {
+                                return DropdownMenuItem<String>(
+                                  value: district,
+                                  child: Text(
+                                    district,
+                                    style:
+                                        TextStyle(fontSize: 12, color: bluem),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (String? newVal) {
+                                setState(() {
+                                  districtTypedropdownvalue = newVal;
+                                  zonalTypedropdownvalue = null;
+                                  zonalType = [];
+
+                                  if (districtTypedropdownvalue != null) {
+                                    try {
+                                      // Debugging: Print the API response
+                                      print(
+                                          'Selected District: $districtTypedropdownvalue');
+
+                                      // Find the district ID corresponding to the selected district name
+                                      String selectedDistrictId =
+                                          (packageNamedropdownvalue ==
+                                                          'District Franchise'
+                                                      ? notdistricts
+                                                      : districts)
+                                                  .firstWhere((district) =>
+                                                      district['name'] ==
+                                                      districtTypedropdownvalue)[
+                                              'id'];
+
+                                      if (packageNamedropdownvalue ==
+                                          'Zonal Franchise') {
+                                        _Membernotzonal(selectedDistrictId);
+                                      } else {
+                                        _Memberzonal(selectedDistrictId);
+                                      }
+
+                                      print(
+                                          'Selected District ID: $selectedDistrictId');
+                                      _Memberzonal(selectedDistrictId);
+                                    } catch (e) {
+                                      // Handle error if district is not found
+                                      print('Error finding district ID: $e');
+                                    }
+                                  }
+                                });
+                              },
+                              value: districtTypedropdownvalue,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                    if (packageNamedropdownvalue == 'Zonal Franchise' ||
+                        packageNamedropdownvalue == 'Mobile Franchise' ||
+                        packageTypedropdownvalue == 'Courses' ||
+                        packageTypedropdownvalue == 'Signals') ...[
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            'Zonal',
+                            style: TextStyle(color: bluem),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Container(
+                          height: 45,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          ),
+                          child: Center(
+                            child: DropdownButtonFormField<String>(
+                              decoration: const InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide:
+                                      BorderSide(color: yellow, width: 1),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide(color: yellow),
+                                ),
+                                hintText: 'Select Zonal',
+                                hintStyle:
+                                    TextStyle(fontSize: 12, color: bluem),
+                              ),
+                              isExpanded: true,
+                              icon: Icon(Icons.arrow_drop_down),
+                              iconSize: 20,
+                              elevation: 10,
+                              style: TextStyle(fontSize: 15),
+                              items:
+                                  (packageNamedropdownvalue == 'Zonal Franchise'
+                                          ? notzonalType
+                                          : zonalType)
+                                      .map((String zonal) {
+                                return DropdownMenuItem<String>(
+                                  value: zonal,
+                                  child: Text(
+                                    zonal,
+                                    style:
+                                        TextStyle(fontSize: 12, color: bluem),
+                                  ),
+                                );
+                              }).toList(),
+                              // onChanged: (String? newVal) {
+                              //   setState(() {
+                              //     zonalTypedropdownvalue = newVal;
+                              //     panchayathTypedropdownvalue = null;
+                              //     panchayathType = [];
+                              //     if (zonalTypedropdownvalue != null) {
+                              //
+                              //       // Find the zonal ID corresponding to the selected zonal name
+                              //       String selectedZonalId = zonals.firstWhere(
+                              //           (zonal) =>
+                              //               zonal['name'] ==
+                              //               zonalTypedropdownvalue)['id'];
+                              //       _Memberpanchayath(selectedZonalId);
+                              //     }
+                              //   });
+                              // },
+
+                              onChanged: (String? newVal) {
+                                setState(() {
+                                  zonalTypedropdownvalue = newVal;
+                                  panchayathTypedropdownvalue = null;
+                                  panchayathType = [];
+
+                                  if (zonalTypedropdownvalue != null) {
+                                    try {
+                                      // Debugging: Print the API response
+                                      print(
+                                          'Selected Zonal: $zonalTypedropdownvalue');
+
+                                      // Find the district ID corresponding to the selected district name
+                                      String selectedZonalId =
+                                          (packageNamedropdownvalue ==
+                                                      'Zonal Franchise'
+                                                  ? notzonals
+                                                  : zonals)
+                                              .firstWhere((zonal) =>
+                                                  zonal['name'] ==
+                                                  zonalTypedropdownvalue)['id'];
+
+                                      print(
+                                          'Selected Zonal ID: $selectedZonalId');
+                                      _Memberpanchayath(selectedZonalId);
+                                    } catch (e) {
+                                      // Handle error if district is not found
+                                      print('Error finding Zonal ID: $e');
+                                    }
+                                  }
+                                });
+                              },
+                              value: zonalTypedropdownvalue,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                    if (packageNamedropdownvalue == 'Mobile Franchise' ||
+                        packageTypedropdownvalue == 'Courses' ||
+                        packageTypedropdownvalue == 'Signals') ...[
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            'Panchayath',
+                            style: TextStyle(color: bluem),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Container(
+                          height: 45,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          ),
+                          child: Center(
+                            child: DropdownButtonFormField<String>(
+                              decoration: const InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide:
+                                      BorderSide(color: yellow, width: 1),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide(color: yellow),
+                                ),
+                                hintText: 'Select Panchayath',
+                                hintStyle:
+                                    TextStyle(fontSize: 12, color: bluem),
+                              ),
+                              isExpanded: true,
+                              icon: Icon(Icons.arrow_drop_down),
+                              iconSize: 20,
+                              elevation: 10,
+                              style: TextStyle(fontSize: 15),
+                              items: panchayathType.map((String panchayath) {
+                                return DropdownMenuItem<String>(
+                                  value: panchayath,
+                                  child: Text(
+                                    panchayath,
+                                    style:
+                                        TextStyle(fontSize: 12, color: bluem),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (String? newVal) {
+                                setState(() {
+                                  panchayathTypedropdownvalue = newVal;
+                                });
+                              },
+                              value: panchayathTypedropdownvalue,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ]),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Password',
+                          style: TextStyle(color: marketbgblue),
+                        )),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextField(
+                      controller: passwordController,
+                      decoration: InputDecoration(
+                        hintText: 'Enter your Password',
+                        hintStyle: TextStyle(
+                            color: marketbgblue, fontWeight: FontWeight.w400),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: yellow, width: 1),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: yellow),
+                        ),
+                      ),
+                      style: TextStyle(
+                          color: black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 18,
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: GestureDetector(
+                        onTap: () {
+                          _addMember();
+                        },
+                        child: Container(
+                          height: 40,
+                          width: 400,
+                          decoration: BoxDecoration(
+                              color: yellow,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Center(
+                              child: Text(
+                            'Submit',
+                            style: TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.w500),
+                          )),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  )
+                ],
               ),
             ),
-            SizedBox(
-              height: 30,
-            )
-          ],
-        ),
-      ),
     );
   }
 }

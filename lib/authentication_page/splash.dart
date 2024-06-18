@@ -60,9 +60,9 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: marketbg,
       body: Center(
         child: Image.asset(
-          'assets/logo/logomaster.png',
-          width: 200, // Set the desired width
-          height: 200, // Set the desired height
+          'assets/logo/logorebrand.png',
+          width: 500, // Set the desired width
+          height: 500, // Set the desired height
         ),
       ),
     );

@@ -76,12 +76,12 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                   hintText: 'Search here...',
                   prefixIcon: Icon(Icons.search),
                   focusedBorder:
-                  OutlineInputBorder(borderSide: BorderSide(color: yellow)),
+                      OutlineInputBorder(borderSide: BorderSide(color: yellow)),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
                       borderSide: BorderSide(color: yellow)),
                   enabledBorder:
-                  OutlineInputBorder(borderSide: BorderSide(color: yellow)),
+                      OutlineInputBorder(borderSide: BorderSide(color: yellow)),
                   contentPadding: EdgeInsets.symmetric(vertical: 10.0),
                 ),
               ),
@@ -90,7 +90,7 @@ class _DropdownscreenState extends State<Dropdownscreen> {
             // Dropdown button implementation
             Container(
               width: 180,
-              height: 45,
+              height: 40,
               decoration: BoxDecoration(
                 color: yellow,
                 borderRadius: BorderRadius.circular(5),
@@ -99,7 +99,9 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                 child: DropdownButtonFormField2<String>(
                   isExpanded: true,
                   value: selectedItem,
+                  style: TextStyle(fontSize: 12, color: Colors.black),
                   decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.only(bottom: 7),
                     border: InputBorder.none,
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide.none,
@@ -107,14 +109,14 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                   ),
                   items: filteredItems
                       .map((item) => DropdownMenuItem<String>(
-                    value: item,
-                    child: Center(
-                      child: Text(
-                        item,
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    ),
-                  ))
+                            value: item,
+                            child: Center(
+                              child: Text(
+                                item,
+                                style: TextStyle(fontSize: 15),
+                              ),
+                            ),
+                          ))
                       .toList(),
                   onChanged: (String? item) {
                     setState(() {
@@ -127,9 +129,9 @@ class _DropdownscreenState extends State<Dropdownscreen> {
             SizedBox(height: 10),
             Expanded(
                 child: levelone(
-                  searchQuery: searchController.text,
-                  selectedFranchise: selectedItem,
-                )),
+              searchQuery: searchController.text,
+              selectedFranchise: selectedItem,
+            )),
           ],
         ),
       ),

@@ -4,10 +4,10 @@ import '../support/dio_helper.dart';
 class MemberService {
   static Future AddMember(Map<String, dynamic> reqData) async {
     var dio = await DioHelper.getInstance();
-    var response =
-    await dio.post('$baseURL/api/user/add-user', data: reqData);
+    var response = await dio.post('$baseURL/api/user/add-user', data: reqData);
     return response.data;
   }
+
   static Future<bool> checkFieldUnique({String? email, String? phone}) async {
     var dio = await DioHelper.getInstance();
     var response = await dio.get(
@@ -32,8 +32,6 @@ class MemberService {
     );
     return response.data;
   }
-
-
 
   static Future GetPackageTypes() async {
     var dio = await DioHelper.getInstance();
@@ -80,10 +78,10 @@ class MemberService {
     return response.data;
   }
 
-  static Future Membernotdistrict(id) async {
+  static Future Membernotdistrict(districtId) async {
     var dio = await DioHelper.getInstance();
     var response =
-        await dio.get('$baseURL/api/admin/view-nottaken-districts/$id');
+        await dio.get('$baseURL/api/admin/view-nottaken-districts/$districtId');
     print(response);
     return response.data;
   }
