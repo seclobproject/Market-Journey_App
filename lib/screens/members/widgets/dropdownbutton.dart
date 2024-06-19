@@ -89,7 +89,7 @@ class _DropdownscreenState extends State<Dropdownscreen> {
             SizedBox(height: 30),
             // Dropdown button implementation
             Container(
-              width: 180,
+
               height: 40,
               decoration: BoxDecoration(
                 color: yellow,

@@ -20,11 +20,11 @@ class _LevelFourReportState extends State<LevelFourReport> {
 
   Future<void> _fetchAutopool() async {
     try {
-      var response = await IncomeService.report3();
+      var response = await IncomeService.report4();
       log.i('API Response: $response');
 
       setState(() {
-        Autopool = response['Autopool'] ?? [];
+        Autopool = response['autoPoolCreditHistory'] ?? [];
         log.i('Autopool: $Autopool');  // Log the directIncome list
         _isLoading = false;
       });
