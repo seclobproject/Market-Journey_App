@@ -577,12 +577,8 @@ class _AddMemberPageState extends State<AddMemberPage> {
                         );
 
                         if (pickedDate != null) {
-                          setState(() {
-                            dob = pickedDate
-                                .millisecondsSinceEpoch; // Save the date as an integer (timestamp)
-                            dobController.text =
-                                "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}"; // Format the date and display it
-                          });
+                          dobController.text =
+                              "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
                         }
                       },
                       style: TextStyle(
