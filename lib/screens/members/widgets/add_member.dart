@@ -46,7 +46,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
   List<String> packageType = [];
 
   String? packageNamedropdownvalue;
-  List<String> PackageName = [];
+  List<String> packageName = [];
 
   String? stateTypedropdownvalue;
   List<String> stateType = [];
@@ -276,7 +276,8 @@ class _AddMemberPageState extends State<AddMemberPage> {
         'email': emailController.text,
         'phone':
             int.tryParse(phoneController.text) ?? 0, // Convert phone to integer
-        'dob': dobController.text, // Ensure dob is in the correct format
+        'DateOfBirth':
+            dobController.text, // Ensure dob is in the correct format
         'address': addressController.text,
         'password': passwordController.text,
         'packageType': packageTypedropdownvalue,
@@ -647,7 +648,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
                               packageAmountGST = '';
                               if (packageTypedropdownvalue != null) {
                                 // Filter package names based on selected package type
-                                PackageName = packageData
+                                packageName = packageData
                                     .where((packagedata) =>
                                         packagedata['franchiseName'] ==
                                         packageTypedropdownvalue)
@@ -655,7 +656,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
                                         packagedata['packageName'] as String)
                                     .toList();
                               } else {
-                                PackageName = [];
+                                packageName = [];
                               }
                             });
                           },
@@ -702,7 +703,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
                           iconSize: 20,
                           elevation: 10,
                           style: TextStyle(fontSize: 15),
-                          items: PackageName.map((String item) {
+                          items: packageName.map((String item) {
                             return DropdownMenuItem<String>(
                               value: item,
                               child: Text(
