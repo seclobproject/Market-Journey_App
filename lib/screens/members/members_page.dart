@@ -56,43 +56,43 @@ class _memberspageState extends State<memberspage> {
       body: profiledata == null
           ? Center(child: CircularProgressIndicator())
           : profiledata!['packageType'] == 'Franchise'
-          ? Dropdownscreen()
-          : Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/logo/exclamation-mark.png', // Replace with your image path
-              height: 25,
-              width: 25,
-            ),
-            SizedBox(height: 10),
-            Center(
-              child: Text(
-                'You Are Not Authorized to View This Page',
-                style: TextStyle(color: black, fontSize: 12),
-              ),
-            ),
-          ],
-        ),
-      ),
+              ? Dropdownscreen()
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/logo/exclamation-mark.png', // Replace with your image path
+                        height: 25,
+                        width: 25,
+                      ),
+                      SizedBox(height: 10),
+                      Center(
+                        child: Text(
+                          'You Are Not Authorized to View This Page',
+                          style: TextStyle(color: black, fontSize: 12),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
       floatingActionButton:
-      profiledata != null && profiledata!['packageType'] == 'Franchise'
-          ? FloatingActionButton(
-        child: Icon(
-          Icons.add,
-          color: bluem,
-        ),
-        backgroundColor: yellow,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const AddMemberPage()),
-          );
-        },
-      )
-          : null,
+          profiledata != null && profiledata!['packageType'] == 'Franchise'
+              ? FloatingActionButton(
+                  child: Icon(
+                    Icons.add,
+                    color: bluem,
+                  ),
+                  backgroundColor: yellow,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AddMemberPage()),
+                    );
+                  },
+                )
+              : null,
     );
   }
 }

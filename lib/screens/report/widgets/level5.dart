@@ -23,7 +23,7 @@ class _LevelFiveReportState extends State<LevelFiveReport> {
 
       setState(() {
         Bonus = response['Bonus'] ?? [];
-        log.i('Bonus: $Bonus');  // Log the Bonus list
+        log.i('Bonus: $Bonus'); // Log the Bonus list
         _isLoading = false;
       });
     } catch (error) {
@@ -53,10 +53,12 @@ class _LevelFiveReportState extends State<LevelFiveReport> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator(
-        strokeWidth: 6.0,
-        valueColor: AlwaysStoppedAnimation(yellow),
-      ),);
+      return const Center(
+        child: CircularProgressIndicator(
+          strokeWidth: 6.0,
+          valueColor: AlwaysStoppedAnimation(yellow),
+        ),
+      );
     }
 
     if (Bonus.isEmpty) {
@@ -90,9 +92,6 @@ class _LevelFiveReportState extends State<LevelFiveReport> {
                                 fontSize: 10,
                                 fontWeight: FontWeight.w500)),
                       ),
-
-
-
                       Center(
                         child: Text(" Bonus Amount",
                             style: TextStyle(
@@ -152,8 +151,6 @@ class _LevelFiveReportState extends State<LevelFiveReport> {
                             fontWeight: FontWeight.w400),
                       ),
                     ),
-
-
                   ],
                 );
               }).toList(),
