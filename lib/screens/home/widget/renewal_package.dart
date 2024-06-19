@@ -180,6 +180,7 @@ class _RenewalpackageState extends State<Renewalpackage> {
         FormData formData = FormData.fromMap({
           'reqPackage': packageName,
           'amount': packageAmount,
+          'action':"addOn",
           'screenshot': MultipartFile.fromBytes(
             uint8List,
             filename: 'image.png',

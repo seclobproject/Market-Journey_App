@@ -7,6 +7,7 @@ import 'package:master_journey/screens/home/widget/renewal_package_franchise.dar
 import 'package:master_journey/screens/home/widget/signaladdonplusconvert.dart';
 import 'package:master_journey/services/home_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../navigation/bottom_tabs_screen.dart';
 import '../../../resources/color.dart';
 import '../../../services/profile_service.dart';
 import '../../../support/logger.dart';
@@ -68,6 +69,17 @@ class _SubscriptionState extends State<Subscription> {
         ),
         centerTitle: true,
         backgroundColor: marketbg,
+        automaticallyImplyLeading: false,
+         leading: IconButton(
+           icon: Icon(Icons.arrow_back),
+           onPressed: () {
+             Navigator.of(context).pushAndRemoveUntil(
+               MaterialPageRoute(builder: (context) => BottomTabsScreen()),
+                   (route) => false,
+             ); // Navigates back to the previous page
+           },
+         ),
+
       ),
       backgroundColor: marketbg,
       body: LayoutBuilder(
@@ -124,7 +136,7 @@ class _SubscriptionState extends State<Subscription> {
                             SizedBox(height: 10),
                             GestureDetector(
                               onTap: () {
-                                if (profiledata['renewalStatus'] == "true" || profiledata['packageType'] == "Courses" || profiledata['packageType'] == "Signals") {
+                                if (profiledata['renewalStatus'] == "true" || profiledata['packageType'] == "Courses" || profiledata['packageType'] == "Signals" || profiledata['franchise'] == "Signals"|| profiledata['franchise'] == "Signals") {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) => Renewalpackagesignal()),

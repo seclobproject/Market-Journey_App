@@ -279,14 +279,14 @@ class _AddMemberPageState extends State<AddMemberPage> {
         'dob': dobController.text, // Ensure dob is in the correct format
         'address': addressController.text,
         'password': passwordController.text,
-        'packageName': packageTypedropdownvalue,
+        'packageType': packageTypedropdownvalue,
         'franchise': packageNamedropdownvalue,
         'packageAmount': packageAmount,
         'packageAmountGST': packageAmountGST,
         'state': stateTypedropdownvalue,
         'district': districtTypedropdownvalue,
-        'zonal': zonalTypedropdownvalue!,
-        'panchayath': panchayathTypedropdownvalue!,
+        'zonal': zonalTypedropdownvalue,
+        'panchayath': panchayathTypedropdownvalue,
       };
 
       log.i('Request Data: $reqData');
@@ -598,7 +598,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
               child: Align(
                 alignment: Alignment.topLeft,
                 child: Text('Package Type',
-                    style: TextStyle(color: marketbgblue)),
+                    style: TextStyle(color: Colors.blue)),
               ),
             ),
             SizedBox(height: 10),
@@ -615,16 +615,17 @@ class _AddMemberPageState extends State<AddMemberPage> {
                       enabledBorder: OutlineInputBorder(
                         borderRadius:
                         BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(color: yellow, width: 1),
+                        borderSide:
+                        BorderSide(color: Colors.yellow, width: 1),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius:
                         BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(color: yellow),
+                        borderSide: BorderSide(color: Colors.yellow),
                       ),
                       hintText: 'Select Package Type',
                       hintStyle:
-                      TextStyle(fontSize: 12, color: marketbgblue),
+                      TextStyle(fontSize: 12, color: Colors.blue),
                     ),
                     isExpanded: true,
                     icon: Icon(Icons.arrow_drop_down),
@@ -636,8 +637,8 @@ class _AddMemberPageState extends State<AddMemberPage> {
                         value: packagedata,
                         child: Text(
                           packagedata,
-                          style: TextStyle(
-                              fontSize: 12, color: marketbgblue),
+                          style:
+                          TextStyle(fontSize: 12, color: Colors.blue),
                         ),
                       );
                     }).toList(),
@@ -672,7 +673,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
               child: Align(
                 alignment: Alignment.topLeft,
                 child: Text('Package Name',
-                    style: TextStyle(color: marketbgblue)),
+                    style: TextStyle(color: Colors.blue)),
               ),
             ),
             SizedBox(height: 10),
@@ -689,16 +690,17 @@ class _AddMemberPageState extends State<AddMemberPage> {
                       enabledBorder: OutlineInputBorder(
                         borderRadius:
                         BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(color: yellow, width: 1),
+                        borderSide:
+                        BorderSide(color: Colors.yellow, width: 1),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius:
                         BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide(color: yellow),
+                        borderSide: BorderSide(color: Colors.yellow),
                       ),
                       hintText: 'Select Package Name',
                       hintStyle:
-                      TextStyle(fontSize: 12, color: marketbgblue),
+                      TextStyle(fontSize: 12, color: Colors.blue),
                     ),
                     isExpanded: true,
                     icon: Icon(Icons.arrow_drop_down),
@@ -710,25 +712,16 @@ class _AddMemberPageState extends State<AddMemberPage> {
                         value: item,
                         child: Text(
                           item,
-                          style: TextStyle(
-                              fontSize: 12, color: marketbgblue),
+                          style:
+                          TextStyle(fontSize: 12, color: Colors.blue),
                         ),
                       );
                     }).toList(),
-                    onChanged: _updatePackageAmountAndGST,
+                    onChanged: (String? newVal) {
+                      _updatePackageAmountAndGST(newVal);
+                    },
                     value: packageNamedropdownvalue,
                   ),
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  'Package Amount',
-                  style: TextStyle(color: bluem, fontSize: 14),
                 ),
               ),
             ),
@@ -1028,12 +1021,12 @@ class _AddMemberPageState extends State<AddMemberPage> {
                             borderRadius:
                             BorderRadius.all(Radius.circular(10.0)),
                             borderSide:
-                            BorderSide(color: yellow, width: 1),
+                            BorderSide(color: yellow1, width: 1),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius:
                             BorderRadius.all(Radius.circular(10.0)),
-                            borderSide: BorderSide(color: yellow),
+                            borderSide: BorderSide(color: yellow1),
                           ),
                           hintText: 'Select Zonal',
                           hintStyle:

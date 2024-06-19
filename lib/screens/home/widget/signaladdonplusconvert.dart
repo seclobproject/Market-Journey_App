@@ -66,7 +66,7 @@ class _RenewalpackagesignalState extends State<Renewalpackagesignal> {
       _imageFile = pickedFile;
     });
   }
-
+///for addon upload
   void _showPackageDetails(BuildContext context, dynamic transaction) {
     TextEditingController _transactionIdController = TextEditingController();
 
@@ -140,6 +140,99 @@ class _RenewalpackagesignalState extends State<Renewalpackagesignal> {
                       uploadPackageDetails(
                         packageName: transaction['packageName'],
                         packageAmount: packageAmount,
+                        action:"addOn",
+
+                        image: _imageFile,
+                        transactionIdController: _transactionIdController,
+                        context: context,
+                      );
+                    },
+                    child: Text("Submit"),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+  ///for convert upload
+  void _showPackageDetailsconvert(BuildContext context, dynamic transaction) {
+    TextEditingController _transactionIdController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Container(
+
+              child: AlertDialog(
+
+                title: Text('Renewal Package', style: TextStyle(color: yellow1)),
+                content: Column(
+
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      transaction['packageName'] ?? 'No Name',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text("₹${transaction['packageAmount'] ?? '0'}"),
+                    SizedBox(height: 20),
+                    _imageFile == null
+                        ? Text("No image selected.")
+                        : Text(
+                      (_imageFile?.path ?? 'No image selected').substring(
+                        (_imageFile?.path ?? 'No image selected').length -
+                            50,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    TextField(
+                      controller: _transactionIdController,
+                      decoration: InputDecoration(
+                        labelText: 'Transaction ID',
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () => _pickImage(setState),
+                      child: Text("Upload Screenshot"),
+                    ),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("Close"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      double? packageAmount =
+                      double.tryParse(transaction['packageAmount'].toString());
+                      if (packageAmount == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Invalid package amount.'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
+                      uploadPackageDetails(
+                        packageName: transaction['packageName'],
+                        packageAmount: packageAmount,
+                        action:"convert",
+
                         image: _imageFile,
                         transactionIdController: _transactionIdController,
                         context: context,
@@ -158,6 +251,7 @@ class _RenewalpackagesignalState extends State<Renewalpackagesignal> {
 
   Future<void> uploadPackageDetails({
     required String packageName,
+    required String action,
     required double packageAmount,
     required XFile? image,
     required TextEditingController transactionIdController,
@@ -180,6 +274,7 @@ class _RenewalpackagesignalState extends State<Renewalpackagesignal> {
         FormData formData = FormData.fromMap({
           'reqPackage': packageName,
           'amount': packageAmount,
+          'action': action,
           'screenshot': MultipartFile.fromBytes(
             uint8List,
             filename: 'image.png',
@@ -367,7 +462,7 @@ class _RenewalpackagesignalState extends State<Renewalpackagesignal> {
                   padding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: GestureDetector(
-                    onTap: () => _showPackageDetails(context, transaction2),
+                    onTap: () => _showPackageDetailsconvert(context, transaction2),
                     child: Container(
                       height: 80,
                       width: 300,

@@ -143,6 +143,7 @@ class _RenewalpackageaddonState extends State<Renewalpackageaddon> {
   Future<void> uploadPackageDetails({
     required String packageName,
     required double packageAmount,
+
     required XFile? image,
     required TextEditingController transactionIdController,
     required BuildContext context,
@@ -164,9 +165,11 @@ class _RenewalpackageaddonState extends State<Renewalpackageaddon> {
         FormData formData = FormData.fromMap({
           'reqPackage': packageName,
           'amount': packageAmount,
+          'action':"addOn",
           'screenshot': MultipartFile.fromBytes(
             uint8List,
             filename: 'image.png',
+
           ),
           'transactionNumber': transactionIdController.text,
         });
