@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:master_journey/screens/members/widgets/filtereduser.dart';
-import 'package:master_journey/screens/members/widgets/level_one.dart';
 
 import '../../../../resources/color.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-
-import '../../../services/member_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../services/profile_service.dart';
 import '../../../support/logger.dart';
 
 class Dropdownscreen extends StatefulWidget {
@@ -16,6 +15,10 @@ class Dropdownscreen extends StatefulWidget {
 class _DropdownscreenState extends State<Dropdownscreen> {
   // Text editing controller for the search bar
   TextEditingController searchController = TextEditingController();
+  var userId;
+  var profileData;
+  var zonal;
+  var panchayath;
 
   List<String> items = [
     'All Package Type',
@@ -38,43 +41,45 @@ class _DropdownscreenState extends State<Dropdownscreen> {
   String? panchayathItem;
   List<String> panchayathType = [];
 
-  Future<void> _Memberzonal(String districtId) async {
+  Future<void> _Viewzonal(String id) async {
     try {
-      var response = await MemberService.Memberzonal(districtId);
+      var response = await ProfileService.viewzonal(id);
       log.i('Zonal API response: $response');
 
       if (response != null &&
           response['sts'] == '01' &&
-          response['msg'] == 'Zonals retrieved successfully') {
+          response['msg'] == 'get user profile Success') {
+        // Updated condition
         setState(() {
-          var zonals = response['zonals'];
+          zonal = response['zonal'];
 
           // Extract zonal names and remove duplicates
           zonalType = List<String>.from(
-              zonals.map((zonal) => zonal['name']).toSet().toList());
+              zonal.map((zonal) => zonal['name']).toSet().toList());
           log.i('Zonal names extracted: $zonalType');
         });
       } else {
         log.e('Unexpected API response: $response');
       }
     } catch (e) {
-      log.e('Error fetching zonals: $e');
+      log.e('Error fetching zonal data: $e');
     }
   }
 
-  Future<void> _Memberpanchayath(String zonalId) async {
+  Future<void> _Viewpanchayath(String id) async {
     try {
-      var response = await MemberService.Memberpanchayath(zonalId);
+      var response = await ProfileService.viewpanchayath(id);
       log.i('Panchayath API response: $response');
 
       if (response != null &&
           response['sts'] == '01' &&
-          response['msg'] == 'panchayaths retrieved successfully') {
+          response['msg'] == 'Districts retrieved success') {
+        // Updated condition
         setState(() {
-          var panchayaths = response['panchayaths'];
+          panchayath = response['panchayath'];
 
-          // Extract Panchayath names and remove duplicates
-          panchayathType = List<String>.from(panchayaths
+          // Extract panchayath names and remove duplicates
+          panchayathType = List<String>.from(panchayath
               .map((panchayath) => panchayath['name'])
               .toSet()
               .toList());
@@ -84,7 +89,32 @@ class _DropdownscreenState extends State<Dropdownscreen> {
         log.e('Unexpected API response: $response');
       }
     } catch (e) {
-      log.e('Error fetching panchayaths: $e');
+      log.e('Error fetching panchayath data: $e');
+    }
+  }
+
+  Future<void> _fetchProfileData() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      userId = prefs.getString('userid');
+      var response = await ProfileService.profile();
+      log.i('Profile data show.... $response');
+      setState(() {
+        profileData = response;
+      });
+
+      // Fetch zonal or panchayath data based on profile type
+      if (profileData != null) {
+        if (profileData['franchise'] == 'Zonal Franchise' &&
+            profileData['zonalFranchise'] != null) {
+          _Viewpanchayath(profileData['zonalFranchise']);
+        } else if (profileData['districtFranchise'] != null) {
+          _Viewzonal(profileData['districtFranchise']);
+        }
+      }
+    } catch (e) {
+      log.e('Error fetching profile data: $e');
+      // Handle error appropriately, e.g., show a snackbar or a message to the user
     }
   }
 
@@ -93,6 +123,7 @@ class _DropdownscreenState extends State<Dropdownscreen> {
     super.initState();
     // Initialize the filtered items list with all items, ensuring there are no duplicates
     filteredItems = items.toSet().toList();
+    _fetchProfileData(); // Fetch the profile data when the widget initializes
   }
 
   // Function to filter items based on search input
@@ -114,6 +145,9 @@ class _DropdownscreenState extends State<Dropdownscreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool showZonalDropdown =
+        profileData != null && profileData['franchise'] == 'Zonal Franchise';
+
     return Scaffold(
       backgroundColor: marketbg,
       body: Padding(
@@ -127,7 +161,7 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                 controller: searchController,
                 onChanged: (value) {
                   // Filter search results without affecting dropdown
-                  setState(() {});
+                  filterSearchResults(value);
                 },
                 decoration: InputDecoration(
                   hintText: 'Search here...',
@@ -156,16 +190,15 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                   ),
                   child: Center(
                     child: DropdownButtonFormField2<String>(
+                      decoration: const InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: yellow, width: 1),
+                        ),
+                      ),
                       isExpanded: true,
                       value: selectedItem,
                       style: TextStyle(fontSize: 12, color: Colors.black),
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(bottom: 7),
-                        border: InputBorder.none,
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
                       items: filteredItems
                           .map((item) => DropdownMenuItem<String>(
                                 value: item,
@@ -185,77 +218,96 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                     ),
                   ),
                 ),
-                SizedBox(width: 10),
-                Container(
-                  width: 100,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: yellow,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Center(
-                    child: DropdownButtonFormField2<String>(
-                      isExpanded: true,
-                      value: selectedItem,
-                      style: TextStyle(fontSize: 12, color: Colors.black),
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(bottom: 7),
-                        border: InputBorder.none,
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                      items: filteredItems
-                          .map((item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Center(
-                                  child: Text(
-                                    item,
-                                    style: TextStyle(fontSize: 10),
-                                  ),
-                                ),
-                              ))
-                          .toList(),
-                      onChanged: (String? item) {
-                        setState(() {
-                          selectedItem = item;
-                        });
-                      },
+                if (!showZonalDropdown) ...[
+                  SizedBox(width: 10),
+                  Container(
+                    width: 100,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: yellow,
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Container(
-                  width: 100,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: yellow,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Center(
-                    child: DropdownButtonFormField2<String>(
-                      isExpanded: true,
-                      value: selectedItem,
-                      style: TextStyle(fontSize: 12, color: Colors.black),
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(bottom: 7),
-                        border: InputBorder.none,
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                      items: panchayathType.map((String panchayath) {
-                        return DropdownMenuItem<String>(
-                          value: panchayath,
-                          child: Text(
-                            panchayath,
-                            style: TextStyle(fontSize: 12, color: bluem),
+                    child: Center(
+                      child: DropdownButtonFormField2<String>(
+                        isExpanded: true,
+                        value: zonalItem,
+                        style: TextStyle(fontSize: 12, color: Colors.black),
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(bottom: 7),
+                          border: InputBorder.none,
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide.none,
                           ),
-                        );
-                      }).toList(),
-                      onChanged: (String? newVal) {
+                          hintText: 'zonal',
+                          hintStyle: TextStyle(fontSize: 10, color: bluem),
+                        ),
+                        items: zonalType.map((String zonal) {
+                          return DropdownMenuItem<String>(
+                            value: zonal,
+                            child: Text(
+                              zonal,
+                              style: TextStyle(fontSize: 12, color: bluem),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (String? newVal) {
+                          setState(() {
+                            zonalItem = newVal;
+                            // Fetch panchayath data using zonal ID
+                            if (newVal != null) {
+                              // Assuming that you have the zonal ID here
+                              var selectedZonal = zonal.firstWhere(
+                                  (z) => z['name'] == newVal,
+                                  orElse: () => null);
+                              if (selectedZonal != null) {
+                                _Viewpanchayath(selectedZonal['id']);
+                              }
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+                SizedBox(
+                  width: 10,
+                ),
+                
+                Container(
+                  width: 100,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: yellow,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Center(
+                    child: DropdownButtonFormField2<String>(
+                      isExpanded: true,
+                      value: panchayathItem,
+                      style: TextStyle(fontSize: 12, color: Colors.black),
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.only(bottom: 7),
+                        border: InputBorder.none,
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide.none,
+                        ),
+                        hintText: 'Panchayath',
+                        hintStyle: TextStyle(fontSize: 10, color: bluem),
+                      ),
+                      items: panchayathType
+                          .map((item) => DropdownMenuItem<String>(
+                                value: item,
+                                child: Center(
+                                  child: Text(
+                                    item,
+                                    style: TextStyle(fontSize: 10),
+                                  ),
+                                ),
+                              ))
+                          .toList(),
+                      onChanged: (String? item) {
                         setState(() {
-                          panchayathItem = newVal;
+                          panchayathItem = item;
                         });
                       },
                     ),
@@ -265,10 +317,11 @@ class _DropdownscreenState extends State<Dropdownscreen> {
             ),
             SizedBox(height: 10),
             Expanded(
-                child: Filtereduser(
-              searchQuery: searchController.text,
-              selectedFranchise: selectedItem,
-            )),
+              child: Filtereduser(
+                searchQuery: searchController.text,
+                selectedFranchise: selectedItem,
+              ),
+            ),
           ],
         ),
       ),

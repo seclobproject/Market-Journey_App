@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:master_journey/resources/color.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../services/member_service.dart';
-import '../../../support/logger.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+// import '../../../services/member_service.dart';
+// import '../../../support/logger.dart';
 
 class Childone extends StatefulWidget {
   final String searchQuery;
@@ -15,149 +15,284 @@ class Childone extends StatefulWidget {
 
 class _ChildoneState extends State<Childone> {
   var userid;
-  var child1;
-  List filteredChild1 = [];
-  bool _isLoading = true;
-
-  Future _childOne() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    userid = prefs.getString('userid');
-
-    var response = await MemberService.leveloneview();
-    log.i('Profile data show.... $response');
-    setState(() {
-      child1 = response;
-      _filterChild1();
-      _isLoading = false;
-    });
-  }
-
-  void _filterChild1() {
-    if (widget.searchQuery.isNotEmpty && child1 != null) {
-      filteredChild1 = child1
-          .where((item) => item['name']
-              .toLowerCase()
-              .contains(widget.searchQuery.toLowerCase()))
-          .toList();
-    } else {
-      filteredChild1 = child1 ?? [];
-    }
-    log.i('Filtered data: $filteredChild1');
-  }
-
-  Future _initLoad() async {
-    await Future.wait(
-      [
-        _childOne(),
-      ],
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initLoad();
-  }
-
-  @override
-  void didUpdateWidget(Childone oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.searchQuery != widget.searchQuery) {
-      setState(() {
-        _filterChild1();
-      });
-    }
-  }
+  var isSelected = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: filteredChild1.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Container(
-                    height: 107,
-                    width: 400,
-                    decoration: BoxDecoration(
-                        color: bluem, borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(
-                            children: [
-                              Text(
-                                "Name",
-                                style: TextStyle(fontSize: 12, color: marketbg),
-                              ),
-                              SizedBox(width: 40),
-                              Text(":",
-                                  style:
-                                      TextStyle(fontSize: 12, color: marketbg)),
-                              SizedBox(width: 20),
-                              Text(
-                                filteredChild1[index]['name'],
-                                style: TextStyle(fontSize: 12, color: marketbg),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(
-                            children: [
-                              Text(
-                                "Franchise",
-                                style: TextStyle(fontSize: 12, color: marketbg),
-                              ),
-                              SizedBox(width: 16),
-                              Text(":",
-                                  style:
-                                      TextStyle(fontSize: 12, color: marketbg)),
-                              SizedBox(width: 20),
-                              Text(
-                                filteredChild1[index]['franchise'],
-                                style: TextStyle(fontSize: 12, color: marketbg),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(
-                            children: [
-                              Text(
-                                "Package",
-                                style: TextStyle(fontSize: 12, color: marketbg),
-                              ),
-                              SizedBox(width: 24),
-                              Text(":",
-                                  style:
-                                      TextStyle(fontSize: 12, color: marketbg)),
-                              SizedBox(width: 20),
-                              Text(
-                                filteredChild1[index]['tempPackageAmount']
-                                    .toString(),
-                                style: TextStyle(fontSize: 12, color: marketbg),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isSelected = 0;
+                      });
+                    },
+                    child: Container(
+                      width: 90,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: greenbg),
+                        color: isSelected == 0 ? greenbg : Colors.white,
+                      ),
+                      child: Center(
+                          child: Text(
+                        "level 1 ",
+                        style: TextStyle(
+                            fontSize: 8,
+                            fontWeight: FontWeight.w500,
+                            color: black),
+                      )),
                     ),
                   ),
-                );
-              },
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isSelected = 1;
+                      });
+                    },
+                    child: Container(
+                      width: 90,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: greenbg),
+                        color: isSelected == 1 ? greenbg : Colors.white,
+                      ),
+                      child: Center(
+                          child: Text(
+                        "level 2 ",
+                        style: TextStyle(
+                            fontSize: 8,
+                            fontWeight: FontWeight.w500,
+                            color: black),
+                      )),
+                    ),
+                  ),
+                ],
+              ),
             ),
+            isSelected == 0
+                ? Expanded(
+                    child: ListView.builder(
+                      itemCount: 7,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 16),
+                          child: Container(
+                            height: 115,
+                            width: 312,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: bluem,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Name",
+                                        style: TextStyle(
+                                            fontSize: 12, color: marketbg),
+                                      ),
+                                      SizedBox(width: 63),
+                                      Text(
+                                        ":",
+                                        style: TextStyle(
+                                            fontSize: 12, color: marketbg),
+                                      ),
+                                      SizedBox(width: 12),
+                                      Text(
+                                        "ghj",
+                                        style: TextStyle(
+                                            fontSize: 12, color: marketbg),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Franchise name",
+                                        style: TextStyle(
+                                            fontSize: 12, color: marketbg),
+                                      ),
+                                      SizedBox(width: 8),
+                                      Text(
+                                        ":",
+                                        style: TextStyle(
+                                            fontSize: 12, color: marketbg),
+                                      ),
+                                      SizedBox(width: 12),
+                                      Text(
+                                        "ghj",
+                                        style: TextStyle(
+                                            fontSize: 12, color: marketbg),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Package",
+                                        style: TextStyle(
+                                            fontSize: 12, color: marketbg),
+                                      ),
+                                      SizedBox(width: 47),
+                                      Text(
+                                        ":",
+                                        style: TextStyle(
+                                            fontSize: 12, color: marketbg),
+                                      ),
+                                      SizedBox(width: 16),
+                                      Text(
+                                        "hjk",
+                                        style: TextStyle(
+                                            fontSize: 12, color: marketbg),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                : SizedBox(
+                    child: ListView.builder(
+                      itemCount: 7,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 16),
+                          child: Container(
+                            height: 115,
+                            width: 312,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: bluem,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Name",
+                                        style: TextStyle(
+                                            fontSize: 12, color: marketbg),
+                                      ),
+                                      SizedBox(width: 63),
+                                      Text(
+                                        ":",
+                                        style: TextStyle(
+                                            fontSize: 12, color: marketbg),
+                                      ),
+                                      SizedBox(width: 12),
+                                      Text(
+                                        "ghj",
+                                        style: TextStyle(
+                                            fontSize: 12, color: marketbg),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Franchise name",
+                                        style: TextStyle(
+                                            fontSize: 12, color: marketbg),
+                                      ),
+                                      SizedBox(width: 8),
+                                      Text(
+                                        ":",
+                                        style: TextStyle(
+                                            fontSize: 12, color: marketbg),
+                                      ),
+                                      SizedBox(width: 12),
+                                      Text(
+                                        "ghj",
+                                        style: TextStyle(
+                                            fontSize: 12, color: marketbg),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Package",
+                                        style: TextStyle(
+                                            fontSize: 12, color: marketbg),
+                                      ),
+                                      SizedBox(width: 47),
+                                      Text(
+                                        ":",
+                                        style: TextStyle(
+                                            fontSize: 12, color: marketbg),
+                                      ),
+                                      SizedBox(width: 16),
+                                      Text(
+                                        "hjk",
+                                        style: TextStyle(
+                                            fontSize: 12, color: marketbg),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+          ],
+        ),
+      ),
     );
   }
 }
+
+// var child1;
+// List filteredChild1 = [];
+// bool _isLoading = false;
+
+// Future _childOne() async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance
