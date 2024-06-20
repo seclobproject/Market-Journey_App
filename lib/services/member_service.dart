@@ -23,15 +23,15 @@ class MemberService {
     return emailExists || phoneExists;
   }
 
-  static Future<Map<String, dynamic>> addMember(
-      Map<String, dynamic> reqData) async {
-    var dio = await DioHelper.getInstance();
-    var response = await dio.post(
-      '$baseURL/api/user/add-member',
-      data: reqData,
-    );
-    return response.data;
-  }
+  // static Future<Map<String, dynamic>> addMember(
+  //     Map<String, dynamic> reqData) async {
+  //   var dio = await DioHelper.getInstance();
+  //   var response = await dio.post(
+  //     '$baseURL/api/user/add-member',
+  //     data: reqData,
+  //   );
+  //   return response.data;
+  // }
 
   static Future GetPackageTypes() async {
     var dio = await DioHelper.getInstance();
@@ -40,6 +40,14 @@ class MemberService {
   }
 
   static Future Memberview() async {
+    var dio = await DioHelper.getInstance();
+    var response = await dio
+        .post('$baseURL/api/user/view-district-Users?page=1&pageSize=10');
+    print(response);
+    return response.data;
+  }
+
+  static Future leveloneview() async {
     var dio = await DioHelper.getInstance();
     var response = await dio.post(
         '$baseURL/api/user/view-level1-user?page=1&pageSize=10&searchText=');
