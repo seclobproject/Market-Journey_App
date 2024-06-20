@@ -73,7 +73,7 @@ class _DropdownscreenState extends State<Dropdownscreen> {
 
       if (response != null &&
           response['sts'] == '01' &&
-          response['msg'] == 'Districts retrieved success') {
+          response['msg'] == 'get user profile Success') {
         // Updated condition
         setState(() {
           panchayath = response['panchayath'];

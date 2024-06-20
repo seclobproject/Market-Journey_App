@@ -182,7 +182,7 @@ class _ChildoneState extends State<Childone> {
                       },
                     ),
                   )
-                : SizedBox(
+                : Expanded(
                     child: ListView.builder(
                       itemCount: 7,
                       itemBuilder: (context, index) {
@@ -217,7 +217,7 @@ class _ChildoneState extends State<Childone> {
                                       ),
                                       SizedBox(width: 12),
                                       Text(
-                                        "ghj",
+                                        "lj",
                                         style: TextStyle(
                                             fontSize: 12, color: marketbg),
                                       ),
