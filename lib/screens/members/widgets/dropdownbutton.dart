@@ -132,6 +132,16 @@ class _DropdownscreenState extends State<Dropdownscreen> {
     }
   }
 
+  void _resetDropdowns() {
+    setState(() {
+      selectedItem = 'All Package Type';
+      zonalItem = null;
+      panchayathItem = null;
+      searchController.clear();
+      filteredItems = items;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isZonalFranchiseUser =
@@ -164,7 +174,9 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                 ),
               ),
             ),
-            SizedBox(height: 30),
+
+
+            SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.only(right: 10.0),
               child: Container(
@@ -185,15 +197,15 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                         decoration: InputDecoration(
                           hintText: 'LevelUser',
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.yellow),
+                            borderSide: BorderSide(color: yellow1),
                           ),
                           border: OutlineInputBorder(
                             borderRadius:
                             BorderRadius.all(Radius.circular(5.0)),
-                            borderSide: BorderSide(color: Colors.yellow),
+                            borderSide: BorderSide(color:yellow1),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.yellow),
+                            borderSide: BorderSide(color:yellow1),
                           ),
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 10.0, horizontal: 12),
@@ -206,9 +218,12 @@ class _DropdownscreenState extends State<Dropdownscreen> {
             ),
             SizedBox(height: 10),
             Row(
+
               children: [
+
                 Expanded(
-                  child: Container(
+                  child:
+                  Container(
                     height: 40,
                     decoration: BoxDecoration(
                       color: yellow,
@@ -245,7 +260,9 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                         },
                       ),
                     ),
+
                   ),
+
                 ),
                 if (!isZonalFranchiseUser) ...[
                   SizedBox(width: 10),
@@ -253,7 +270,7 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                     child: Container(
                       height: 40,
                       decoration: BoxDecoration(
-                        color: yellow,
+                        color: yellow1,
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Center(
@@ -305,7 +322,7 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                   child: Container(
                     height: 40,
                     decoration: BoxDecoration(
-                      color: yellow,
+                      color:yellow1,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Center(
@@ -345,6 +362,12 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                     ),
                   ),
                 ),
+                IconButton(
+                  onPressed: _resetDropdowns,
+                  icon: Icon(Icons.refresh, color: yellow1),
+                  color: yellow,
+                )
+
               ],
             ),
             SizedBox(height: 10),

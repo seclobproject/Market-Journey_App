@@ -68,7 +68,10 @@ class _walletState extends State<wallet> {
       ),
       backgroundColor: bluem,
       body: profiledata == null
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator(
+        strokeWidth: 6.0,
+        valueColor: AlwaysStoppedAnimation(yellow),
+      ),)
           : profiledata!['packageType'] == 'Franchise'
           ? SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),

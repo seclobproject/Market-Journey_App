@@ -48,7 +48,10 @@ class _LevelUserState extends State<LevelUser> {
     return Scaffold(
       backgroundColor: marketbg,
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator(
+        strokeWidth: 6.0,
+        valueColor: AlwaysStoppedAnimation(yellow),
+      ),)
           : ListView.builder(
         itemCount: child1.length,
         itemBuilder: (BuildContext context, int index) {
@@ -57,60 +60,137 @@ class _LevelUserState extends State<LevelUser> {
             padding:
             const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Container(
-              height: 107,
-              width: 400,
               decoration: BoxDecoration(
                 color: bluem,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildInfoRow("Name", user['name']),
-                  SizedBox(height: 10),
-                  _buildInfoRow("Franchise", user['franchise']),
-                  SizedBox(height: 10),
-                  _buildInfoRow(
-                    "Package",
-                    user['tempPackageAmount']?.toString() ??
-                        user['actualPackageAmount']?.toString() ??
-                        user['packageAmount']?.toString() ??
-                        '',
-                  ),
-                  SizedBox(height: 5),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: InkWell(
-                      onTap: () {
-                        String id = user['_id'];
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LevelOne(id: id),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Name",
+                            style:
+                            TextStyle(fontSize: 12, color: marketbg),
                           ),
-                        );
-                      },
-                      child: Container(
-                        width: 65,
-                        height: 25,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                          color: yellow,
-                        ),
-                        child: Center(
-                          child: Text(
-                            'View Tree',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 10,
-                              color: Color(0xff0F1535),
+                          SizedBox(width: 40),
+                          Text(":",
+                              style: TextStyle(
+                                  fontSize: 12, color: marketbg)),
+                          SizedBox(width: 18),
+                          Text(
+                            user['name'] ?? '',
+                            style:
+                            TextStyle(fontSize: 12, color: marketbg),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Franchise",
+                            style:
+                            TextStyle(fontSize: 12, color: marketbg),
+                          ),
+                          SizedBox(width: 20),
+                          Text(":",
+                              style: TextStyle(
+                                  fontSize: 12, color: marketbg)),
+                          SizedBox(width: 18),
+                          Expanded(
+                            child: Text(
+                              user['franchise'] ?? '',
+                              style: TextStyle(
+                                  fontSize: 12, color: marketbg),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Package",
+                            style:
+                            TextStyle(fontSize: 12, color: marketbg),
+                          ),
+                          SizedBox(width: 26),
+                          Text(":",
+                              style: TextStyle(
+                                  fontSize: 12, color: marketbg)),
+                          SizedBox(width: 18),
+                          Expanded(
+                            child: Text(
+                              "₹ ${user['tempPackageAmount']?.toString() ?? user['actualPackageAmount']?.toString() ?? user['packageAmount']?.toString() ?? ''}",
+                              style: TextStyle(
+                                  fontSize: 12, color: marketbg),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // _buildInfoRow("Name", user['name']),
+                    // SizedBox(height: 10),
+                    // _buildInfoRow("Franchise", user['franchise']),
+                    // SizedBox(height: 10),
+                    // _buildInfoRow(
+                    //   "Package",
+                    //   user['tempPackageAmount']?.toString() ??
+                    //       user['actualPackageAmount']?.toString() ??
+                    //       user['packageAmount']?.toString() ??
+                    //       '',
+                    // ),
+                    SizedBox(height: 5),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: InkWell(
+                          onTap: () {
+                            String id = user['_id'];
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LevelOne(id: id),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: 65,
+                            height: 25,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: yellow,
+                            ),
+                            child: Center(
+                              child: Text(
+                                'View Tree',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 10,
+                                  color: Color(0xff0F1535),
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );

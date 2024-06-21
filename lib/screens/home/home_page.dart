@@ -1165,84 +1165,54 @@ class _homeState extends State<home> {
                 ),
                 SizedBox(
                   height:
-                  180, // Adjust height as needed, or consider removing for flexibility
+                  100, // Adjust height as needed, or consider removing for flexibility
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount:
-                    homeVideoData['homeVideoData']?.length ?? 0,
+                    itemCount: homeVideoData['homeVideoData']?.length ?? 0,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
-                        padding:
-                        EdgeInsets.only(left: screenWidth * 0.05),
+                        padding: EdgeInsets.only(left: screenWidth * 0.05),
                         child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                  const Flashfeedvideo()),
-                            );
+                          onTap: () async {
+                            final url = homeVideoData['homeVideoData'][index]['videoLink'];
+                            if (await canLaunch(url)) {
+                              await launch(url);
+                            } else {
+                              throw 'Could not launch $url';
+                            }
                           },
-                          child: ClipRRect(
-                            // Clip content that overflows
-                            borderRadius: BorderRadius.circular(10),
-                            child: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 88,
-                                  width: 122,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[200],
-                                    borderRadius:
-                                    BorderRadius.circular(10),
-                                  ),
-                                  child: ClipRRect(
-                                    // Clip image within container
-                                    borderRadius:
-                                    BorderRadius.circular(10),
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        final url =
-                                        homeVideoData['homeVideoData']
-                                        [index]['videoLink'];
-                                        final uri = Uri.parse(url);
+                          child: Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                  'https://admin.marketjourney.in/uploads/${homeVideoData['homeVideoData'][index]['videoThambnail']}',
+                                  fit: BoxFit.fitHeight,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Icon(Icons.error, color: Colors.red);
+                                  },
+                                ),
+                              ),
+                              Align(
+                                alignment:Alignment.center,
+                                child: Center(
+                                  child:
 
-                                        if (await canLaunchUrl(uri)) {
-                                          await launchUrl(uri,
-                                              mode: LaunchMode
-                                                  .externalApplication);
+                                    IconButton(
+                                      icon: Icon(Icons.play_arrow, size: 30, color: Colors.white),
+                                      onPressed: () async {
+                                        final url = homeVideoData['homeVideoData'][index]['videoLink'];
+                                        if (await canLaunch(url)) {
+                                          await launch(url);
                                         } else {
                                           throw 'Could not launch $url';
                                         }
                                       },
-                                      child: Image.network(
-                                        'https://admin.marketjourney.in/uploads/${homeVideoData['homeVideoData'][index]['videoThambnail']}',
-                                        fit: BoxFit.fitHeight,
-                                        errorBuilder:
-                                            (context, error, stackTrace) {
-                                          return Icon(Icons.error,
-                                              color: Colors.red);
-                                        },
-                                      ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  homeVideoData['homeVideoData'][index]
-                                  ['videoTitle'] ??
-                                      "",
-                                  style: TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xff000080)),
-                                ),
-                              ],
-                            ),
+                              ),
+
+                            ],
                           ),
                         ),
                       );

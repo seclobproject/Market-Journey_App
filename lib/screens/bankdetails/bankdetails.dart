@@ -52,7 +52,10 @@ class _BankdetailsState extends State<Bankdetails> {
       ),
       backgroundColor: marketbg,
       body: profiledata == null
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator(
+        strokeWidth: 6.0,
+        valueColor: AlwaysStoppedAnimation(yellow),
+      ),)
           : profiledata!['packageType'] == 'Franchise'
           ? DefaultTabController(
         length: 2,

@@ -55,7 +55,10 @@ class _memberspageState extends State<memberspage> {
         ),
       ),
       body: profileData == null
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child:CircularProgressIndicator(
+        strokeWidth: 6.0,
+        valueColor: AlwaysStoppedAnimation(yellow),
+      ),)
           : profileData!['packageType'] == 'Franchise'
           ? (profileData!['isMobileFranchise'] == true
           ? Mobileview()

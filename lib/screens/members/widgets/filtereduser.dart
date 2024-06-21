@@ -118,7 +118,10 @@ class _FiltereduserState extends State<Filtereduser> {
   @override
   Widget build(BuildContext context) {
     return _isLoading
-        ? Center(child: CircularProgressIndicator())
+        ? Center(child: CircularProgressIndicator(
+      strokeWidth: 6.0,
+      valueColor: AlwaysStoppedAnimation(yellow),
+    ),)
         : ListView.builder(
       itemCount: filteredUsers != null ? filteredChild1.length : 0,
       itemBuilder: (BuildContext context, int index) {

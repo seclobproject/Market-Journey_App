@@ -74,7 +74,10 @@ class _ProfilePageState extends State<ProfilePage> {
           backgroundColor: bluem,
         ),
         body: _isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? Center(child: CircularProgressIndicator(
+          strokeWidth: 6.0,
+          valueColor: AlwaysStoppedAnimation(Colors.white),
+        ),)
             : SingleChildScrollView(
             child: Column(children: [
               Column(children: [

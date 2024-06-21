@@ -219,7 +219,10 @@ class _NomineeaccountState extends State<Nomineeaccount> {
     return Scaffold(
       backgroundColor: marketbg,
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator(
+        strokeWidth: 6.0,
+        valueColor: AlwaysStoppedAnimation(yellow),
+      ),)
           : _hasNomineeDetails
           ? SingleChildScrollView(
         child: Column(

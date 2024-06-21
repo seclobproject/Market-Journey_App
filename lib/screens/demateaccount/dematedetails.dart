@@ -23,7 +23,6 @@ class _DematedetailsState extends State<Dematedetails> {
     super.initState();
     _Dematedetail();
     _profileData();
-
   }
 
   Future<void> _profileData() async {
@@ -75,8 +74,18 @@ class _DematedetailsState extends State<Dematedetails> {
 
   Widget _buildBody() {
     if (profiledata == null) {
-      return Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator(
+        strokeWidth: 6.0,
+        valueColor: AlwaysStoppedAnimation(yellow),
+      ),);
     } else if (profiledata!['packageType'] == 'Franchise') {
+      return ListView.builder(
+        itemCount: demateAccounts.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _buildDematAccountCard(demateAccounts[index]);
+        },
+      );
+    } else {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -94,14 +103,6 @@ class _DematedetailsState extends State<Dematedetails> {
           ],
         ),
       );
-    } else {
-      return ListView.builder(
-        itemCount: demateAccounts.length,
-        itemBuilder: (BuildContext context, int index) {
-          return _buildDematAccountCard(demateAccounts[index]);
-        },
-      );
-
     }
   }
 
@@ -117,10 +118,12 @@ class _DematedetailsState extends State<Dematedetails> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildAccountDetailRow('District', account['district'] ?? 'No Title'),
+            _buildAccountDetailRow(
+                'District', account['district'] ?? 'No Title'),
             _buildAccountDetailRow('Name', account['name'] ?? ''),
             _buildAccountDetailRow('Username', account['demateUserName'] ?? ''),
-            _buildAccountDetailRow('Mobile Number', account['phone'].toString()),
+            _buildAccountDetailRow(
+                'Mobile Number', account['phone'].toString()),
             _buildAccountDetailRow('Email', account['email'] ?? ''),
             _buildAccountDetailRow('Address', account['address'] ?? ''),
           ],
@@ -136,17 +139,20 @@ class _DematedetailsState extends State<Dematedetails> {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: bluem),
+            style: TextStyle(
+                fontSize: 12, fontWeight: FontWeight.w500, color: bluem),
           ),
           SizedBox(width: 20),
           Text(
             ":",
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: bluem),
+            style: TextStyle(
+                fontSize: 12, fontWeight: FontWeight.w500, color: bluem),
           ),
           SizedBox(width: 20),
           Text(
             value,
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: bluem),
+            style: TextStyle(
+                fontSize: 12, fontWeight: FontWeight.w500, color: bluem),
           ),
         ],
       ),
@@ -154,7 +160,7 @@ class _DematedetailsState extends State<Dematedetails> {
   }
 
   Widget _buildFloatingActionButton() {
-    if (profiledata != null && profiledata!['packageType'] != 'Franchise') {
+    if (profiledata != null && profiledata!['packageType'] == 'Franchise') {
       return FloatingActionButton(
         onPressed: () {
           Navigator.push(

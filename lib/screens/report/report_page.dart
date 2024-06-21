@@ -65,7 +65,10 @@ class _reportState extends State<report> {
         ),
       ),
       body: profiledata == null
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator(
+        strokeWidth: 6.0,
+        valueColor: AlwaysStoppedAnimation(yellow),
+      ),)
           : profiledata!['packageType'] == 'Franchise'
           ? DefaultTabController(
         length: 5, // Number of tabs

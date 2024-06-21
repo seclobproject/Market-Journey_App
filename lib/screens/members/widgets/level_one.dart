@@ -50,14 +50,18 @@ class _LevelOneState extends State<LevelOne> {
     return Scaffold(
       appBar: AppBar(),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator(
+        strokeWidth: 6.0,
+        valueColor: AlwaysStoppedAnimation(yellow),
+      ),)
+          : child1.isEmpty
+          ? Center(child: Text("No data available"))
           : ListView.builder(
         itemCount: child1.length,
         itemBuilder: (BuildContext context, int index) {
           final user = child1[index];
           return Padding(
-            padding:
-            const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Container(
               height: 107,
               width: 400,
@@ -78,8 +82,7 @@ class _LevelOneState extends State<LevelOne> {
                         ),
                         SizedBox(width: 40),
                         Text(":",
-                            style:
-                            TextStyle(fontSize: 12, color: marketbg)),
+                            style: TextStyle(fontSize: 12, color: marketbg)),
                         SizedBox(width: 20),
                         Text(
                           user['name'] ?? '',
@@ -99,8 +102,7 @@ class _LevelOneState extends State<LevelOne> {
                         ),
                         SizedBox(width: 16),
                         Text(":",
-                            style:
-                            TextStyle(fontSize: 12, color: marketbg)),
+                            style: TextStyle(fontSize: 12, color: marketbg)),
                         SizedBox(width: 20),
                         Text(
                           user['franchise'] ?? '',
@@ -120,8 +122,7 @@ class _LevelOneState extends State<LevelOne> {
                         ),
                         SizedBox(width: 24),
                         Text(":",
-                            style:
-                            TextStyle(fontSize: 12, color: marketbg)),
+                            style: TextStyle(fontSize: 12, color: marketbg)),
                         SizedBox(width: 20),
                         Text(
                           user['tempPackageAmount']?.toString() ??
