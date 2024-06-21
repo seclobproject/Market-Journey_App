@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../resources/color.dart';
 import '../../services/profile_service.dart';
 import '../../support/logger.dart';
+import 'widgets/mobileview.dart';
 
 class memberspage extends StatefulWidget {
   const memberspage({super.key});
@@ -14,23 +15,23 @@ class memberspage extends StatefulWidget {
 }
 
 class _memberspageState extends State<memberspage> {
-  String? userid;
-  Map<String, dynamic>? profiledata;
+  String? userId;
+  Map<String, dynamic>? profileData;
 
   @override
   void initState() {
     super.initState();
-    _profileData();
+    _fetchProfileData();
   }
 
-  Future<void> _profileData() async {
+  Future<void> _fetchProfileData() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      userid = prefs.getString('userid');
+      userId = prefs.getString('userid');
       var response = await ProfileService.profile();
       log.i('Profile data show.... $response');
       setState(() {
-        profiledata = response;
+        profileData = response;
       });
     } catch (e) {
       log.e('Error fetching profile data: $e');
@@ -44,55 +45,57 @@ class _memberspageState extends State<memberspage> {
       backgroundColor: marketbg, // Replace with your color
       appBar: AppBar(
         backgroundColor: marketbg, // Replace with your color
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.black, // Replace with your color
         ),
         centerTitle: true,
-        title: Text(
+        title: const Text(
           "Member View",
-          style: TextStyle(color: black, fontSize: 18),
+          style: TextStyle(color: Colors.black, fontSize: 18),
         ),
       ),
-      body: profiledata == null
-          ? Center(child: CircularProgressIndicator())
-          : profiledata!['packageType'] == 'Franchise'
-              ? Dropdownscreen()
-              : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/logo/exclamation-mark.png', // Replace with your image path
-                        height: 25,
-                        width: 25,
-                      ),
-                      SizedBox(height: 10),
-                      Center(
-                        child: Text(
-                          'You Are Not Authorized to View This Page',
-                          style: TextStyle(color: black, fontSize: 12),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+      body: profileData == null
+          ? const Center(child: CircularProgressIndicator())
+          : profileData!['packageType'] == 'Franchise'
+          ? (profileData!['isMobileFranchise'] == true
+          ? Mobileview()
+          : Dropdownscreen())
+          : Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/logo/exclamation-mark.png', // Replace with your image path
+              height: 25,
+              width: 25,
+            ),
+            const SizedBox(height: 10),
+            const Center(
+              child: Text(
+                'You Are Not Authorized to View This Page',
+                style: TextStyle(color: Colors.black, fontSize: 12),
+              ),
+            ),
+          ],
+        ),
+      ),
       floatingActionButton:
-          profiledata != null && profiledata!['packageType'] == 'Franchise'
-              ? FloatingActionButton(
-                  child: Icon(
-                    Icons.add,
-                    color: bluem,
-                  ),
-                  backgroundColor: yellow,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AddMemberPage()),
-                    );
-                  },
-                )
-              : null,
+      profileData != null && profileData!['packageType'] == 'Franchise'
+          ? FloatingActionButton(
+        child: const Icon(
+          Icons.add,
+          color: bluem,
+        ),
+        backgroundColor: yellow,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const AddMemberPage()),
+          );
+        },
+      )
+          : null,
     );
   }
 }

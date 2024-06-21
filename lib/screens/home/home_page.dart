@@ -42,6 +42,8 @@ class _homeState extends State<home> {
   dynamic newsData;
   dynamic homeImageData;
   dynamic homeVideoData;
+  bool isError = false;
+  String errorMessage = '';
 
   Future _ProfileData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -105,13 +107,39 @@ class _homeState extends State<home> {
     });
   }
 
-  Future _distributedleadersboard() async {
-    var response = await homeservice.distributedleaders();
-    log.i(' data show.... $response');
-    setState(() {
-      pool2 = response['pool'] ?? [];
-    });
+
+
+  Future<void> _distributedleadersboard() async {
+    try {
+      var response = await homeservice.distributedleaders();
+      log.i('Data show.... $response');
+      if (response != null && response['statusCode'] == 200) {
+        setState(() {
+          pool2 = response['pool'] ?? [];
+          isError = false;
+        });
+      } else if (response != null && response['statusCode'] == 404) {
+        setState(() {
+          isError = true;
+          errorMessage = 'Auto pool distribution history not found';
+        });
+      } else {
+        setState(() {
+          isError = true;
+          errorMessage = 'No data Available';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isError = true;
+        errorMessage = 'No data Available';
+      });
+      log.e('Error fetching data: $e');
+    }
   }
+
+
+
 
   Future _initLoad() async {
     await Future.wait(
@@ -869,142 +897,150 @@ class _homeState extends State<home> {
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.02),
-                SizedBox(
-                  height: 100,
-                  child: ListView.builder(
-                    itemCount: pool2.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index) {
-                      var pooldata2 = pool2[index];
-                      // Define a list of static titles
-                      List<String> titles = [
-                        'Team Leader (A)',
-                        'Business Development Manager (B)',
-                        'Regional Manager (C)',
-                        'Territory Manager (D)',
-                        'Associate Direction (E)',
-                        // Add more titles as needed
-                      ];
-                      // Use the index to fetch the corresponding title
-                      String title = titles.length > index
-                          ? titles[index]
-                          : 'Default Title';
+            SizedBox(
+              height: 100,
+              child: isError
+                  ? Center(
+                child: Text(
+                  errorMessage,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey,
+                  ),
+                ),
+              )
+                  : pool2.isEmpty
+                  ? Center(
+                child: Text(
+                  'No data available',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey,
+                  ),
+                ),
+              )
+                  : ListView.builder(
+                itemCount: pool2.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index) {
+                  var pooldata2 = pool2[index];
+                  // Define a list of static titles
+                  List<String> titles = [
+                    'Team Leader (A)',
+                    'Business Development Manager (B)',
+                    'Regional Manager (C)',
+                    'Territory Manager (D)',
+                    'Associate Direction (E)',
+                    // Add more titles as needed
+                  ];
+                  // Use the index to fetch the corresponding title
+                  String title = titles.length > index
+                      ? titles[index]
+                      : 'Default Title';
 
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: Container(
-                          width: 200,
-                          height: 88,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: marketbgblue,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                              children: [
-                                Text(
-                                  title, // Use the static title
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w500,
-                                    color: marketbg,
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 20, right: 20),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Container(
+                      width: 200,
+                      height: 88,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: marketbgblue,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              title, // Use the static title
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500,
+                                color: marketbg,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 20, right: 20),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Column(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Member’s",
-                                            style: TextStyle(
-                                              fontSize: 8,
-                                              fontWeight: FontWeight.w500,
-                                              color: marketbg,
-                                            ),
-                                          ),
-                                          SizedBox(height: 5),
-                                          Container(
-                                            height: 25,
-                                            width: 40,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                              BorderRadius.circular(
-                                                  4),
-                                              color: yellow1,
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                pooldata2['count']
-                                                    ?.toString() ??
-                                                    "0",
-                                                style: TextStyle(
-                                                  fontWeight:
-                                                  FontWeight.w500,
-                                                  fontSize: 10,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                      Text(
+                                        "Member’s",
+                                        style: TextStyle(
+                                          fontSize: 8,
+                                          fontWeight: FontWeight.w500,
+                                          color: marketbg,
+                                        ),
                                       ),
-                                      Column(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Amount",
+                                      SizedBox(height: 5),
+                                      Container(
+                                        height: 25,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(4),
+                                          color: yellow1,
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            pooldata2['count']?.toString() ?? "0",
                                             style: TextStyle(
-                                              fontSize: 8,
                                               fontWeight: FontWeight.w500,
-                                              color: marketbg,
+                                              fontSize: 10,
                                             ),
                                           ),
-                                          SizedBox(height: 5),
-                                          Container(
-                                            height: 25,
-                                            width: 40,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                              BorderRadius.circular(
-                                                  4),
-                                              color: yellow1,
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                pooldata2['amount']
-                                                    ?.toString() ??
-                                                    "0",
-                                                style: TextStyle(
-                                                  fontWeight:
-                                                  FontWeight.w500,
-                                                  fontSize: 10,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                        ),
                                       ),
                                     ],
                                   ),
-                                ),
-                              ],
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Amount",
+                                        style: TextStyle(
+                                          fontSize: 8,
+                                          fontWeight: FontWeight.w500,
+                                          color: marketbg,
+                                        ),
+                                      ),
+                                      SizedBox(height: 5),
+                                      Container(
+                                        height: 25,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(4),
+                                          color: yellow1,
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            pooldata2['amount']?.toString() ?? "0",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SizedBox(
                   height: screenHeight * 0.04,
                 ),
                 Padding(

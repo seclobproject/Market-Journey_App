@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:master_journey/screens/members/members_page.dart';
 import 'package:master_journey/services/package_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../navigation/bottom_tabs_screen.dart';
 import '../../../resources/color.dart';
 
 import '../../../services/member_service.dart';
@@ -274,10 +275,8 @@ class _AddMemberPageState extends State<AddMemberPage> {
       var reqData = {
         'name': nameController.text,
         'email': emailController.text,
-        'phone':
-        int.tryParse(phoneController.text) ?? 0, // Convert phone to integer
-        'DateOfBirth':
-        dobController.text, // Ensure dob is in the correct format
+        'phone': int.tryParse(phoneController.text) ?? 0, // Convert phone to integer
+        'DateOfBirth': dobController.text, // Ensure dob is in the correct format
         'address': addressController.text,
         'password': passwordController.text,
         'packageType': packageTypedropdownvalue,
@@ -285,10 +284,20 @@ class _AddMemberPageState extends State<AddMemberPage> {
         'packageAmount': packageAmount,
         'packageAmountGST': packageAmountGST,
         'state': stateTypedropdownvalue,
-        'district': districtTypedropdownvalue,
-        'zonal': zonalTypedropdownvalue,
-        'panchayath': panchayathTypedropdownvalue,
+        if (packageNamedropdownvalue == 'Zonal Franchise')
+          'franchiseName': zonalTypedropdownvalue,
+        if (packageNamedropdownvalue != 'Zonal Franchise')
+          'zonal': zonalTypedropdownvalue,
+        if (packageNamedropdownvalue == 'District Franchise')
+          'franchiseName': districtTypedropdownvalue,
+        if (packageNamedropdownvalue != 'District Franchise')
+          'district': districtTypedropdownvalue,
+        if (packageNamedropdownvalue == 'Mobile Franchise')
+          'franchiseName': panchayathTypedropdownvalue,
+        if (packageNamedropdownvalue != 'Mobile Franchise')
+          'panchayath': panchayathTypedropdownvalue,
       };
+
 
       log.i('Request Data: $reqData');
 
@@ -296,6 +305,9 @@ class _AddMemberPageState extends State<AddMemberPage> {
       if (response['sts'] == '01') {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Add member success')),
+        );
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => BottomTabsScreen(initialPageIndex: 2,)),
         );
       } else {
         log.e('Add member failed: ${response['msg']}');
@@ -1051,22 +1063,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
                             ),
                           );
                         }).toList(),
-                        // onChanged: (String? newVal) {
-                        //   setState(() {
-                        //     zonalTypedropdownvalue = newVal;
-                        //     panchayathTypedropdownvalue = null;
-                        //     panchayathType = [];
-                        //     if (zonalTypedropdownvalue != null) {
-                        //
-                        //       // Find the zonal ID corresponding to the selected zonal name
-                        //       String selectedZonalId = zonals.firstWhere(
-                        //           (zonal) =>
-                        //               zonal['name'] ==
-                        //               zonalTypedropdownvalue)['id'];
-                        //       _Memberpanchayath(selectedZonalId);
-                        //     }
-                        //   });
-                        // },
+
 
                         onChanged: (String? newVal) {
                           setState(() {
