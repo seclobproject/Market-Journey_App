@@ -16,6 +16,8 @@ class _ChildoneState extends State<Childone> {
   int isSelected = 0;
   List child1 = [];
   List child2 = [];
+  List filteredChild1 = [];
+  List filteredChild2 = [];
   bool _isLoading = false;
 
   @override
@@ -24,35 +26,40 @@ class _ChildoneState extends State<Childone> {
     _initLoad();
   }
 
-  // Function to fetch data for child1
+  @override
+  void didUpdateWidget(Childone oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.searchQuery != widget.searchQuery) {
+      _filterData();
+    }
+  }
+
   Future<void> _ChildOneData() async {
     try {
       var response = await MemberService.leveloneview();
       log.i('child1 data: $response');
       setState(() {
         child1 = response['child1'] ?? [];
-        log.i('Updated child1 state: $child1');
+        _filterData();
       });
     } catch (error) {
       log.e('Error fetching child1 data: $error');
     }
   }
 
-  // Function to fetch data for child2
   Future<void> _ChildTwoData() async {
     try {
       var response = await MemberService.leveltwoview();
       log.i('child2 data: $response');
       setState(() {
         child2 = response['child2'] ?? [];
-        log.i('Updated child2 state: $child2');
+        _filterData();
       });
     } catch (error) {
       log.e('Error fetching child2 data: $error');
     }
   }
 
-  // Function to initialize data load
   Future<void> _initLoad() async {
     setState(() {
       _isLoading = true;
@@ -63,6 +70,28 @@ class _ChildoneState extends State<Childone> {
     ]);
     setState(() {
       _isLoading = false;
+    });
+  }
+
+  void _filterData() {
+    String query = widget.searchQuery.toLowerCase();
+    setState(() {
+      filteredChild1 = child1
+          .where((item) =>
+      item['name'].toLowerCase().contains(query) ||
+          item['franchise'].toLowerCase().contains(query) ||
+          (item['tempPackageAmount']?.toString() ?? '').contains(query) ||
+          (item['actualPackageAmount']?.toString() ?? '').contains(query) ||
+          (item['packageAmount']?.toString() ?? '').contains(query))
+          .toList();
+      filteredChild2 = child2
+          .where((item) =>
+      item['name'].toLowerCase().contains(query) ||
+          item['franchise'].toLowerCase().contains(query) ||
+          (item['tempPackageAmount']?.toString() ?? '').contains(query) ||
+          (item['actualPackageAmount']?.toString() ?? '').contains(query) ||
+          (item['packageAmount']?.toString() ?? '').contains(query))
+          .toList();
     });
   }
 
@@ -117,7 +146,6 @@ class _ChildoneState extends State<Childone> {
                   SizedBox(width: 48),
                   Text(":", style: TextStyle(fontSize: 12, color: marketbg)),
                   SizedBox(width: 12),
-                  // Displaying the package amount based on availability
                   Text(
                     data['tempPackageAmount']?.toString() ??
                         data['actualPackageAmount']?.toString() ??
@@ -165,7 +193,7 @@ class _ChildoneState extends State<Childone> {
                       ),
                       child: Center(
                         child: Text(
-                          "Level 1",
+                          "Direct",
                           style: TextStyle(
                               fontSize: 8,
                               fontWeight: FontWeight.w500,
@@ -190,7 +218,7 @@ class _ChildoneState extends State<Childone> {
                       ),
                       child: Center(
                         child: Text(
-                          "Level 2",
+                          "Indirects",
                           style: TextStyle(
                               fontSize: 8,
                               fontWeight: FontWeight.w500,
@@ -203,24 +231,24 @@ class _ChildoneState extends State<Childone> {
               ),
             ),
             isSelected == 0
-                ? child1.isEmpty
+                ? filteredChild1.isEmpty
                 ? Center(child: Text("No data available"))
                 : ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
-              itemCount: child1.length,
+              itemCount: filteredChild1.length,
               itemBuilder: (context, index) {
-                return _buildDataRow(child1[index]);
+                return _buildDataRow(filteredChild1[index]);
               },
             )
-                : child2.isEmpty
+                : filteredChild2.isEmpty
                 ? Center(child: Text("No data available2"))
                 : ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
-              itemCount: child2.length,
+              itemCount: filteredChild2.length,
               itemBuilder: (context, index) {
-                return _buildDataRow(child2[index]);
+                return _buildDataRow(filteredChild2[index]);
               },
             ),
           ],

@@ -174,6 +174,7 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                     child: Center(
                       child: DropdownButtonFormField2<String>(
                         decoration: const InputDecoration(
+                          contentPadding: const EdgeInsets.only(bottom: 7),
                           enabledBorder: OutlineInputBorder(
                             borderRadius:
                             BorderRadius.all(Radius.circular(10.0)),
@@ -223,8 +224,15 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide.none,
                             ),
-                            hintText: 'Zonal',
-                            hintStyle: TextStyle(fontSize: 10, color: bluem),
+                            // hintText: 'Zonal',
+                            // hintStyle: TextStyle(fontSize: 10, color: bluem),
+                          ),
+                          hint: Text(
+                            'Zonal',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.black,
+                            ),
                           ),
                           items: zonalType.map((String zonal) {
                             return DropdownMenuItem<String>(
@@ -232,7 +240,8 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                               child: Center(
                                 child: Text(
                                   zonal,
-                                  style: TextStyle(fontSize: 12, color: bluem),
+                                  style:
+                                  TextStyle(fontSize: 10.5, color: bluem),
                                 ),
                               ),
                             );
@@ -269,25 +278,25 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                         value: panchayathItem,
                         style: TextStyle(fontSize: 12, color: Colors.black),
                         decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(vertical: 10.0,horizontal: 10)
-                          ,
+                          contentPadding: EdgeInsets.only(bottom: 7),
                           border: InputBorder.none,
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide.none,
                           ),
-                          hintText: 'Panchayath',
-                          hintStyle: TextStyle(fontSize: 10, color: bluem
-                          ,
-                           ),
+                        ),
+                        hint: Text(
+                          'Panchayath',
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.black,
+                          ),
                         ),
                         items: panchayathType
                             .map((item) => DropdownMenuItem<String>(
                           value: item,
-                          child: Center(
-                            child: Text(
-                              item,
-                              style: TextStyle(fontSize: 10),
-                            ),
+                          child: Text(
+                            item,
+                            style: TextStyle(fontSize: 10),
                           ),
                         ))
                             .toList(),

@@ -1,31 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:master_journey/resources/color.dart';
-
 import '../../../services/member_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../support/logger.dart';
 
-class levelone extends StatefulWidget {
-  const levelone({
-    super.key,
-  });
+class LevelOne extends StatefulWidget {
+  final String id;
+  const LevelOne({super.key, required this.id});
 
   @override
-  State<levelone> createState() => _leveloneState();
+  State<LevelOne> createState() => _LevelOneState();
 }
 
-class _leveloneState extends State<levelone> {
-  var userid;
-
+class _LevelOneState extends State<LevelOne> {
+  String? userid;
   List child1 = [];
   bool _isLoading = true;
 
-  Future _leveview() async {
+  Future _levelView(String id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userid = prefs.getString('userid');
 
-    var response = await MemberService.leveloneview();
+    var response = await MemberService.Memberviewtree(id);
     log.i('Profile data show.... $response');
     setState(() {
       child1 = response['child1'] ?? [];
@@ -33,12 +29,10 @@ class _leveloneState extends State<levelone> {
   }
 
   Future _initLoad() async {
-    await Future.wait(
-      [
-        _leveview(),
-      ],
-    );
-    _isLoading = false;
+    await _levelView(widget.id);
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -50,112 +44,86 @@ class _leveloneState extends State<levelone> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
-        body: _isLoading
-            ? Center(child: CircularProgressIndicator())
-            : ListView.builder(
-            itemCount: child1 != null ? child1.length : 0,
-            itemBuilder: (BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 10, vertical: 10),
-                child: Container(
-                  height: 107,
-                  width: 400,
-                  decoration: BoxDecoration(
-                      color: bluem,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Name",
-                              style:
-                              TextStyle(fontSize: 12, color: marketbg),
-                            ),
-                            SizedBox(
-                              width: 40,
-                            ),
-                            Text(":",
-                                style: TextStyle(
-                                    fontSize: 12, color: marketbg)),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Text(
-                              child1[index]['name'],
-                              style:
-                              TextStyle(fontSize: 12, color: marketbg),
-                            ),
-                          ],
+      appBar: AppBar(),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+        itemCount: child1.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: Container(
+              height: 107,
+              width: 400,
+              decoration: BoxDecoration(
+                color: bluem,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Name",
+                          style: TextStyle(fontSize: 12, color: marketbg),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Franchise",
-                              style:
-                              TextStyle(fontSize: 12, color: marketbg),
-                            ),
-                            SizedBox(
-                              width: 16,
-                            ),
-                            Text(":",
-                                style: TextStyle(
-                                    fontSize: 12, color: marketbg)),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Text(
-                              child1[index]['franchise'],
-                              style:
-                              TextStyle(fontSize: 12, color: marketbg),
-                            ),
-                          ],
+                        SizedBox(width: 40),
+                        Text(":", style: TextStyle(fontSize: 12, color: marketbg)),
+                        SizedBox(width: 20),
+                        Text(
+                          child1[index]['name'],
+                          style: TextStyle(fontSize: 12, color: marketbg),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Package",
-                              style:
-                              TextStyle(fontSize: 12, color: marketbg),
-                            ),
-                            SizedBox(
-                              width: 24,
-                            ),
-                            Text(":",
-                                style: TextStyle(
-                                    fontSize: 12, color: marketbg)),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Text(
-                              child1[index]['tempPackageAmount'].toString(),
-                              style:
-                              TextStyle(fontSize: 12, color: marketbg),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }));
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Franchise",
+                          style: TextStyle(fontSize: 12, color: marketbg),
+                        ),
+                        SizedBox(width: 16),
+                        Text(":", style: TextStyle(fontSize: 12, color: marketbg)),
+                        SizedBox(width: 20),
+                        Text(
+                          child1[index]['franchise'],
+                          style: TextStyle(fontSize: 12, color: marketbg),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Package",
+                          style: TextStyle(fontSize: 12, color: marketbg),
+                        ),
+                        SizedBox(width: 24),
+                        Text(":", style: TextStyle(fontSize: 12, color: marketbg)),
+                        SizedBox(width: 20),
+                        Text(
+                          child1[index]['tempPackageAmount'].toString(),
+                          style: TextStyle(fontSize: 12, color: marketbg),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }

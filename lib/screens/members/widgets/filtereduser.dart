@@ -120,133 +120,128 @@ class _FiltereduserState extends State<Filtereduser> {
     return _isLoading
         ? Center(child: CircularProgressIndicator())
         : ListView.builder(
-        itemCount: filteredUsers != null ? filteredChild1.length : 0,
-        itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding:
-            const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: Container(
-              width: 400,
-              decoration: BoxDecoration(
-                  color: bluem, borderRadius: BorderRadius.circular(10)),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 20, top: 20, right: 10, bottom: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          "Name",
+      itemCount: filteredUsers != null ? filteredChild1.length : 0,
+      itemBuilder: (BuildContext context, int index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: Container(
+            width: 400,
+            decoration: BoxDecoration(
+              color: bluem,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 20,
+                top: 20,
+                right: 10,
+                bottom: 10,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Name",
+                        style: TextStyle(fontSize: 12, color: marketbg),
+                      ),
+                      SizedBox(width: 40),
+                      Text(
+                        ":",
+                        style: TextStyle(fontSize: 12, color: marketbg),
+                      ),
+                      SizedBox(width: 20),
+                      Expanded(
+                        child: Text(
+                          filteredChild1[index]['name'],
                           style: TextStyle(fontSize: 12, color: marketbg),
                         ),
-                        SizedBox(
-                          width: 40,
-                        ),
-                        Text(":",
-                            style:
-                            TextStyle(fontSize: 12, color: marketbg)),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Expanded(
-                          child: Text(
-                            filteredChild1[index]['name'],
-                            style: TextStyle(fontSize: 12, color: marketbg),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Franchise",
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Text(
+                        "Franchise",
+                        style: TextStyle(fontSize: 12, color: marketbg),
+                      ),
+                      SizedBox(width: 16),
+                      Text(
+                        ":",
+                        style: TextStyle(fontSize: 12, color: marketbg),
+                      ),
+                      SizedBox(width: 20),
+                      Expanded(
+                        child: Text(
+                          filteredChild1[index]['franchise'],
                           style: TextStyle(fontSize: 12, color: marketbg),
                         ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Text(":",
-                            style:
-                            TextStyle(fontSize: 12, color: marketbg)),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Expanded(
-                          child: Text(
-                            filteredChild1[index]['franchise'],
-                            style: TextStyle(fontSize: 12, color: marketbg),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Package",
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Text(
+                        "Package",
+                        style: TextStyle(fontSize: 12, color: marketbg),
+                      ),
+                      SizedBox(width: 24),
+                      Text(
+                        ":",
+                        style: TextStyle(fontSize: 12, color: marketbg),
+                      ),
+                      SizedBox(width: 20),
+                      Expanded(
+                        child: Text(
+                          filteredChild1[index]['tempPackageAmount'].toString(),
                           style: TextStyle(fontSize: 12, color: marketbg),
                         ),
-                        SizedBox(
-                          width: 24,
-                        ),
-                        Text(":",
-                            style:
-                            TextStyle(fontSize: 12, color: marketbg)),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Expanded(
-                          child: Text(
-                            filteredChild1[index]['tempPackageAmount']
-                                .toString(),
-                            style: TextStyle(fontSize: 12, color: marketbg),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 5),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: InkWell(
+                      onTap: () {
+                        String id = filteredChild1[index]['_id'];
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LevelOne(id: id),
                           ),
+                        );
+                      },
+                      child: Container(
+                        width: 65,
+                        height: 25,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          color: yellow,
                         ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const levelone()),
-                          );
-                        },
-                        child: Container(
-                          width: 65,
-                          height: 25,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: yellow),
-                          child: Center(
-                            child: Text(
-                              'View Tree',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 10,
-                                  color: Color(0xff0F1535)),
+                        child: Center(
+                          child: Text(
+                            'View Tree',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 10,
+                              color: Color(0xff0F1535),
                             ),
                           ),
                         ),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
+
   }
 }

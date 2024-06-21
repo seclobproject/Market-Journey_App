@@ -47,7 +47,13 @@ class MemberService {
     return response.data;
   }
 
-
+  static Future Memberviewtree(id) async {
+    var dio = await DioHelper.getInstance();
+    var response = await dio
+        .post('$baseURL/api/user/view-level1-user?id=$id');
+    print(response);
+    return response.data;
+  }
   static Future Memberstate() async {
     var dio = await DioHelper.getInstance();
     var response = await dio.get('$baseURL/api/admin/view-states');
