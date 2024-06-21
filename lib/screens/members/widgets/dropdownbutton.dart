@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../services/member_service.dart';
 import '../../../services/profile_service.dart';
 import '../../../support/logger.dart';
+import 'level_two.dart';
 
 class Dropdownscreen extends StatefulWidget {
   @override
@@ -39,6 +40,8 @@ class _DropdownscreenState extends State<Dropdownscreen> {
 
   String? panchayathItem;
   List<String> panchayathType = [];
+
+  bool isLevelUserClicked = false;
 
   Future<void> _fetchProfileData() async {
     try {
@@ -162,6 +165,46 @@ class _DropdownscreenState extends State<Dropdownscreen> {
               ),
             ),
             SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.only(right: 10.0),
+              child: Container(
+                height: 40,
+                width: 100,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isLevelUserClicked = !isLevelUserClicked;
+                    });
+                    print('TextField tapped!');
+                  },
+                  child: AbsorbPointer(
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: TextField(
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          hintText: 'LevelUser',
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.yellow),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(5.0)),
+                            borderSide: BorderSide(color: Colors.yellow),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.yellow),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 12),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
             Row(
               children: [
                 Expanded(
@@ -224,15 +267,8 @@ class _DropdownscreenState extends State<Dropdownscreen> {
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide.none,
                             ),
-                            // hintText: 'Zonal',
-                            // hintStyle: TextStyle(fontSize: 10, color: bluem),
-                          ),
-                          hint: Text(
-                            'Zonal',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.black,
-                            ),
+                            hintText: 'Zonal',
+                            hintStyle: TextStyle(fontSize: 10, color: bluem),
                           ),
                           items: zonalType.map((String zonal) {
                             return DropdownMenuItem<String>(
@@ -313,7 +349,9 @@ class _DropdownscreenState extends State<Dropdownscreen> {
             ),
             SizedBox(height: 10),
             Expanded(
-              child: Filtereduser(
+              child: isLevelUserClicked
+                  ? LevelUser()
+                  : Filtereduser(
                 searchQuery: searchController.text,
                 selectedFranchise: selectedItem,
                 selectedZonal: zonalItem,
@@ -326,3 +364,7 @@ class _DropdownscreenState extends State<Dropdownscreen> {
     );
   }
 }
+
+void main() => runApp(MaterialApp(
+  home: Dropdownscreen(),
+));

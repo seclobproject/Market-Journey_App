@@ -21,11 +21,15 @@ class _LevelOneState extends State<LevelOne> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userid = prefs.getString('userid');
 
-    var response = await MemberService.Memberviewtree(id);
-    log.i('Profile data show.... $response');
-    setState(() {
-      child1 = response['child1'] ?? [];
-    });
+    try {
+      var response = await MemberService.Memberviewtree(id);
+      log.i('Profile data show.... $response');
+      setState(() {
+        child1 = response['child1'] ?? [];
+      });
+    } catch (error) {
+      log.e('Failed to load profile data: $error');
+    }
   }
 
   Future _initLoad() async {
@@ -38,7 +42,7 @@ class _LevelOneState extends State<LevelOne> {
   @override
   void initState() {
     super.initState();
-    _initLoad();
+    _initLoad(); // Ensure async function is awaited properly
   }
 
   @override
@@ -50,8 +54,10 @@ class _LevelOneState extends State<LevelOne> {
           : ListView.builder(
         itemCount: child1.length,
         itemBuilder: (BuildContext context, int index) {
+          final user = child1[index];
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            padding:
+            const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Container(
               height: 107,
               width: 400,
@@ -71,10 +77,12 @@ class _LevelOneState extends State<LevelOne> {
                           style: TextStyle(fontSize: 12, color: marketbg),
                         ),
                         SizedBox(width: 40),
-                        Text(":", style: TextStyle(fontSize: 12, color: marketbg)),
+                        Text(":",
+                            style:
+                            TextStyle(fontSize: 12, color: marketbg)),
                         SizedBox(width: 20),
                         Text(
-                          child1[index]['name'],
+                          user['name'] ?? '',
                           style: TextStyle(fontSize: 12, color: marketbg),
                         ),
                       ],
@@ -90,10 +98,12 @@ class _LevelOneState extends State<LevelOne> {
                           style: TextStyle(fontSize: 12, color: marketbg),
                         ),
                         SizedBox(width: 16),
-                        Text(":", style: TextStyle(fontSize: 12, color: marketbg)),
+                        Text(":",
+                            style:
+                            TextStyle(fontSize: 12, color: marketbg)),
                         SizedBox(width: 20),
                         Text(
-                          child1[index]['franchise'],
+                          user['franchise'] ?? '',
                           style: TextStyle(fontSize: 12, color: marketbg),
                         ),
                       ],
@@ -109,10 +119,15 @@ class _LevelOneState extends State<LevelOne> {
                           style: TextStyle(fontSize: 12, color: marketbg),
                         ),
                         SizedBox(width: 24),
-                        Text(":", style: TextStyle(fontSize: 12, color: marketbg)),
+                        Text(":",
+                            style:
+                            TextStyle(fontSize: 12, color: marketbg)),
                         SizedBox(width: 20),
                         Text(
-                          child1[index]['tempPackageAmount'].toString(),
+                          user['tempPackageAmount']?.toString() ??
+                              user['actualPackageAmount']?.toString() ??
+                              user['packageAmount']?.toString() ??
+                              '',
                           style: TextStyle(fontSize: 12, color: marketbg),
                         ),
                       ],

@@ -84,6 +84,12 @@ class MemberService {
     return response.data;
   }
 
+  static Future leveloneuser() async {
+    var dio = await DioHelper.getInstance();
+    var response = await dio.post('$baseURL/api/user/view-level1-user');
+    print(response);
+    return response.data;
+  }
   static Future Memberzonal(districtId) async {
     var dio = await DioHelper.getInstance();
     var response =
